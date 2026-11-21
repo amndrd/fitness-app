@@ -58,6 +58,15 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
 
 Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les tailles et les règles. Les machines suivront cette charte.
 
+**Étape 6 (21/11/2026) : la barre et les colliers.**
+- La recherche : `3d/recherche/4-barre-et-colliers/` (barres Eleiko et Matrix, trois types de colliers), avec sa planche `planche.png`, qui reste sur ton Mac.
+- Les prototypes : `3d/prototypes/04-barre-et-colliers/planche.jpg`. On refait les deux planches avec `python3 3d/outils/planche_barre.py`. On y trouve :
+  - la barre olympique homme (2,20 m, 20 kg) et femme (2,01 m, 15 kg), aux mesures normées ;
+  - trois finitions : A noir et acier, B tout acier, C tout noir ;
+  - la couleur choisie sur la bague d'identification et l'embout gravé « 20 KG », et des thèmes complets (rose, bleu, vert) ;
+  - trois colliers : la pince à ressort, le collier à levier et le collier en aluminium, chacun dans les huit coloris.
+- Le modèle est dans `3d/outils/blender/barre.py`. Tous les rendus se refont avec `rendus-barre.sh` (environ 12 min).
+
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
 ## Structure
@@ -71,10 +80,12 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
     1-pectoraux/           01-chest-press … 11-dips : les photos de chaque machine
     2-poids-et-halteres/   la petite recherche de l'étape 2 (les liens seulement)
     3-style-poids/         l'étape 3 : halteres/, disques/, planche.png
+    4-barre-et-colliers/   l'étape 6 : barres/, colliers/, planche.png
   prototypes/
     01-poids-et-halteres/  la planche de l'étape 2, puis disques/ et halteres/, un dossier par piste
     02-disque-et-haltere/  l'étape 4 : disque/ et haltere/, un dossier par police, et commun/
     03-textures-coloris/   l'étape 5 : disque/ et haltere/, puis texture/, couleur/, design/
+    04-barre-et-colliers/  l'étape 6 : la barre (trois finitions, la couleur) et les trois colliers
   references/              tes images de référence
   outils/
     planche_recherche.py   refait la planche
@@ -85,6 +96,7 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
     planche_style_poids.py refait la planche de l'étape 3
     planche_poids2.py      refait la planche de l'étape 4
     planche_poids3.py      refait la planche de l'étape 5
+    planche_barre.py       refait les deux planches de l'étape 6
     credits.md             les éléments de tiers (HDRI) et leurs licences
     compose.mjs            pose un rendu transparent sur un fond (couleur ou dégradé)
     blender/
@@ -95,6 +107,8 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
       rendus-poids2.sh     lance tous les rendus de l'étape 4
       poids3.py            textures, coloris, designs et plans (étape 5)
       rendus-poids3.sh     lance tous les rendus de l'étape 5
+      barre.py             la barre olympique et les trois colliers (étape 6)
+      rendus-barre.sh      lance tous les rendus de l'étape 6
 ```
 
 Les outils utilisent Playwright, installé dans `~/Desktop/Portfolio/tools`.

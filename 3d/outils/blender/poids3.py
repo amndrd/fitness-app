@@ -361,7 +361,7 @@ HALTERE_DESIGNS = {
     'tout-noir': dict(handle='noir'), 'poignee-laiton': dict(handle='laiton', bezel=None),
 }
 
-for var in VARS:
+for var in ([] if globals().get('AS_LIB_P3') else VARS):
     for plan in PLANS:
         reset()
         for w in list(bpy.data.worlds):
