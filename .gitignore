@@ -1,0 +1,30 @@
+# macOS, Python, Node
+.DS_Store
+__pycache__/
+node_modules/
+
+# secrets: never on GitHub
+.env
+.env.*
+*.pem
+*.p8
+*.p12
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+
+# Blender: scene files (too heavy for GitHub, rebuilt by the scripts), backups, raw renders
+*.blend
+*.blend1
+3d/outils/blender/_bruts/
+
+# third-party material, not published here (the sources.json files keep the links):
+# - inspiration and research images (Pinterest, manufacturers' sites, the web)
+3d/recherche/**/*.jpg
+3d/recherche/**/*.jpeg
+3d/recherche/**/*.png
+3d/recherche/**/*.webp
+3d/recherche/**/*.gif
+# - downloaded 3D models and textures (see credits.md)
+3d/outils/assets/
+# the research boards are collages of those images: kept locally, rebuilt by 3d/outils/planche_recherche.py
