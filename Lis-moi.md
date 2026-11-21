@@ -52,12 +52,19 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
 - La lumière vient maintenant d'un vrai studio photographié (HDRI Poly Haven, CC0, voir `3d/outils/credits.md`). Le fichier se retélécharge, il n'est pas sur GitHub.
 - Les modèles sont dans `3d/outils/blender/poids3.py`, qui reprend ceux de `poids2.py` en changeant les matières, la lumière et les plans. Tous les rendus se refont avec `rendus-poids3.sh` (environ 22 min), qui relance tout seul un rendu quand Blender s'arrête sans prévenir.
 
+**Tes choix (21/11) :**
+- les disques en texture moulée et les haltères en grain fin, dans les huit coloris ;
+- les designs (insert, tranche, face, chiffres de couleur…) sont gardés de côté, au cas où la personnalisation irait plus loin que la couleur.
+
+Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les tailles et les règles. Les machines suivront cette charte.
+
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
 ## Structure
 
 ```
 3d/
+  charte.md                les choix validés : police, coloris, tailles, textures, ce qui est gardé de côté
   recherche/
     planche.png            la planche de l'étape 1
     0-style-des-salles/    les salles : Basic-Fit (machines guidées, zones libres et force)
