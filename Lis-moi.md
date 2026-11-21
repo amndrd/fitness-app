@@ -24,6 +24,12 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
 - Les rendus seuls sont dans `disques/` et `halteres/`, un dossier par piste.
 - Les modèles sont faits par `3d/outils/blender/poids.py` (les pièces) et `base.py` (le studio, les matières, la caméra). On refait tous les rendus avec `3d/outils/blender/rendus-poids.sh` (environ 20 min sur le M4), ou un essai rapide avec `rendus-poids.sh test disques C barre`.
 
+**Tes choix (21/11) :** l'haltère rond (B), à retravailler ; des disques épais, ronds et noirs.
+
+**Étape 3 (21/11/2026) : le style des poids, tes références et la recherche.**
+- `3d/recherche/3-style-poids/planche.png` : l'analyse de tes trois images (le rendu, le design, la texture, les couleurs, la typo), la recherche sur ce style (Skelcore, American Barbell, Hammer Strength, REP, Eleiko), comment je le traduis pour nous, et les questions. On la refait avec `python3 3d/outils/planche_style_poids.py`.
+- Tes images sont rangées dans `3d/references/halteres/` et `3d/references/disques/`.
+
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
 ## Structure
@@ -34,6 +40,8 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
     planche.png            la planche de l'étape 1
     0-style-des-salles/    les salles : Basic-Fit (machines guidées, zones libres et force)
     1-pectoraux/           01-chest-press … 11-dips : les photos de chaque machine
+    2-poids-et-halteres/   la petite recherche de l'étape 2 (les liens seulement)
+    3-style-poids/         l'étape 3 : halteres/, disques/, planche.png
   prototypes/
     01-poids-et-halteres/  la planche de l'étape 2, puis disques/ et halteres/, un dossier par piste
   references/              tes images de référence
@@ -43,6 +51,7 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
     contact.py             assemble les images d'un dossier en une seule image, pour les regarder d'un coup
     export.mjs             transforme une page HTML en PNG
     planche_poids.py       refait la planche de l'étape 2
+    planche_style_poids.py refait la planche de l'étape 3
     blender/
       base.py              le studio, les matières, la caméra, le rendu (commun à tous les modèles)
       poids.py             les disques, la barre et les haltères

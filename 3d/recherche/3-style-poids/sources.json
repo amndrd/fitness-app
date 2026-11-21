@@ -1,0 +1,122 @@
+{
+ "disques/01-rep-noir-face.webp": {
+  "titre": "REP, disque noir de compétition : texte blanc, insert en acier, rebord. La version noire de ta référence",
+  "source": "Rep",
+  "trouvee_sur": "https://repfitness.com/products/black-competition-bumper-plates-kg",
+  "image": "https://cdn.arenacommerce.com/repfitnessco/Black%20Bumper%20-%20KG%20-%2010.webp"
+ },
+ "disques/02-rep-noir-gamme.webp": {
+  "titre": "La gamme noire : même diamètre, épaisseurs différentes",
+  "source": "Rep",
+  "trouvee_sur": "https://repfitness.com/products/black-competition-bumper-plates-kg",
+  "image": "https://cdn.arenacommerce.com/repfitnessco/Black%20Bumper%20-%20KG%20-%20Set%20-%20140.webp"
+ },
+ "disques/03-rep-noir-pile.jpg": {
+  "titre": "Une pile de disques noirs : le rebord, les inserts, le texte en symétrie",
+  "source": "Rep",
+  "trouvee_sur": "https://repfitness.com/products/black-competition-bumper-plates-kg",
+  "image": "https://repfitness.com/cdn/shop/files/07_26-BlackBumperPlates-Lifestyle-320-900x600-df76f30.jpg?v=1786045873&width=400"
+ },
+ "disques/04-rep-noir-de-pres.jpg": {
+  "titre": "De près : le texte blanc en relief, le rebord du pourtour",
+  "source": "Rep",
+  "trouvee_sur": "https://repfitness.com/products/black-competition-bumper-plates-kg",
+  "image": "https://cdn.arenacommerce.com/repfitnessco/07_26%20-%20Black%20Bumper%20Plates%20-%20Lifestyle%20-%20315-900x600-e305dea.jpg"
+ },
+ "disques/05-rep-noir-barre-rack.jpg": {
+  "titre": "Sur la barre, dans un rack",
+  "source": "Rep",
+  "trouvee_sur": "https://repfitness.com/products/black-competition-bumper-plates-kg",
+  "image": "https://repfitness.com/cdn/shop/files/07_26-BlackBumperPlates-Lifestyle-240-900x600-e305dea.jpg?v=1786045851&width=400"
+ },
+ "disques/06-rep-noir-plateforme.jpg": {
+  "titre": "Sur une plateforme",
+  "source": "Rep",
+  "trouvee_sur": "https://repfitness.com/products/black-competition-bumper-plates-kg",
+  "image": "https://repfitness.com/cdn/shop/files/07_26-BlackBumperPlates-Lifestyle-352-900x600-d8ba2df.jpg?v=1786045827&width=550"
+ },
+ "disques/07-eleiko-rouge-25.jpg": {
+  "titre": "Eleiko : la famille de ta référence, en rouge 25 kg",
+  "source": "Eleiko",
+  "trouvee_sur": "https://eleiko.com/en/equipment/plates/weightlifting",
+  "image": "https://eleiko.com/_next/image?url=https%3A%2F%2Fmedia.eleiko.com%2Fimages%2Fupload%2F4x5%2F%2F3085440-25_10.jpg&w=828&q=75"
+ },
+ "disques/08-eleiko-competition-25.jpg": {
+  "titre": "Eleiko compétition : un insert en acier plus travaillé",
+  "source": "Eleiko",
+  "trouvee_sur": "https://eleiko.com/en/equipment/plates/weightlifting",
+  "image": "https://eleiko.com/_next/image?url=https%3A%2F%2Fmedia.eleiko.com%2Fimages%2Fupload%2F4x5%2F%2F3062910-25_10.jpg&w=828&q=75"
+ },
+ "disques/09-eleiko-petit-5.jpg": {
+  "titre": "Eleiko 5 kg : petit diamètre, même mise en page",
+  "source": "Eleiko",
+  "trouvee_sur": "https://eleiko.com/en/equipment/plates/weightlifting",
+  "image": "https://eleiko.com/_next/image?url=https%3A%2F%2Fmedia.eleiko.com%2Fimages%2Fupload%2F4x5%2F%2F3085260-0050_10.jpg&w=828&q=75"
+ },
+ "disques/10-eleiko-fond-sombre-macro.png": {
+  "titre": "Eleiko sur fond sombre, de près : l'acier tourné accroche la lumière",
+  "source": "Eleiko",
+  "trouvee_sur": "https://eleiko.com/stories/eleiko-introduces-new-redesigned-iwf-plate-collection",
+  "image": "https://eleiko.com/_next/image?url=https%3A%2F%2Feleiko.fra1.digitaloceanspaces.com%2Fcms-prod%2F55dbe4f097c507386c4d4a9f496e0f85.png&w=1920&q=75"
+ },
+ "disques/11-eleiko-rouge-fond-sombre.png": {
+  "titre": "Eleiko rouge sur fond sombre",
+  "source": "Eleiko",
+  "trouvee_sur": "https://eleiko.com/stories/eleiko-introduces-new-redesigned-iwf-plate-collection",
+  "image": "https://eleiko.com/_next/image?url=https%3A%2F%2Ffra1.digitaloceanspaces.com%2Feleiko%2Fcms-prod%2Fe9557fcc1e48926e488d7ab3c2e7f2d0.png&w=828&q=75"
+ },
+ "disques/12-eleiko-barre-plateforme.png": {
+  "titre": "Sur la barre, sur une plateforme",
+  "source": "Eleiko",
+  "trouvee_sur": "https://eleiko.com/en/equipment/plates/weightlifting",
+  "image": "https://eleiko.com/_next/image?url=https%3A%2F%2Fcdn.eleiko.com%2Fimage%2F685226291125%2Fimage_t0r61k40kh71bbap9m65k4t52l&w=1920&q=75"
+ },
+ "halteres/01-skelcore-paire-flottante-25.png": {
+  "titre": "Skelcore : la même mise en scène que ta référence, en 25 kg",
+  "source": "Skelcore",
+  "trouvee_sur": "https://www.skelcore.com/products/skelcore-urethane-dumbbell-set-d",
+  "image": "https://cdn.prod.website-files.com/6a2ddcb80a9b3e87a719c752/6a95933caad5acd88aede4bd_SK-RND-URE-25KG%20W.png"
+ },
+ "halteres/02-american-barbell-paire.png": {
+  "titre": "American Barbell Series 1 : uréthane noir texturé, chiffres gris sur la face et sur le côté",
+  "source": "American",
+  "trouvee_sur": "https://www.kodiaksports.com/collections/american-barbell/products/american-barbell-series-1-round-heavy-commercial-urethane-encased-dumbbell",
+  "image": "https://www.kodiaksports.com/cdn/shop/products/Series1_Dumbbell_large.png?v=1752963031"
+ },
+ "halteres/03-american-barbell-grain.png": {
+  "titre": "Le grain de l'uréthane texturé, de près : mat, sablé, il cache l'usure",
+  "source": "American",
+  "trouvee_sur": "https://www.kodiaksports.com/collections/american-barbell/products/american-barbell-series-1-round-heavy-commercial-urethane-encased-dumbbell",
+  "image": "https://www.kodiaksports.com/cdn/shop/products/fixed_curl_series4_grande.png?v=1752963016"
+ },
+ "halteres/04-american-barbell-collerette.png": {
+  "titre": "La collerette d'acier à l'entrée de la tête, et les grands rayons du bord",
+  "source": "American",
+  "trouvee_sur": "https://www.kodiaksports.com/collections/american-barbell/products/american-barbell-series-1-round-heavy-commercial-urethane-encased-dumbbell",
+  "image": "https://www.kodiaksports.com/cdn/shop/products/Series1_Dumbbell_2_compact.png?v=1752963031"
+ },
+ "halteres/05-american-barbell-cote.png": {
+  "titre": "De profil : têtes épaisses, bords très arrondis des deux côtés",
+  "source": "American",
+  "trouvee_sur": "https://www.kodiaksports.com/collections/american-barbell/products/american-barbell-series-1-round-heavy-commercial-urethane-encased-dumbbell",
+  "image": "https://www.kodiaksports.com/cdn/shop/products/Series1_Dumbbell_4_large.png?v=1752963031"
+ },
+ "halteres/06-american-barbell-poignee.png": {
+  "titre": "La poignée moletée et sa collerette",
+  "source": "American",
+  "trouvee_sur": "https://www.kodiaksports.com/collections/american-barbell/products/american-barbell-series-1-round-heavy-commercial-urethane-encased-dumbbell",
+  "image": "https://www.kodiaksports.com/cdn/shop/products/Series1_Dumbbell_2_large.png?v=1752963031"
+ },
+ "halteres/07-american-barbell-trois-quarts.png": {
+  "titre": "Trois quarts : le chiffre sur la face, le grain sur le côté",
+  "source": "American",
+  "trouvee_sur": "https://www.kodiaksports.com/collections/american-barbell/products/american-barbell-series-1-round-heavy-commercial-urethane-encased-dumbbell",
+  "image": "https://www.kodiaksports.com/cdn/shop/products/Series1_Dumbbell_3_large.png?v=1752963031"
+ },
+ "halteres/08-hammer-strength-rond.webp": {
+  "titre": "Hammer Strength : rond, chiffres ton sur ton, plus discret",
+  "source": "Lifefitness",
+  "trouvee_sur": "https://lifefitness.com/en-us/catalog/accessories/dumbbells-fixed-barbells/round-rubber-dumbbells",
+  "image": "https://production-gvckb4eyhna3g6c7.a03.azurefd.net/v11-24-24/960_lossy_level2_webp/kentico13corebase/media/lfmedia/lifefitnessimages/mediasync/242-512-hammer-strength-round-rubber-dumbbells-1000x1000.webp"
+ }
+}
