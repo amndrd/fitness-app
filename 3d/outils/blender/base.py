@@ -171,8 +171,9 @@ def round_poly(pts, radius, segs=6, closed=True):
     return out
 
 
-def lathe(name, profile, m=None, segs=128, axis='Y'):
-    """Revolves a closed profile [(r, h)] around an axis (Y: plates standing up, X: dumbbells/bars)."""
+def lathe(name, profile, m=None, segs=128, axis='Y', edge_mats=None, mats=None):
+    """Revolves a closed profile [(r, h)] around an axis (Y: plates standing up, X: dumbbells/bars).
+    edge_mats = material index per profile edge (edge i goes from point i to i+1), mats = the materials."""
     verts, faces = [], []
     n = len(profile)
     for j in range(segs):
@@ -189,6 +190,12 @@ def lathe(name, profile, m=None, segs=128, axis='Y'):
             i2 = (i + 1) % n
             faces.append((j * n + i, j * n + i2, j2 * n + i2, j2 * n + i))
     o = mesh_obj(name, verts, faces, m)
+    if edge_mats and mats:
+        o.data.materials.clear()
+        for mm in mats:
+            o.data.materials.append(mm)
+        for f in o.data.polygons:
+            f.material_index = edge_mats[f.index % n]
     if any(r < 1e-9 for r, h in profile):       # points on the axis: merge the duplicates
         bm = bmesh.new()
         bm.from_mesh(o.data)
@@ -258,8 +265,9 @@ def remove(o):
     bpy.data.objects.remove(o, do_unlink=True)
 
 
-def text_mesh(name, body, size, depth, m, font=FONT_NUM, spacing=1.0):
-    """Centered text as a mesh in its local XY plane, extruded along Z (total thickness 2*depth)."""
+def text_mesh(name, body, size, depth, m, font=FONT_NUM, spacing=1.0, bevel=0.0, fit_h=None, max_w=None):
+    """Centered text as a mesh in its local XY plane, extruded along Z (total thickness 2*depth).
+    fit_h: scales the glyphs so the text is exactly that tall (same size whatever the font); max_w caps the width."""
     cu = bpy.data.curves.new(name, 'FONT')
     cu.body = body
     cu.font = bpy.data.fonts.load(font, check_existing=True)
@@ -269,10 +277,22 @@ def text_mesh(name, body, size, depth, m, font=FONT_NUM, spacing=1.0):
     cu.align_y = 'CENTER'
     cu.space_character = spacing
     cu.resolution_u = 6
+    if bevel:
+        cu.bevel_depth = bevel
+        cu.bevel_resolution = 2
     tmp = link(bpy.data.objects.new(name + '_c', cu))
     dg = bpy.context.evaluated_depsgraph_get()
     me = bpy.data.meshes.new_from_object(tmp.evaluated_get(dg))
     remove(tmp)
+    if fit_h or max_w:
+        xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]
+        w, h = max(xs) - min(xs), max(ys) - min(ys)
+        k = (fit_h / h) if fit_h else 1.0
+        if max_w:
+            k = min(k, max_w / w) if fit_h else max_w / w
+        cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
+        me.transform(Matrix.Translation((-cx, -cy, 0)))
+        me.transform(Matrix.Diagonal((k, k, 1.0, 1.0)))
     o = link(bpy.data.objects.new(name, me))
     me.materials.append(m)
     return o
@@ -422,5 +442,6 @@ def setup_render(res=None, aspect=(16, 9)):
 def render(path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     SC.render.filepath = path
+    SC.render.image_settings.color_mode = 'RGBA' if SC.render.film_transparent else 'RGB'
     bpy.ops.render.render(write_still=True)
     print('rendu', path)

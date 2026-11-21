@@ -1,0 +1,68 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Disque et haltère : prototypes v2</title>
+<link rel="stylesheet" href="../../outils/planche_style.css">
+<style>
+.board{display:flex;flex-direction:column;gap:120px}
+.notes section{width:640px}
+section.big{width:2060px}
+.piste{display:flex;flex-direction:column;gap:18px;padding:28px 0;border-top:1px solid #E6E6E6}
+.head{display:flex;gap:16px;align-items:flex-start;max-width:1500px}
+.letter{flex:none;width:34px;height:34px;border-radius:17px;background:#111;color:#fff;font-weight:600;font-size:15px;text-align:center;line-height:34px}
+.renders{display:flex;gap:16px;flex-wrap:wrap}
+figure{display:flex;flex-direction:column;gap:8px}
+figure.p img{width:480px;height:600px;object-fit:cover;display:block}
+figure.l img{width:640px;height:auto;display:block}
+.cap{font-size:12px;color:#6B6B6B}
+.refs .cap{color:#111;font-weight:600}
+</style></head><body>
+
+<div class="colw notes">
+<section>
+  <div class="stitle">Le disque et l'haltère : les prototypes, version 2</div>
+  <div class="snote">21/11/2026 · étape 4 · Blender et Cycles, d'après tes références</div>
+  <div class="txt">Le disque reprend les disques Eleiko de ta référence, en noir. L'haltère, c'est le rond B retravaillé d'après l'haltère de ta référence.
+  Les rendus imitent aussi la photo : le disque de face et sans perspective sur fond blanc, les haltères qui flottent sur un gris clair.</div>
+</section>
+<section>
+  <div class="stitle">Ce qui est fait</div>
+  <div class="lbl">Le disque</div>
+  <ul class="list">
+    <li>Noir et épais : 58 mm pour le 20 kg, 66 mm pour le 25 kg ; 45 cm de diamètre de 10 à 25 kg.</li>
+    <li>Un rebord en relief sur le pourtour, une fine ligne autour du moyeu, une bague de caoutchouc.</li>
+    <li>Un grand insert en acier tourné : reflets brossés en éventail et deux rainures polies.</li>
+    <li>Le poids en blanc et en relief à droite et à gauche (retourné), « KG » ton sur ton dessous. Le haut et le bas restent vides.</li>
+  </ul>
+  <div class="lbl">L'haltère</div>
+  <ul class="list">
+    <li>Des têtes rondes et épaisses (0,57 fois leur diamètre), avec de grands rayons des deux côtés.</li>
+    <li>Une face en médaillon lisse et creusé, cerclé d'un liseré, et un tour en caoutchouc grainé.</li>
+    <li>Le chiffre et « KG » imprimés en blanc. Pas de marque.</li>
+    <li>Une poignée en acier satiné moletée et des collerettes d'acier.</li>
+  </ul>
+</section>
+<section>
+  <div class="stitle">Trois variantes : trois polices</div>
+  <div class="txt">La forme est la même partout ; seule la police des chiffres change. Les trois sont libres de droits (licence OFL) : elles peuvent aller dans l'app.
+  Les vues communes (la gamme, la barre, le fond sombre) sont montrées avec la variante A.</div>
+</section>
+<section>
+  <div class="stitle">Questions</div>
+  <ol class="list">
+    <li>Quelle police gardes-tu, A, B ou C ? Une seule pour les disques et les haltères, pour qu'ils forment une famille.</li>
+    <li>Le rendu est-il assez proche de tes références ? Qu'est-ce qui manque ?</li>
+    <li>La suite : la barre et les colliers, ou directement les pièces communes des machines et la chest press ?</li>
+  </ol>
+</section>
+</div>
+<div class="board">
+<section class="big"><div class="stitle">Le disque</div><div class="snote">noir, épais, insert en acier tourné · trois polices</div>
+  <div class="renders refs"><figure class="p"><img src="../../references/disques/01-ta-reference-bleu-20.jpeg" alt=""><div class="cap">Ta référence : Eleiko 20 kg</div></figure><figure class="p"><img src="../../references/disques/02-ta-reference-rouge-25.jpeg" alt=""><div class="cap">Ta référence : Eleiko 25 kg</div></figure></div>
+  <div class="piste"><div class="head"><span class="letter">A</span><div><div class="stitle">Archivo Expanded</div><div class="txt">Large et très grasse : la plus proche des disques Eleiko. Une famille complète, qui pourrait aussi servir à l&#x27;interface de l&#x27;app.</div></div></div><div class="renders"><figure class="p"><img src="disque/A-archivo/face20.jpg" alt=""><div class="cap">Le 20 kg, de face</div></figure><figure class="p"><img src="disque/A-archivo/face25.jpg" alt=""><div class="cap">Le 25 kg, de face</div></figure><figure class="p"><img src="disque/A-archivo/tq.jpg" alt=""><div class="cap">De trois quarts : l&#x27;épaisseur</div></figure></div></div><div class="piste"><div class="head"><span class="letter">B</span><div><div class="stitle">Saira Expanded</div><div class="txt">Des chiffres aux angles carrés adoucis : la plus proche de l&#x27;haltère de ta référence. Plus « sport ».</div></div></div><div class="renders"><figure class="p"><img src="disque/B-saira/face20.jpg" alt=""><div class="cap">Le 20 kg, de face</div></figure><figure class="p"><img src="disque/B-saira/face25.jpg" alt=""><div class="cap">Le 25 kg, de face</div></figure><figure class="p"><img src="disque/B-saira/tq.jpg" alt=""><div class="cap">De trois quarts : l&#x27;épaisseur</div></figure></div></div><div class="piste"><div class="head"><span class="letter">C</span><div><div class="stitle">Michroma</div><div class="txt">Très large et technique, un seul poids. La plus graphique, la moins classique.</div></div></div><div class="renders"><figure class="p"><img src="disque/C-michroma/face20.jpg" alt=""><div class="cap">Le 20 kg, de face</div></figure><figure class="p"><img src="disque/C-michroma/face25.jpg" alt=""><div class="cap">Le 25 kg, de face</div></figure><figure class="p"><img src="disque/C-michroma/tq.jpg" alt=""><div class="cap">De trois quarts : l&#x27;épaisseur</div></figure></div></div>
+  <div class="piste"><div class="stitle">Les vues communes</div><div class="renders"><figure class="l"><img src="disque/commun/gamme.jpg" alt=""><div class="cap">La gamme, de 25 à 1,25 kg</div></figure><figure class="l"><img src="disque/commun/barre.jpg" alt=""><div class="cap">Sur la barre : 25 et 20 kg</div></figure><figure class="l"><img src="disque/commun/sombre.jpg" alt=""><div class="cap">Sur fond sombre</div></figure></div></div>
+</section>
+<section class="big"><div class="stitle">L'haltère rond, version 2</div><div class="snote">médaillon lisse, tour grainé, chiffre et KG en blanc · trois polices</div>
+  <div class="renders refs"><figure class="p"><img src="../../references/halteres/01-ta-reference-rond.jpeg" alt=""><div class="cap">Ta référence : haltère rond</div></figure></div>
+  <div class="piste"><div class="head"><span class="letter">A</span><div><div class="stitle">Archivo Expanded</div><div class="txt">Large et très grasse : la plus proche des disques Eleiko. Une famille complète, qui pourrait aussi servir à l&#x27;interface de l&#x27;app.</div></div></div><div class="renders"><figure class="p"><img src="haltere/A-archivo/flottant.jpg" alt=""><div class="cap">La paire de 40 kg, qui flotte</div></figure><figure class="p"><img src="haltere/A-archivo/face.jpg" alt=""><div class="cap">La face de près</div></figure></div></div><div class="piste"><div class="head"><span class="letter">B</span><div><div class="stitle">Saira Expanded</div><div class="txt">Des chiffres aux angles carrés adoucis : la plus proche de l&#x27;haltère de ta référence. Plus « sport ».</div></div></div><div class="renders"><figure class="p"><img src="haltere/B-saira/flottant.jpg" alt=""><div class="cap">La paire de 40 kg, qui flotte</div></figure><figure class="p"><img src="haltere/B-saira/face.jpg" alt=""><div class="cap">La face de près</div></figure></div></div><div class="piste"><div class="head"><span class="letter">C</span><div><div class="stitle">Michroma</div><div class="txt">Très large et technique, un seul poids. La plus graphique, la moins classique.</div></div></div><div class="renders"><figure class="p"><img src="haltere/C-michroma/flottant.jpg" alt=""><div class="cap">La paire de 40 kg, qui flotte</div></figure><figure class="p"><img src="haltere/C-michroma/face.jpg" alt=""><div class="cap">La face de près</div></figure></div></div>
+  <div class="piste"><div class="stitle">Les vues communes</div><div class="renders"><figure class="l"><img src="haltere/commun/heros.jpg" alt=""><div class="cap">La paire de 15 kg, posée</div></figure><figure class="l"><img src="haltere/commun/gamme.jpg" alt=""><div class="cap">5, 15 et 30 kg</div></figure><figure class="l"><img src="haltere/commun/sombre.jpg" alt=""><div class="cap">Sur fond sombre</div></figure></div></div>
+</section>
+</div>
+</body></html>

@@ -32,3 +32,6 @@ GoogleService-Info.plist
 # your own reference images (third-party content)
 3d/references/**
 !3d/references/Lis-moi.md
+
+# the step-4 board shows the user's reference images next to the renders: kept locally
+3d/prototypes/02-disque-et-haltere/planche.jpg

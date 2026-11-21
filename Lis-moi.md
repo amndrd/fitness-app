@@ -30,6 +30,15 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
 - `3d/recherche/3-style-poids/planche.png` : l'analyse de tes trois images (le rendu, le design, la texture, les couleurs, la typo), la recherche sur ce style (Skelcore, American Barbell, Hammer Strength, REP, Eleiko), comment je le traduis pour nous, et les questions. On la refait avec `python3 3d/outils/planche_style_poids.py`.
 - Tes images sont rangées dans `3d/references/halteres/` et `3d/references/disques/`.
 
+**Tes réponses (21/11) :** rien en haut et en bas du disque, le chiffre de l'haltère en blanc, avec « KG » et sans marque.
+
+**Étape 4 (21/11/2026) : le disque et l'haltère, version 2.**
+- `3d/prototypes/02-disque-et-haltere/planche.jpg` : tes références à côté des rendus. Trois variantes, qui ne changent que la police des chiffres : A Archivo Expanded, B Saira Expanded, C Michroma. Il y a aussi les vues communes (la gamme, la barre, le fond sombre). Cette planche reste sur ton Mac, parce qu'elle montre tes références. On la refait avec `python3 3d/outils/planche_poids2.py`.
+- Le disque : noir et épais (58 mm pour le 20 kg), avec un rebord, une bague de caoutchouc, un insert en acier tourné et ses deux rainures polies. Le poids est en blanc et en relief à gauche et à droite, avec « KG » ton sur ton.
+- L'haltère : des têtes rondes épaisses, une face en médaillon lisse cerclé d'un liseré, un tour grainé, le chiffre et « KG » en blanc, une poignée satinée et des collerettes.
+- Les modèles sont dans `3d/outils/blender/poids2.py`. Tous les rendus se refont avec `rendus-poids2.sh` (environ 15 min) ; `compose.mjs` pose le fond clair des références.
+- Les polices sont dans `3d/outils/polices/`, avec leur licence OFL.
+
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
 ## Structure
@@ -44,6 +53,7 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
     3-style-poids/         l'étape 3 : halteres/, disques/, planche.png
   prototypes/
     01-poids-et-halteres/  la planche de l'étape 2, puis disques/ et halteres/, un dossier par piste
+    02-disque-et-haltere/  l'étape 4 : disque/ et haltere/, un dossier par police, et commun/
   references/              tes images de référence
   outils/
     planche_recherche.py   refait la planche
@@ -52,10 +62,14 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
     export.mjs             transforme une page HTML en PNG
     planche_poids.py       refait la planche de l'étape 2
     planche_style_poids.py refait la planche de l'étape 3
+    planche_poids2.py      refait la planche de l'étape 4
+    compose.mjs            pose un rendu transparent sur un fond (couleur ou dégradé)
     blender/
       base.py              le studio, les matières, la caméra, le rendu (commun à tous les modèles)
       poids.py             les disques, la barre et les haltères
       rendus-poids.sh      lance tous les rendus de l'étape 2
+      poids2.py            le disque et l'haltère, version 2 (étape 4)
+      rendus-poids2.sh     lance tous les rendus de l'étape 4
 ```
 
 Les outils utilisent Playwright, installé dans `~/Desktop/Portfolio/tools`.
