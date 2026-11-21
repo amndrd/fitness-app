@@ -39,6 +39,19 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
 - Les modèles sont dans `3d/outils/blender/poids2.py`. Tous les rendus se refont avec `rendus-poids2.sh` (environ 15 min) ; `compose.mjs` pose le fond clair des références.
 - Les polices sont dans `3d/outils/polices/`, avec leur licence OFL.
 
+**Tes réponses (21/11) :** la police A (Archivo Expanded). Le design est validé, mais tu voulais une texture plus réaliste, des coloris (noir, rose, bleu…) que l'utilisateur pourra personnaliser, et plusieurs plans par rendu.
+
+**Étape 5 (21/11/2026) : textures, coloris et designs.**
+- `3d/prototypes/03-textures-coloris/planche.jpg` (on la refait avec `python3 3d/outils/planche_poids3.py`) :
+  - le disque en quatre textures (moulé, satiné, moucheté, vécu), chacune de face, en lumière rasante et en pile ;
+  - les huit coloris (noir, graphite, blanc, rose, bleu, vert, rouge, sable), alignés, en pile et de face ;
+  - quatre designs du disque : insert noir, insert laiton, tranche de couleur, chiffres de couleur ;
+  - l'haltère en quatre grains (fin, gros, satiné, moucheté), en paire flottante et en lumière rasante ;
+  - les coloris de l'haltère, en rangée et en paires ;
+  - quatre designs de l'haltère : face de couleur, liseré en acier, tout noir, poignée laiton.
+- La lumière vient maintenant d'un vrai studio photographié (HDRI Poly Haven, CC0, voir `3d/outils/credits.md`). Le fichier se retélécharge, il n'est pas sur GitHub.
+- Les modèles sont dans `3d/outils/blender/poids3.py`, qui reprend ceux de `poids2.py` en changeant les matières, la lumière et les plans. Tous les rendus se refont avec `rendus-poids3.sh` (environ 22 min), qui relance tout seul un rendu quand Blender s'arrête sans prévenir.
+
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
 ## Structure
@@ -54,6 +67,7 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
   prototypes/
     01-poids-et-halteres/  la planche de l'étape 2, puis disques/ et halteres/, un dossier par piste
     02-disque-et-haltere/  l'étape 4 : disque/ et haltere/, un dossier par police, et commun/
+    03-textures-coloris/   l'étape 5 : disque/ et haltere/, puis texture/, couleur/, design/
   references/              tes images de référence
   outils/
     planche_recherche.py   refait la planche
@@ -63,6 +77,8 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
     planche_poids.py       refait la planche de l'étape 2
     planche_style_poids.py refait la planche de l'étape 3
     planche_poids2.py      refait la planche de l'étape 4
+    planche_poids3.py      refait la planche de l'étape 5
+    credits.md             les éléments de tiers (HDRI) et leurs licences
     compose.mjs            pose un rendu transparent sur un fond (couleur ou dégradé)
     blender/
       base.py              le studio, les matières, la caméra, le rendu (commun à tous les modèles)
@@ -70,6 +86,8 @@ Le plan complet de l'application est dans le Google Doc « fitness app · Plan c
       rendus-poids.sh      lance tous les rendus de l'étape 2
       poids2.py            le disque et l'haltère, version 2 (étape 4)
       rendus-poids2.sh     lance tous les rendus de l'étape 4
+      poids3.py            textures, coloris, designs et plans (étape 5)
+      rendus-poids3.sh     lance tous les rendus de l'étape 5
 ```
 
 Les outils utilisent Playwright, installé dans `~/Desktop/Portfolio/tools`.

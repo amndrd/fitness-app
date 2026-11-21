@@ -185,7 +185,12 @@ def disque(w, M, name='disque', sides=True):
             rad.append(0.0)
         else:
             rad.append(0.0009)
-    body = sharp(fix_normals(lathe(name, round_poly(prof, rad, segs=4), M['caoutchouc'], segs=200)), 30)
+    rp = round_poly(prof, rad, segs=4)
+    nr = len(rp)
+    # the outer edge (the "tranche") can get its own material: a colour stripe
+    em_b = [1 if (rp[i][0] > R - 0.0015 and rp[(i + 1) % nr][0] > R - 0.0015) else 0 for i in range(nr)]
+    body = sharp(fix_normals(lathe(name, rp, M['caoutchouc'], segs=200, edge_mats=em_b,
+                                   mats=[M['caoutchouc'], M.get('tranche', M['caoutchouc'])])), 30)
     # the steel insert: turned face, two polished grooves, a chamfer into the bore
     yf = T / 2 + ec - 0.001
     g1, g2 = (0.058, 0.041) if big else (r_ins * 0.76, r_ins * 0.54)
@@ -213,7 +218,7 @@ def disque(w, M, name='disque', sides=True):
                 parts.append(text_on_face(name + '_n', label(w), F_BIG, hn, wmax, (cx, 0.004 if not flip else -0.004), T / 2 - df, M['blanc'], 0.0016, front_face, flip))
                 if big:
                     kz = -0.025 if not flip else 0.025
-                    parts.append(text_on_face(name + '_kg', 'KG', F_SMALL, 0.0105, 0.05, (cx, kz), T / 2 - df, M['caoutchouc'], 0.0011, front_face, flip))
+                    parts.append(text_on_face(name + '_kg', 'KG', F_SMALL, 0.0105, 0.05, (cx, kz), T / 2 - df, M.get('kg', M['caoutchouc']), 0.0011, front_face, flip))
     e = group(name, parts)
     e['R'], e['T'] = R, T
     return e
@@ -245,7 +250,7 @@ def haltere(w, M, name='haltere'):
     R, L = DB2[w]
     G, hr = 0.132, 0.0165
     parts = []
-    handle = mat_knurl('poignee', (0.72, 0.72, 0.74), 0.24, 1.0, G, bands=[(0.0, 0.055)])
+    handle = M.get('poignee') or mat_knurl('poignee', (0.72, 0.72, 0.74), 0.24, 1.0, G, bands=[(0.0, 0.055)])
     parts.append(fix_normals(lathe(name + '_poignee', [(0.0, -G / 2 - 0.03), (hr, -G / 2 - 0.03), (hr, G / 2 + 0.03), (0.0, G / 2 + 0.03)], handle, segs=48, axis='X')))
     ri, ro = 0.13 * R, 0.15 * R
     rb = 0.79 * R
@@ -263,12 +268,12 @@ def haltere(w, M, name='haltere'):
         pts += [(rb + 0.0045, x0 + L), (rb + 0.003, x0 + L + 0.0009), (rb - 0.0002, x0 + L + 0.0009), (rb - 0.0016, x0 + L - 0.0012), (0.0, x0 + L - 0.0012)]
         n = len(pts)
         em = [0] * n
-        for i in range(b0 + 1, n - 1):         # bezel and face: smooth (material 1)
-            em[i] = 1
+        for i in range(b0 + 1, n - 1):         # bezel: material 1, recessed face: material 2
+            em[i] = 2 if i == n - 2 else 1
         prof = [(r, sg * x) for r, x in pts]
         if sg < 0:
             prof = list(reversed(prof)); em = list(reversed(em[:-1])) + [em[-1]]
-        o = sharp(fix_normals(lathe(name + '_tete', prof, M['grain'], segs=160, axis='X', edge_mats=em, mats=[M['grain'], M['lisse']])), 30)
+        o = sharp(fix_normals(lathe(name + '_tete', prof, M['grain'], segs=160, axis='X', edge_mats=em, mats=[M['grain'], M.get('liseré', M['lisse']), M.get('face', M['lisse'])])), 30)
         parts.append(o)
         # printed white number and unit on the face medallion
         fx = x0 + L - 0.0012 + 0.00012
@@ -404,7 +409,7 @@ def scene_haltere(vue):
     render(out(vue))
 
 
-for v in VUES:
+for v in ([] if globals().get('AS_LIB') else VUES):
     reset()
     for w in list(bpy.data.worlds):
         bpy.data.worlds.remove(w)
