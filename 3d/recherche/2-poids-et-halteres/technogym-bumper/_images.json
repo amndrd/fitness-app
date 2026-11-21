@@ -1,0 +1,20 @@
+[
+ {
+  "fichier": "img-01.jpg",
+  "image": "https://webapi-prod.technogym.com/dw/image/v2/BFLQ_PRD/on/demandware.static/-/Sites-tg-catalog-master/default/dwd1007774/product/A0001-BP/black_rubber_bumper_plates_related_1.jpg?sw=1600&q=75",
+  "alt": "Bumper Plate",
+  "trouvee_sur": "https://www.technogym.com/en-INT/product/bumper-plate_A0001-BP.html"
+ },
+ {
+  "fichier": "img-02.webp",
+  "image": "https://images.ctfassets.net/ipjoepkmtnha/6OnDgGGVHbmLfOjwoARoeH/92c991a9da346e3d29fb203c9cce01fb/bumper_plates_secondaryfeature_01_g.jpg?w=750&fm=webp&q=75",
+  "alt": "bumper_plates_secondaryfeature_01.jpg",
+  "trouvee_sur": "https://www.technogym.com/en-INT/product/bumper-plate_A0001-BP.html"
+ },
+ {
+  "fichier": "img-03.webp",
+  "image": "https://images.ctfassets.net/ipjoepkmtnha/6e37az7fpt5EvYRhtRlgXY/98fa0bd4eca7bd064a8b46941de22c30/bumper_plates_secondaryfeature_02_g.jpg?w=750&fm=webp&q=75",
+  "alt": "bumper_plates_secondaryfeature_02.jpg",
+  "trouvee_sur": "https://www.technogym.com/en-INT/product/bumper-plate_A0001-BP.html"
+ }
+]

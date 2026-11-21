@@ -154,22 +154,17 @@ notes = f'''
   </ol>
 </section>
 <section>
-  <div class="stitle">La suite : étape 2, le style</div>
-  <div class="txt">Trois pistes de style sur <b>la chest press seule</b>, modélisées dans Blender. Chacune est rendue en studio, puis <b>dans l'interface sombre de l'app</b> (vert citron, écran d'iPhone 16), parce que le modèle doit aller avec l'interface.</div>
+  <div class="stitle">Tes réponses (21/11)</div>
   <ul class="list">
-    <li><span class="lbl2">A, réaliste :</span> les vraies matières, acier laqué, similicuir, caoutchouc, chrome.</li>
-    <li><span class="lbl2">B, objet premium :</span> matières mates, peu de couleurs, le vert citron sur ce qui bouge et se règle.</li>
-    <li><span class="lbl2">C, épuré :</span> formes simplifiées, presque une maquette, très lisible en petit.</li>
+    <li>Les onze machines pectoraux sont toutes dans ton Basic-Fit.</li>
+    <li>Le style : <b>noir, sobre, sombre</b>, comme les machines Technogym de Fitness Park. Pas de couleur d'accent : on part de zéro.</li>
+    <li><b>Universel</b> : pas de machine propre à une salle. Pour chaque machine, <b>plusieurs variantes</b> au choix de l'utilisateur, pour qu'il trouve toujours la sienne.</li>
+    <li>Tes propres références de design iront dans <code>3d/references/</code>.</li>
   </ul>
-  <div class="txt">Ensuite, le test technique : la machine retenue affichée dans une vraie app sur ton iPhone.</div>
 </section>
 <section>
-  <div class="stitle">Questions</div>
-  <ol class="list">
-    <li>Dans ton Basic-Fit, lesquelles sont là : smith machine (1·07), poulies (1·08), machines à disques (1·10), dips assistés (1·11), chest press convergente (1·03) ?</li>
-    <li>Les couleurs par défaut : un noir neutre avec l'accent vert citron de l'app, ou garder un peu de l'orange de Basic-Fit ?</li>
-    <li>Si tu peux, à ta prochaine séance : 4 ou 5 photos de la chest press de ta salle (de face, de côté, de trois quarts, la tour, les réglages). Elles valent toutes les photos produits.</li>
-  </ol>
+  <div class="stitle">La suite : étape 2, les poids</div>
+  <div class="txt">On commence par les pièces qu'on retrouvera partout : <b>les disques et les haltères</b>, en plusieurs designs sombres. Voir <code>3d/prototypes/01-poids-et-halteres/</code>.</div>
 </section>
 </div>'''
 

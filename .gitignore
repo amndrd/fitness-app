@@ -28,3 +28,7 @@ GoogleService-Info.plist
 # - downloaded 3D models and textures (see credits.md)
 3d/outils/assets/
 # the research boards are collages of those images: kept locally, rebuilt by 3d/outils/planche_recherche.py
+
+# your own reference images (third-party content)
+3d/references/**
+!3d/references/Lis-moi.md
