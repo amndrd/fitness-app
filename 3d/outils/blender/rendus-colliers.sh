@@ -2,6 +2,7 @@
 # Step 7: the spring clip and the lever collar, reworked from the user's references.
 # One Blender run per piece and colour, run again if Blender dies silently.
 # Raw renders in outils/blender/_bruts/colliers2, finished by outils/planche_colliers.py.
+# usage: ./rendus-colliers.sh [pince|levier]   (both pieces by default)
 cd "$(dirname "$0")"
 B=/Applications/Blender.app/Contents/MacOS/Blender
 OUT="$PWD/_bruts/colliers2"; mkdir -p "$OUT"; t0=$(date +%s)
@@ -16,7 +17,13 @@ run() {  # piece couleur plans
   done
   echo "$1 $2 : $(( $(date +%s) - t0 )) s"
 }
-run pince noir paire,macro,profil,sur-barre,couleurs
-run levier noir paire,detail,sur-barre,couleurs
-for c in rose bleu; do run pince $c paire; run levier $c paire; done
+ONLY=${1:-}
+if [[ $ONLY != levier ]]; then
+  run pince noir paire,macro,trois-quarts,sur-barre,couleurs
+  for c in rose bleu; do run pince $c paire; done
+fi
+if [[ $ONLY != pince ]]; then
+  run levier noir paire,detail,sur-barre,couleurs
+  for c in rose bleu; do run levier $c paire; done
+fi
 echo "fin : $(( $(date +%s) - t0 )) s"

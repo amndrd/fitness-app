@@ -4,6 +4,7 @@
 #          a three-knuckle hinge on top, a curved lever with a grid pad, black cross-head screws.
 # The colour (sleeves, plastic) is a setting (3d/charte.md). Reuses barre.py, poids3.py, poids2.py and base.py.
 # usage: Blender -b --factory-startup -P colliers.py -- piece=pince|levier plans=paire,macro couleur=noir res=1400 samples=128 out=<dir>
+# 22/11: the clip's sleeves now lie flat in the plane of the ring, as on the user's photo of the pair.
 import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 AS_LIB_BARRE = True
@@ -86,23 +87,22 @@ def square():
 
 
 # ------------------------------------------------------------------ the spring clip
-def sleeve(name, E, h, xc, m, L=0.075, w=0.026, t=0.0105, twist=0.0):
-    """Flat sleeve: open rectangular end at E, rounded tip, broad faces perpendicular to the coil plane.
-    Local axes: X = thickness (in the coil plane), Y = along the sleeve (h), Z = width (world X)."""
+def sleeve(name, E, d, wdir, m, L=0.084, w=0.026, t=0.0105):
+    """Flat sleeve: open rectangular end at E, rounded tip, pointing along d, its width along wdir.
+    As on the user's photos (22/11), the sleeves lie flat: the width stays in the plane of the ring.
+    Local axes: X = thickness, Y = along the sleeve, Z = width."""
     out = [(0.0, -w / 2), (L - w / 2, -w / 2)] + [((L - w / 2) + (w / 2) * math.cos(a), (w / 2) * math.sin(a))
                                                   for a in [math.radians(-90 + 180 * i / 24) for i in range(1, 24)]] + [(L - w / 2, w / 2), (0.0, w / 2)]
     o = fix_normals(prism(name, out, -t / 2, t / 2, m, axis='X'))
-    hy, hz = h
-    v = Vector((0.0, -hz, hy))               # in the coil plane, perpendicular to the sleeve
-    d = Vector((0.0, hy, hz))
-    mtx = Matrix((v, d, Vector((-1.0, 0.0, 0.0)))).transposed().to_4x4()
-    mtx.translation = Vector((xc, E[1], E[2]))
-    mtx = mtx @ Matrix.Rotation(twist, 4, 'Y')       # the sleeve turned a little on its own axis
+    d = d.normalized()
+    wv = (wdir - d * wdir.dot(d)).normalized()
+    mtx = Matrix((d.cross(wv), d, wv)).transposed().to_4x4()
+    mtx.translation = Vector(E)
     o.matrix_world = mtx
     cav = box(name + '_creux', (t - 0.0026, 0.04, w - 0.0026), (0, 0, 0), m)
     cav.matrix_world = mtx @ Matrix.Translation((0.0, 0.019 - 0.0011, 0.0))
     boolean(o, cav)
-    bevel(o, 0.0011, segs=3, angle=35)
+    bevel(o, float(ARGS.get('arrondi', 0.0018)), segs=4, angle=35)
     o = bake(o, 35)
     remove(cav)
     return o
@@ -112,36 +112,61 @@ def bez(a, c, b, n=10):
     return [tuple((1 - t) ** 2 * a + 2 * (1 - t) * t * c + t ** 2 * b) for t in [i / n for i in range(1, n + 1)]]
 
 
+def unit(deg):
+    """A direction in the plane of the ring (YZ), by its angle."""
+    return Vector((0.0, math.cos(math.radians(deg)), math.sin(math.radians(deg))))
+
+
+# The geometry read on the user's photos (22/11): seen face on, the upper sleeve goes up-left at about 45°,
+# the lower one goes left, so the two sleeves make a V of about 40°. Both lie flat (their width in the plane
+# of the ring, not across it); the lower one is bent out of that plane, towards the back of the clip, so on
+# the photo of the pair it looks shorter and shows its open end. Tuned against the photo (keys for tests).
+P_UP = float(ARGS.get('haut', 137))       # upper sleeve, angle in the ring plane
+P_LO = float(ARGS.get('bas', 172))        # lower sleeve, angle in the ring plane
+P_TILT = float(ARGS.get('recul', 60))     # lower sleeve, bent towards the back (-X)
+P_EXIT = float(ARGS.get('sortie', 138))   # where the upper leg leaves the ring
+P_START = float(ARGS.get('debut', 210))   # where the lower leg leaves the ring
+P_ROLL = float(ARGS.get('vrille', 20))    # lower sleeve, turned a little on its own axis
+
+
 def pince2(M, colour='noir', name='pince'):
     rw = 0.0024
     rc = 0.0255 + rw + 0.0003
     pitch = 2 * rw + 0.0002
-    th0, span = math.radians(185), math.radians(615)
+    th0 = math.radians(P_START)
+    th1 = math.radians(P_EXIT + 720)
+    span = th1 - th0
     xs = pitch * span / (2 * math.pi)
-    n = 150
+    n = 160
     coil = []
     for i in range(n + 1):
         th = th0 + span * i / n
         coil.append(Vector((-xs / 2 + xs * i / n, rc * math.cos(th), rc * math.sin(th))))
-    th1 = th0 + span
-    # leg 1 leaves the front end (going backwards round the coil), leg 2 the back end
+    # leg 1 leaves the back end (going backwards round the coil, then an S to the left), leg 2 the front end (up)
     e1 = Vector((0.0, math.sin(th0), -math.cos(th0)))
     e2 = Vector((0.0, -math.sin(th1), math.cos(th1)))
-    h1 = Vector((0.0, math.cos(math.radians(192)), math.sin(math.radians(192))))   # front end, left side: goes left
-    h2 = Vector((0.0, math.cos(math.radians(122)), math.sin(math.radians(122))))   # back end, top: goes up-left
+    h1, h2 = unit(P_LO), unit(P_UP)
+    t = math.radians(P_TILT)
+    d1 = h1 * math.cos(t) + Vector((-1.0, 0.0, 0.0)) * math.sin(t)
     sl = plastic(colour, 'gaine')
     parts = []
     legs = []
-    for P0, e, h in ((coil[0], e1, h1), (coil[-1], e2, h2)):
-        a = P0 + e * 0.004
-        c = a + e * 0.007
-        b = c + h * 0.007
-        E = b + h * 0.006
-        legs.append(([tuple(P0 + e * 0.002), tuple(a)] + bez(a, c, b) + [tuple(E), tuple(E + h * 0.016)], E, h, P0.x))
+    for P0, e, d, h, runs in ((coil[0], e1, d1, h1, (0.002, 0.003, 0.005, 0.005)),
+                              (coil[-1], e2, h2, h2, (0.0012, 0.0028, 0.004, 0.004))):
+        r0, r1, r2, r3 = runs
+        a = P0 + e * r0
+        c = a + e * r1
+        b = c + d * r2
+        E = b + d * r3
+        pts = ([tuple(P0 + e * r0 * 0.5)] if r0 > 0.002 else []) + [tuple(a)] + bez(a, c, b) + [tuple(E), tuple(E + d * 0.016)]
+        wv = Vector((0.0, -h.z, h.y))
+        if d is d1:
+            wv = Matrix.Rotation(math.radians(P_ROLL), 3, d) @ wv
+        legs.append((pts, E, d, wv))
     path = list(reversed(legs[0][0])) + [tuple(p) for p in coil] + legs[1][0]
     parts.append(wire(name + '_fil', path, rw, M['chrome']))
-    for k, (_, E, h, xc) in enumerate(legs):
-        parts.append(sleeve(f'{name}_gaine{k}', E, (h.y, h.z), xc, sl, twist=math.radians(64)))
+    for k, (_, E, d, wv) in enumerate(legs):
+        parts.append(sleeve(f'{name}_gaine{k}', E, d, wv, sl))
     return group(name, parts)
 
 
@@ -246,6 +271,10 @@ def out(plan):
     return os.path.join(OUT, f'collier2-{PIECE}-{COLOUR}-{plan}.png')
 
 
+# the pair, as on the user's photo: the rings face the camera (seen a little from above)
+FACE = (math.radians(-10), math.radians(-13), math.radians(-70))
+
+
 def shot():
     M = collar_mats(COLOUR)
     for plan in PLANS:
@@ -256,31 +285,33 @@ def shot():
         M = collar_mats(COLOUR)
         if PIECE == 'pince':
             if plan == 'paire':
-                a = pince2(M, COLOUR, 'pa'); a.location = (0.058, 0.07, 0.05); a.rotation_euler = (math.radians(-10), 0, math.radians(-104))
-                b = pince2(M, COLOUR, 'pb'); b.location = (-0.045, -0.05, -0.05); b.rotation_euler = (math.radians(-10), 0, math.radians(-104))
+                a = pince2(M, COLOUR, 'pa'); a.location = (0.036, 0.03, 0.03); a.rotation_euler = FACE
+                b = pince2(M, COLOUR, 'pb'); b.location = (-0.036, -0.03, -0.03); b.rotation_euler = FACE
                 chrome_studio(); square()
-                camera((-0.015, -0.5, 0.14), (-0.02, 0.0, 0.03), lens=66, fstop=16)
+                camera((-0.029, -0.42, 0.134), (-0.033, 0.0, 0.042), lens=66, fstop=16)
             elif plan == 'macro':
-                a = pince2(M, COLOUR); a.rotation_euler = (math.radians(12), 0, math.radians(118))
+                # seen from the back and from the left, like the user's close-up: the upper sleeve stands
+                # straight up, the bent one comes towards the camera and goes off to the right
+                a = pince2(M, COLOUR); a.rotation_euler = (math.radians(-47), math.radians(5), math.radians(90))
                 chrome_studio(); square()
-                camera((0.0, -0.27, 0.06), (0.012, 0.0, 0.018), lens=80, fstop=8, focus=(0.012, -0.01, 0.02))
-            elif plan == 'profil':
-                a = pince2(M, COLOUR); a.rotation_euler = (math.radians(128), 0, math.radians(10))
+                camera((-0.13, -0.26, 0.0), (0.02, 0.0, 0.025), lens=80, fstop=11, focus=(0.0, 0.0, 0.0))
+            elif plan == 'trois-quarts':
+                a = pince2(M, COLOUR); a.rotation_euler = (math.radians(-10), 0, math.radians(-35))
                 chrome_studio(); square()
-                camera((0.0, -0.42, 0.0), (0.0, 0.0, -0.038), lens=62, fstop=16)
+                camera((-0.05, -0.295, 0.137), (-0.05, 0.0, 0.03), lens=66, fstop=16)
             elif plan == 'sur-barre':
                 barre_olympique(bar_mats('B', 'noir'))
                 e = disque(20, plate_mats('noir', 'moule'), name='d'); x = 0.686 + e['T'] / 2
                 e.location = (x, 0, 0); e.rotation_euler = (0, 0, math.radians(90))
-                c = pince2(M, COLOUR); c.location = (x + e['T'] / 2 + 0.006, 0, 0); c.rotation_euler = (0, 0, 0)
+                c = pince2(M, COLOUR); c.location = (x + e['T'] / 2 + 0.006, 0, 0); c.rotation_euler = (math.radians(-85), 0, math.radians(180))   # the bent sleeve away from the plate
                 catalog(k=1.05); flags((0.8, 0, 0)); portrait()
                 camera((1.12, -0.33, 0.17), (0.8, 0.0, 0.02), lens=70, fstop=5.6, focus=(x + e['T'] / 2 + 0.01, -0.03, 0.0))
             elif plan == 'couleurs':
                 for i, cname in enumerate(PALETTE):
                     c = pince2(collar_mats(cname), cname, 'k%d' % i)
-                    c.location = (-0.49 + 0.15 * i, 0.0, 0.0303); c.rotation_euler = (0, 0, math.radians(90 - 20))
+                    c.location = (-0.42 + 0.14 * i, 0.0, 0.0303); c.rotation_euler = FACE
                 light_floor(center=(0.0, 0.0, 0.04), k=1.1); flags((0, 0, 0.05), 0.9); setup_render()
-                camera((0.075, -1.55, 0.5), (0.075, 0.02, 0.07), lens=45, fstop=10)
+                camera((0.035, -1.55, 0.5), (0.035, 0.02, 0.07), lens=45, fstop=10)
         else:
             if plan == 'paire':
                 a = levier2(M, False, 'la'); a.location = (-0.058, -0.01, 0.0); a.rotation_euler = (0, 0, math.radians(-128))

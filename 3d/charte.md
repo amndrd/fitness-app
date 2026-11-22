@@ -71,6 +71,7 @@ Les petites mentions (« KG » sur les disques) sont ton sur ton : de la couleur
 ### Les colliers
 
 Deux modèles seulement : **la pince à ressort** et **le collier à levier**, d'après les références de l'utilisateur (étape 7, en cours de validation).
+- **La pince :** les gaines sont à plat dans le plan de l'anneau (jamais tournées en travers). Elles forment un V serré d'environ 40°, et celle du bas est pliée vers l'arrière.
 
 ## Gardé de côté
 
