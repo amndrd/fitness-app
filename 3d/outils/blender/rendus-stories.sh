@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 B=/Applications/Blender.app/Contents/MacOS/Blender
 OUT="$PWD/_bruts/stories"; mkdir -p "$OUT"; t0=$(date +%s)
 R=${RES:-1440}; S=${SAMPLES:-128}
-if (( $# )); then list=("$@"); else list=(1a 1b 1c 2a 2b 2c 3a 3b 3c 3d 4); fi   # usage: ./rendus-stories.sh [1a 2b ...]
+if (( $# )); then list=("$@"); else list=(barres 1d 2a 2b 2c 3a 3b 3c 3d 4 6); fi   # usage: ./rendus-stories.sh [1a 2b ...]
 for sc in $list; do
   for essai in 1 2 3; do
     $B -b --factory-startup -P stories.py -- scenes=$sc res=$R samples=$S out="$OUT" > "$OUT/log-$sc.txt" 2>&1

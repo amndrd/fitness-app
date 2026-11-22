@@ -23,6 +23,8 @@ GROUPS = [   # story, its prototypes: scene, file, label on the board
         ('3d', '3d-haltere-disques-couleurs', 'd · les huit coloris')]),
     ('4 · Disques vinyle et pinces', 'ton choix', [
         ('4', '4-vinyle-et-pinces', 'la colonne')]),
+    ('6 · Trois disques de face', 'noir, blanc, rose, sur toute la hauteur', [
+        ('6', '6-disques-de-face', 'de face')]),
     ('5 · Coming soon', 'le logo, petit, et « coming soon » en Outfit (ton choix)', [
         ('logo-b', '5-coming-soon', 'coming soon')]),
 ]

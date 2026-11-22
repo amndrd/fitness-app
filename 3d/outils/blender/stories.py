@@ -5,7 +5,8 @@
 #   1  the bars in an arc at the bottom (validated), the plates above: a stack (1a), a fan (1b), the range of weights (1c);
 #   2  the round dumbbells, the whole screen: a column (2a), the faces (2b), the range of weights (2c);
 #   3  the plate-loaded dumbbell: the plates (3a), exploded (3b), the pair (3c), the eight colours (3d);
-#   4  the 25 mm plates in a column, the clips on both sides (chosen).
+#   4  the 25 mm plates in a column, the clips on both sides (chosen);
+#   6  three plates seen from the front, black, white and pink, one above the other, filling the screen.
 # Instagram covers the top and the bottom of a story (profile, reply bar): the models stay in the middle.
 # One transparent render per story (story-X.png); outils/stories.py puts it on white.
 # usage: Blender -b --factory-startup -P stories.py -- scenes=1a,2b res=1440 samples=128 out=<dir>
@@ -259,7 +260,19 @@ def s4():
     return (0.0, 0.0, 0.95), 1.0, 0.38
 
 
-SCENE_FN = {k: globals()['s' + k] for k in ('1a', '1b', '1c', '1d', 'barres', '2a', '2b', '2c', '3a', '3b', '3c', '3d', '4')}
+# 6 three plates seen from the front, one above the other, filling the screen (the user, 22/11): black, white, pink
+def s6():
+    gap, PR = 0.025, 0.225                                   # PR: radius of a 20 kg plate (450 mm)
+    for i, c in enumerate(('noir', 'blanc', 'rose')):
+        pose(plate(c, name='d%d' % i), (0.0, 0.0, (1 - i) * (2 * PR + gap)), (0, 0, 0))     # the face towards the camera
+    story()
+    height = (3 * 2 * PR + 2 * gap) / 0.97                   # the column fills 97 % of the height
+    dist = height / 2 / (18 / 200)                           # lens 200 (almost flat), the 36 mm side is the height
+    camera((0.0, -dist, 0.0), (0.0, 0.0, 0.0), lens=200, fstop=32)
+    return (0.0, 0.0, 0.0), 1.0, None
+
+
+SCENE_FN = {k: globals()['s' + k] for k in ('1a', '1b', '1c', '1d', 'barres', '2a', '2b', '2c', '3a', '3b', '3c', '3d', '4', '6')}
 
 for sc in SCENES:
     reset()

@@ -43,7 +43,8 @@ Des images de présentation des modèles, au format story (1080 × 1920), sur fo
 | 2 | les haltères ronds, sur tout l'écran | a en colonne, b les faces, c la gamme de 5 à 40 kg |
 | 3 | l'haltère à disques | a les disques, b l'éclaté, c la paire, d les huit coloris |
 | 4 | les disques vinyle et les pinces, en colonne | ton choix |
-| 5 | « coming soon » : le logo, plus petit, au centre de l'écran blanc, le texte dessous | a Inter, b Outfit, c Instrument Serif, d Manrope |
+| 5 | « coming soon » : le logo, petit, au centre de l'écran blanc, le texte dessous en Outfit | une |
+| 6 | trois disques de face, noir, blanc et rose, l'un au-dessus de l'autre sur toute la hauteur de l'écran | une |
 
 Les fichiers et leur planche (`planche.jpg`) sont dans `3d/stories/`. Le logo (`marque/logo.png`), la story 5 et la planche restent sur ton Mac : le logo n'est pas publié sur GitHub avant l'annonce de l'app. Les modèles restent dans la zone centrale : Instagram couvre le haut (le profil) et le bas (la réponse).
 
