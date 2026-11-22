@@ -34,7 +34,8 @@ Des images de présentation des modèles, au format story (1080 × 1920), sur fo
 - la colonne de disques vinyle et de pinces (devenue la story 4) ;
 - les deux haltères séparés, chacun sur sa story.
 
-Les prototypes :
+**Validées telles quelles (22/11) :** toutes les stories ci-dessous.
+
 
 | Story | Le contenu | Les prototypes |
 |---|---|---|
