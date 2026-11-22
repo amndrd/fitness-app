@@ -1,6 +1,6 @@
 # La charte du matériel 3D
 
-Les choix validés, à respecter pour toutes les pièces de la bibliothèque : poids, barres, machines. Mise à jour le 21/11/2026.
+Les choix validés, à respecter pour toutes les pièces de la bibliothèque : poids, barres, machines. Mise à jour le 22/11/2026.
 
 ## L'esprit
 
@@ -70,8 +70,15 @@ Les petites mentions (« KG » sur les disques) sont ton sur ton : de la couleur
 
 ### Les colliers
 
-Deux modèles seulement : **la pince à ressort** et **le collier à levier**, d'après les références de l'utilisateur (étape 7, en cours de validation).
+Deux modèles seulement : **la pince à ressort** et **le collier à levier**, d'après les références de l'utilisateur (étape 7, validée le 22/11). **La pince pour les petites charges, le levier pour les grosses.** La couleur va sur les gaines de la pince et sur tout le plastique du levier.
+- **La même pince** sert aussi aux barres de 25 mm (haltères à disques) : à cette taille, elle est réduite de moitié.
 - **La pince :** d'après le modèle choisi par l'utilisateur (22/11). La spirale est à plat, trois spires serrées d'un fil d'acier satiné (1/8 du diamètre). Les deux bouts partent du même point de l'anneau, chacun à sa hauteur, puis s'écartent en V d'environ 50°. Les gaines en caoutchouc anthracite sont posées sur la tranche, leurs grandes faces verticales, bout arrondi et ouverture à fente. Elles posent au sol avec la spirale. Dimensions pour la barre olympique : 51 mm dedans, fil de 7,8 mm, gaines de 73 × 35 × 10,5 mm. Le fil reste toujours dans la fente de la gaine (paroi de 0,9 mm).
+
+### L'haltère à disques (étape 8, en cours de validation)
+
+- **Poignée de 25 mm et 46 cm :** une prise moletée de 13 cm, deux bagues d'arrêt de 37 mm, des manchons lisses de 15 cm et des embouts noirs bombés. Trois finitions, comme la barre : A (prise noire), B (tout acier), C (tout noir).
+- **Disques ciment-vinyle :** 1,25 kg (Ø 185 × 34 mm), 2,5 kg (Ø 225 × 42 mm) et 5 kg (Ø 282 × 50 mm), avec un alésage de 26,6 mm. Le bord est en bourrelet avec la ligne de moulage, la face porte huit trous, le centre est lisse. Le poids est en relief le long de l'anneau, deux fois. La couleur est un réglage.
+- **Une pince** à chaque bout.
 
 ## Gardé de côté
 

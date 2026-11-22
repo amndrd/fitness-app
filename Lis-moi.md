@@ -77,6 +77,18 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
 - Le collier à levier : deux mâchoires à six lobes articulées en bas, une garniture en caoutchouc, une charnière à trois segments, un levier avec sa grille, des vis cruciformes, montré fermé et ouvert.
 - Le modèle est dans `3d/outils/blender/colliers.py`. Tous les rendus se refont avec `rendus-colliers.sh` (ou `rendus-colliers.sh pince` pour la pince seule).
 
+**Tes choix (22/11) :** la pince est validée. Elle sert aux petites charges, le levier aux grosses, et les couleurs te conviennent.
+
+**Étape 8 (22/11/2026) : l'haltère à disques, d'après ta photo.**
+- Ta photo est dans `3d/references/halteres-disques/`. Les recherches (dimensions des disques ciment-vinyle, poignées de 25 mm) sont dans `3d/recherche/7-halteres-disques/`.
+- `3d/prototypes/06-halteres-disques/planche.jpg` montre :
+  - ta photo à côté de notre rendu, avec le même montage ;
+  - l'haltère, l'éclaté, les trois finitions de poignée ;
+  - les trois disques, trois textures et deux marquages ;
+  - les coloris.
+  La planche reste sur ton Mac, puisqu'elle montre ta photo. On la refait avec `python3 3d/outils/planche_halteres.py`.
+- Le modèle est dans `3d/outils/blender/halteres.py` (il réutilise la pince de `colliers.py`). Tous les rendus se refont avec `rendus-halteres.sh`.
+
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
 ## Structure
@@ -97,6 +109,7 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
     03-textures-coloris/   l'étape 5 : disque/ et haltere/, puis texture/, couleur/, design/
     04-barre-et-colliers/  l'étape 6 : la barre (trois finitions, la couleur) et les trois premiers colliers (remplacés)
     05-colliers/           l'étape 7 : pince/ et levier/, d'après tes photos
+    06-halteres-disques/   l'étape 8 : l'haltère à disques
   references/              tes images de référence
   outils/
     planche_recherche.py   refait la planche
@@ -109,6 +122,7 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
     planche_poids3.py      refait la planche de l'étape 5
     planche_barre.py       refait les deux planches de l'étape 6
     planche_colliers.py    refait la planche de l'étape 7
+    planche_halteres.py    refait la planche de l'étape 8
     credits.md             les éléments de tiers (HDRI) et leurs licences
     compose.mjs            pose un rendu transparent sur un fond (couleur ou dégradé)
     blender/
@@ -122,6 +136,7 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
       barre.py             la barre olympique et les trois colliers (étape 6)
       rendus-barre.sh      lance tous les rendus de l'étape 6
       colliers.py          la pince à ressort et le collier à levier (étape 7)
+      halteres.py          l'haltère à disques : poignée, disques ciment-vinyle (étape 8)
       rendus-colliers.sh   lance tous les rendus de l'étape 7
 ```
 

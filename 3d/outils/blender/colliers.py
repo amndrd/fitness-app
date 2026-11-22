@@ -395,4 +395,5 @@ def shot():
         render(out(plan))
 
 
-shot()
+if not globals().get('AS_LIB_COLLIERS'):     # halteres.py uses this file as a library
+    shot()

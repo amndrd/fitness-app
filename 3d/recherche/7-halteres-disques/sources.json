@@ -1,0 +1,33 @@
+{
+  "sujet": "L'haltère à disques ciment-vinyle (étape 8, 22/11/2026)",
+  "reference": "3d/references/halteres-disques/01-ta-reference-halteres.jpeg (photo de l'utilisateur, non publiée)",
+  "dimensions": {
+    "1,25 kg": "Ø 185 × 34 mm",
+    "2,5 kg": "Ø 225 × 42 mm",
+    "5 kg": "Ø 282 × 50 mm",
+    "alesage": "25 à 27 mm",
+    "poignee": "35 à 45 cm, Ø 25 mm"
+  },
+  "sources": [
+    {
+      "titre": "MuscleSquad, Vinyl 1 Inch Weight Plates",
+      "url": "https://musclesquad.com/products/musclesquad-vinyl-1-inch-weight-plates",
+      "note": "images gardées : musclesquad/ (disques vinyle)"
+    },
+    {
+      "titre": "FXR Sports 1\" Standard Vinyl Weight Plates (YPC)",
+      "url": "https://www.ypc.co.uk/product/fxr-sports-1-standard-vinyl-weight-plates-2-x-1-25kg/",
+      "note": "dimensions des disques ciment"
+    },
+    {
+      "titre": "Decathlon, kit haltères composite 20 kg",
+      "url": "https://www.decathlon.co.uk/p/mp/composite-dumbbell-set-1-x-20-kg/f32f3cc0-1825-4c19-96da-8f64e1f9b4be/novar",
+      "note": "barre courte Ø 25 mm × 44 cm, trous de 27 mm"
+    },
+    {
+      "titre": "Opti Vinyl Dumbbell Set 20 kg (Argos)",
+      "url": "https://www.argos.co.uk/product/8196026",
+      "note": "même style que la photo ; page non lisible automatiquement"
+    }
+  ]
+}
