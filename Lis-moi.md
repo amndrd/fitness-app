@@ -67,6 +67,15 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
   - trois colliers : la pince à ressort, le collier à levier et le collier en aluminium, chacun dans les huit coloris.
 - Le modèle est dans `3d/outils/blender/barre.py`. Tous les rendus se refont avec `rendus-barre.sh` (environ 12 min).
 
+**Tes choix (21/11) :** pour la barre, l'originale est la **B (tout acier)**, avec A et C en options ; la couleur sur la bague et l'embout est validée. Les colliers de l'étape 6 ne te plaisaient pas : on n'en garde que deux, refaits d'après tes photos. **Le collier en aluminium est abandonné.**
+
+**Étape 7 (21-22/11/2026) : les deux colliers, d'après tes photos.**
+- Tes photos sont dans `3d/references/colliers/` : trois de la pince à ressort, une du collier à levier.
+- `3d/prototypes/05-colliers/planche.jpg` : chacune de tes photos à côté de notre rendu, pris sous le même angle, puis les plans en plus (sur la barre, les huit coloris, rose et bleu). La planche reste sur ton Mac, puisqu'elle montre tes photos. On la refait avec `python3 3d/outils/planche_colliers.py`.
+- La pince : fil chromé de 4,8 mm, deux spires serrées, branches coudées, gaines plates ouvertes en rectangle et arrondies au bout.
+- Le collier à levier : deux mâchoires à six lobes articulées en bas, une garniture en caoutchouc, une charnière à trois segments, un levier avec sa grille, des vis cruciformes, montré fermé et ouvert.
+- Le modèle est dans `3d/outils/blender/colliers.py`. Tous les rendus se refont avec `rendus-colliers.sh`.
+
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
 ## Structure
@@ -85,7 +94,8 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
     01-poids-et-halteres/  la planche de l'étape 2, puis disques/ et halteres/, un dossier par piste
     02-disque-et-haltere/  l'étape 4 : disque/ et haltere/, un dossier par police, et commun/
     03-textures-coloris/   l'étape 5 : disque/ et haltere/, puis texture/, couleur/, design/
-    04-barre-et-colliers/  l'étape 6 : la barre (trois finitions, la couleur) et les trois colliers
+    04-barre-et-colliers/  l'étape 6 : la barre (trois finitions, la couleur) et les trois premiers colliers (remplacés)
+    05-colliers/           l'étape 7 : pince/ et levier/, d'après tes photos
   references/              tes images de référence
   outils/
     planche_recherche.py   refait la planche
@@ -97,6 +107,7 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
     planche_poids2.py      refait la planche de l'étape 4
     planche_poids3.py      refait la planche de l'étape 5
     planche_barre.py       refait les deux planches de l'étape 6
+    planche_colliers.py    refait la planche de l'étape 7
     credits.md             les éléments de tiers (HDRI) et leurs licences
     compose.mjs            pose un rendu transparent sur un fond (couleur ou dégradé)
     blender/
@@ -109,6 +120,8 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
       rendus-poids3.sh     lance tous les rendus de l'étape 5
       barre.py             la barre olympique et les trois colliers (étape 6)
       rendus-barre.sh      lance tous les rendus de l'étape 6
+      colliers.py          la pince à ressort et le collier à levier (étape 7)
+      rendus-colliers.sh   lance tous les rendus de l'étape 7
 ```
 
 Les outils utilisent Playwright, installé dans `~/Desktop/Portfolio/tools`.

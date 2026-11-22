@@ -59,6 +59,19 @@ Les petites mentions (« KG » sur les disques) sont ton sur ton : de la couleur
 - **Texte :** le chiffre et « KG » imprimés en blanc sur le médaillon. Pas de marque.
 - **Texture :** **grain fin** sur le tour de la tête ; le médaillon reste lisse.
 
+### La barre olympique
+
+- **Mesures normées :**
+  - barre homme : 2,20 m et 20 kg, prise de 28 mm, 1 310 mm entre les bagues, manchons de 50 × 415 mm ;
+  - barre femme : 2,01 m et 15 kg, prise de 25 mm, manchons de 320 mm, sans moletage central.
+- **Détails :** un moletage en pointes de diamant, avec des repères à 81 et 91 cm. La bague d'arrêt est chanfreinée, et le manchon a son joint et deux fines rainures.
+- **Finition originale : B, tout acier** (arbre en chrome satiné, manchons polis). Deux options : A, noir et acier, et C, tout noir.
+- **La couleur** va sur la bague d'identification et sur l'embout, gravé « 20 KG » (ou « 15 KG ») en Archivo Expanded. Un thème applique la même couleur aux disques, aux colliers et à la bague.
+
+### Les colliers
+
+Deux modèles seulement : **la pince à ressort** et **le collier à levier**, d'après les références de l'utilisateur (étape 7, en cours de validation).
+
 ## Gardé de côté
 
 Les accents de design ne servent que si la personnalisation va un jour plus loin que le simple choix de la couleur. Ils sont prêts dans `3d/outils/blender/poids3.py`.

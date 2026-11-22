@@ -322,7 +322,7 @@ def collar_shot(plan, kind):
     render(os.path.join(OUT, f'collier-{kind}-{plan}.png'))
 
 
-for var in VARS:
+for var in ([] if globals().get('AS_LIB_BARRE') else VARS):
     for plan in PLANS:
         reset()
         for w in list(bpy.data.worlds):
