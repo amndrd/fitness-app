@@ -3,7 +3,7 @@
 #   on the left and right (180° symmetry), "KG" tone on tone, top and bottom left empty.
 # Dumbbell B2: thick round heads, smooth recessed face medallion with a raised bezel, grainy sides,
 #   the weight and "KG" printed in white, satin knurled handle with steel collars.
-# Variants A, B, C = the font of the numbers (Archivo Expanded, Saira Expanded, Michroma: open fonts).
+# The font of the numbers: Archivo Expanded (chosen on 21/11; Saira Expanded and Michroma were tried).
 # usage: Blender -b --factory-startup -P poids2.py -- piece=disque|haltere variante=A vues=face20,face25,tq res=1600 samples=96 out=<dir>
 import os
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -13,9 +13,7 @@ PIECE = ARGS.get('piece', 'disque')
 VAR = ARGS.get('variante', 'A')
 VUES = ARGS.get('vues', 'face20').split(',')
 POL = os.path.join(HERE, '..', 'polices')
-FONTS = {'A': ('Archivo-ExpandedExtraBold.ttf', 'Archivo-ExpandedSemiBold.ttf'),
-         'B': ('Saira-ExpandedBold.ttf', 'Saira-ExpandedSemiBold.ttf'),
-         'C': ('Michroma-Regular.ttf', 'Michroma-Regular.ttf')}
+FONTS = {'A': ('Archivo-ExpandedExtraBold.ttf', 'Archivo-ExpandedSemiBold.ttf')}   # the chosen font (B and C were dropped)
 F_BIG, F_SMALL = (os.path.join(POL, f) for f in FONTS[VAR])
 BORE = 0.0254
 

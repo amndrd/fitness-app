@@ -1,6 +1,6 @@
 #!/bin/zsh
-# Step 6: the Olympic bar and the collars. One Blender run per variant, run again if Blender dies silently.
-# Raw renders in outils/blender/_bruts/barre, finished by outils/planche_barre.py.
+# Step 6: the Olympic bar (finish B, options A and C). The collar is the clip: rendus-colliers.sh. One Blender run per variant, run again if Blender dies silently.
+# Raw renders in outils/blender/_bruts/barre.
 cd "$(dirname "$0")"
 B=/Applications/Blender.app/Contents/MacOS/Blender
 OUT="$PWD/_bruts/barre"; mkdir -p "$OUT"; t0=$(date +%s)
@@ -15,9 +15,7 @@ run() {  # piece variante plans prefix
   done
   echo "$1 $2 : $(( $(date +%s) - t0 )) s"
 }
-for f in A B C; do run barre $f entiere,manchon,embout,moletage,chargee barre-$f; done
+for f in B A C; do run barre $f entiere,manchon,embout,moletage barre-$f; done
 run barre A gamme barre-A
 run couleur noir rack barre-couleur-noir
-for c in rose bleu vert; do run couleur $c theme barre-couleur-$c; done
-for k in pince levier alu; do run collier $k seul,sur-barre,couleurs collier-$k; done
 echo "fin : $(( $(date +%s) - t0 )) s"

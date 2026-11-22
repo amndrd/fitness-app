@@ -8,6 +8,8 @@ Le projet en est au début : la bibliothèque 3D des machines de musculation, mo
 
 ```
 3d/
+  charte.md    les choix validés du matériel 3D
+  modeles/     les images des modèles validés
   recherche/   la recherche par étape : les salles de sport, puis un dossier par muscle et par machine
   outils/      les scripts : récupération des références, planches, modèles Blender
 ```

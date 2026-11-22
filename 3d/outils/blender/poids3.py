@@ -1,6 +1,7 @@
-# Step 5 (21/11/2026): textures, colours and design variations of the plate and the round dumbbell (font A, Archivo).
+# Step 5 (21/11/2026): textures and colours of the plate and the round dumbbell (font: Archivo Expanded).
+# Kept: the moulded plate, the fine-grain dumbbell, the 8 colours (3d/charte.md). The other textures stay available in surface().
 # Reuses the models of poids2.py; this script only changes the materials, the lighting (a real studio HDRI) and the shots.
-# usage: Blender -b --factory-startup -P poids3.py -- piece=disque|haltere groupe=texture|couleur|design variantes=a,b plans=face,rasant res=1400 samples=96 out=<dir>
+# usage: Blender -b --factory-startup -P poids3.py -- piece=disque|haltere groupe=texture|couleur variantes=a,b plans=face,rasant res=1400 samples=96 out=<dir>
 import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 AS_LIB = True
@@ -351,15 +352,6 @@ def dumbbell_shot(plan, M_of, tag):
 
 # ------------------------------------------------------------------ the groups
 # texture: one material set per texture, black. couleur: one colour (or "tous" = the whole palette in one shot).
-# design: accents on the black model.
-DISQUE_DESIGNS = {
-    'insert-noir': dict(insert='noir'), 'insert-laiton': dict(insert='laiton'),
-    'tranche-rose': dict(tranche='rose'), 'chiffres-bleus': dict(chiffres=srgb('#5C8FD6')),
-}
-HALTERE_DESIGNS = {
-    'face-rose': dict(face_colour='rose'), 'liseré-acier': dict(bezel='acier'),
-    'tout-noir': dict(handle='noir'), 'poignee-laiton': dict(handle='laiton', bezel=None),
-}
 
 for var in ([] if globals().get('AS_LIB_P3') else VARS):
     for plan in PLANS:
@@ -377,8 +369,6 @@ for var in ([] if globals().get('AS_LIB_P3') else VARS):
                     f = lambda i: plate_mats(('noir', 'rose', 'bleu')[i % 3], 'moule')
                 else:
                     f = lambda i, v=var: plate_mats(v, 'moule')
-            else:
-                f = lambda i, v=var: plate_mats('noir', 'moule', **DISQUE_DESIGNS[v])
             plate_shot(plan, f, var)
         else:
             if GROUPE == 'texture':
@@ -388,6 +378,4 @@ for var in ([] if globals().get('AS_LIB_P3') else VARS):
                     f = lambda i: dumbbell_mats(list(PALETTE)[i % len(PALETTE)], 'fin')
                 else:
                     f = lambda i, v=var: dumbbell_mats(v, 'fin')
-            else:
-                f = lambda i, v=var: dumbbell_mats('noir', 'fin', **HALTERE_DESIGNS[v])
             dumbbell_shot(plan, f, var)

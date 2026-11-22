@@ -1,7 +1,7 @@
 #!/bin/zsh
 # Step 8: the plate-loaded dumbbell (handle, cement-vinyl plates, our clip), after the user's photo.
 # One Blender run per set of settings, run again if Blender dies silently.
-# Raw renders in outils/blender/_bruts/halteres, finished by outils/planche_halteres.py.
+# Raw renders in outils/blender/_bruts/halteres.
 cd "$(dirname "$0")"
 B=/Applications/Blender.app/Contents/MacOS/Blender
 OUT="$PWD/_bruts/halteres"; mkdir -p "$OUT"; t0=$(date +%s)
@@ -19,7 +19,7 @@ run() {  # <expected file> <settings...>
 D=noir-B-gros-blanc
 run haltere-haltere-$D-chanfrein.png plans=paire,detail,haltere
 run haltere-disques-$D-chanfrein.png plans=eclate,gros-plan,disques
-for e in chanfrein arrondi creux; do run haltere-bout-$D-$e.png plans=bout bout=$e; done
-run haltere-couleurs-$D-chanfrein.png plans=bouts,poignees,couleurs
+run haltere-bout-$D-chanfrein.png plans=bout
+run haltere-couleurs-$D-chanfrein.png plans=couleurs
 for c in rose bleu; do run haltere-haltere-$c-B-gros-blanc-chanfrein.png plans=haltere couleur=$c; done
 echo "fin : $(( $(date +%s) - t0 )) s"

@@ -1,8 +1,8 @@
 # Step 6 (21/11/2026): the Olympic bar and the collars, following 3d/charte.md (Archivo Expanded, the 8 colours,
 # the moulded black plates). Reuses poids2.py / poids3.py (plates, materials, studio HDRI, shots helpers).
 # Bar finishes: A black and steel, B all steel, C all black. The colour (ID ring and end cap) is a setting.
-# Collars: pince (spring clip), levier (plastic lever collar), alu (machined aluminium lever collar).
-# usage: Blender -b --factory-startup -P barre.py -- piece=barre|collier variantes=A plans=entiere,manchon res=1400 samples=110 out=<dir>
+# The collar is the spring clip of colliers.py (box() and wire() below are its building blocks).
+# usage: Blender -b --factory-startup -P barre.py -- piece=barre|couleur variantes=B plans=entiere,manchon res=1400 samples=110 out=<dir>
 import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 AS_LIB_P3 = True
@@ -89,18 +89,7 @@ def barre_olympique(M, femme=False, name='barre'):
     return e
 
 
-# ------------------------------------------------------------------ collars
-def coll_mats(kind, colour='noir'):
-    M = {}
-    c = lin(colour)
-    M['plastique'] = surface('plastique', c, 'moule', axis='X')
-    M['acier'] = mat('acier', (0.78, 0.78, 0.8), rough=0.22, metal=1.0)
-    M['fil'] = mat('fil', (0.42, 0.42, 0.44), rough=0.3, metal=1.0)
-    M['levier'] = mat('levier', (0.02, 0.02, 0.022), rough=0.4)
-    M['alu'] = mat('alu', c if colour != 'noir' else (0.05, 0.05, 0.055), rough=0.3, metal=1.0, aniso=0.4)
-    return M
-
-
+# ------------------------------------------------------------------ building blocks of the clip
 def box(name, size, loc, m, bev=0.0):
     """A block (rounded edges if bev > 0)."""
     sx, sy, sz = (v / 2 for v in size)
@@ -111,18 +100,6 @@ def box(name, size, loc, m, bev=0.0):
     if bev:
         bevel(o, bev, segs=3, angle=30)
         o = bake(o, 35)
-    return o
-
-
-def capsule(name, a, b, r, m):
-    """A rubber grip: a cylinder with rounded ends from a to b."""
-    a, b = Vector(a), Vector(b)
-    L = (b - a).length
-    pr = arc(0.0, r, r, -math.pi / 2, 0, 6) + arc(0.0, L - r, r, 0, math.pi / 2, 6)
-    o = fix_normals(lathe(name, pr, m, segs=32, axis='X'))
-    d = (b - a).normalized()
-    q = Vector((1, 0, 0)).rotation_difference(d)
-    o.matrix_world = Matrix.Translation(a) @ q.to_matrix().to_4x4()
     return o
 
 
@@ -142,79 +119,6 @@ def wire(name, pts, r, m):
     return o
 
 
-def pince(M, name='pince'):
-    """Spring clip: three turns of steel wire around the sleeve, two legs in a V with rubber grips. Axis X, centred."""
-    rw, rc, pitch, turns = 0.0021, 0.0255 + 0.0021, 0.0052, 3
-    pts = []
-    n = 72 * turns
-    x0 = -pitch * turns / 2
-    for i in range(n + 1):
-        th = math.pi / 2 + 2 * math.pi * turns * i / n
-        pts.append((x0 + pitch * turns * i / n, rc * math.cos(th), rc * math.sin(th)))
-    s, e = Vector(pts[0]), Vector(pts[-1])
-    leg1 = [s + Vector((0, -0.004 * k, 0.006 * k)) for k in range(1, 3)] + [s + Vector((0, -0.048, 0.07))]
-    leg2 = [e + Vector((0, 0.004 * k, 0.006 * k)) for k in range(1, 3)] + [e + Vector((0, 0.048, 0.07))]
-    full = [tuple(p) for p in reversed(leg1)] + pts + [tuple(p) for p in leg2]
-    parts = [wire(name + '_fil', full, rw, M['fil'])]
-    for leg, base in ((leg1[-1], s), (leg2[-1], e)):
-        d = (leg - base).normalized()
-        parts.append(capsule(name + '_grip', leg - d * 0.045, leg + d * 0.004, 0.0068, M['plastique']))
-    return group(name, parts)
-
-
-def levier(M, name='levier'):
-    """Plastic lever collar (our own design): a ring, a housing on top, a flat hinged lever, a steel pin."""
-    parts = []
-    pr = round_poly([(0.0257, -0.018), (0.043, -0.018), (0.043, 0.018), (0.0257, 0.018)], [0.0012, 0.004, 0.004, 0.0012], segs=4)
-    parts.append(sharp(fix_normals(lathe(name + '_anneau', pr, M['plastique'], segs=128, axis='X')), 35))
-    hb = box(name + '_boitier', (0.036, 0.046, 0.016), (0.0, 0.0, 0.047), M['plastique'], bev=0.003)
-    parts.append(hb)
-    lv = box(name + '_levier', (0.03, 0.068, 0.006), (0.0, -0.012, 0.058), M['plastique'], bev=0.0025)
-    lv.rotation_euler = (math.radians(-5), 0, 0)
-    parts.append(lv)
-    pin = fix_normals(lathe(name + '_axe', [(0.0, -0.0195), (0.0028, -0.0195), (0.0028, 0.0195), (0.0, 0.0195)], M['acier'], segs=24, axis='X'))
-    pin.location = (0, 0.019, 0.05)
-    parts.append(pin)
-    for sy in (-1, 1):            # two screws on each face
-        for sx in (-1, 1):
-            sc = fix_normals(lathe(name + '_vis', [(0.0, 0.0), (0.0032, 0.0), (0.0032, 0.0012), (0.0, 0.0012)], M['acier'], segs=24, axis='X'))
-            sc.location = (sx * 0.018, sy * 0.034, -0.012)
-            if sx < 0:
-                sc.rotation_euler = (0, 0, math.pi)
-            parts.append(sc)
-    return group(name, parts)
-
-
-def rounded_square(a, rr, n=8):
-    pts = []
-    for cx, cy, a0 in ((a - rr, a - rr, 0), (-a + rr, a - rr, 90), (-a + rr, -a + rr, 180), (a - rr, -a + rr, 270)):
-        for i in range(n + 1):
-            t = math.radians(a0 + 90 * i / n)
-            pts.append((cx + rr * math.cos(t), cy + rr * math.sin(t)))
-    return pts
-
-
-def alu(M, name='alu'):
-    """Machined aluminium lever collar (our own design): a rounded-square body with a split on top, a black lever."""
-    a, w = 0.038, 0.015
-    body = fix_normals(prism(name + '_corps', rounded_square(a, 0.013), -w, w, M['alu'], axis='X'))
-    bore = fix_normals(lathe(name + '_trou', [(0.0, -0.05), (0.0256, -0.05), (0.0256, 0.05), (0.0, 0.05)], M['alu'], segs=128, axis='X'))
-    boolean(body, bore)
-    slot = box(name + '_fente', (0.05, 0.0022, 0.03), (0.0, 0.0, 0.034), M['alu'])
-    boolean(body, slot)
-    bevel(body, 0.0012, segs=3, angle=40)
-    body = bake(body, 35)
-    remove(bore); remove(slot)
-    lv = box(name + '_levier', (0.024, 0.066, 0.007), (0.0, -0.018, a + 0.0034), M['levier'], bev=0.0028)
-    lv.rotation_euler = (math.radians(-4), 0, 0)
-    pin = fix_normals(lathe(name + '_axe', [(0.0, -0.0135), (0.0025, -0.0135), (0.0025, 0.0135), (0.0, 0.0135)], M['acier'], segs=24, axis='X'))
-    pin.location = (0, 0.009, a + 0.0032)
-    return group(name, [body, lv, pin])
-
-
-COLLARS = {'pince': pince, 'levier': levier, 'alu': alu}
-
-
 # ------------------------------------------------------------------ shots
 def floor_or_catalog(catalogue, center=(0, 0, 0.2), k=1.0):
     if catalogue:
@@ -223,23 +127,22 @@ def floor_or_catalog(catalogue, center=(0, 0, 0.2), k=1.0):
         light_floor(center=center, k=k)
 
 
-def load_bar(Mb, plates_colour, collar_kind, collar_colour, femme=False, y=0.0):
-    """A loaded bar lying on the floor: 20 + 10 kg each side and the collars."""
+def load_bar(Mb, plates_colour, collar=None, femme=False, y=0.0, plates=(20, 10)):
+    """A loaded bar lying on the floor: 20 + 10 kg each side. collar(name, sign, x) places a collar against
+    the last plate (colliers.py gives the clip)."""
     R0 = 0.225
     b = barre_olympique(Mb, femme)
     b.location = (0, y, R0)
     for sg in (-1, 1):
         x = 0.685 + 0.001
-        for i, w in enumerate((20, 10)):
+        for i, w in enumerate(plates):
             e = disque(w, plate_mats(plates_colour, 'moule'), name='c%d%d' % (sg, i))
             x += e['T'] / 2
             e.location = (sg * x, y, R0)
             e.rotation_euler = (0, 0, math.radians(90))
             x += e['T'] / 2 + 0.001
-        c = COLLARS[collar_kind](coll_mats(collar_kind, collar_colour), name='col%d' % sg)
-        c.location = (sg * (x + 0.02), y, R0)
-        if sg < 0:
-            c.rotation_euler = (0, 0, math.pi)
+        if collar:
+            collar('col%d' % sg, sg, x)
     return b
 
 
@@ -266,10 +169,6 @@ def bar_shot(plan, fin):
         barre_olympique(Mb)
         raking((0.43, 0.0, 0.0), side=1, k=0.9); portrait()
         camera((0.52, -0.15, 0.06), (0.43, 0.0, 0.0), lens=100, fstop=9, focus=(0.44, -0.014, 0.0))
-    elif plan == 'chargee':
-        load_bar(Mb, 'noir', 'alu', 'noir')
-        light_floor(center=(0.5, 0, 0.22), k=1.2); setup_render()
-        camera((2.25, -1.2, 0.62), (0.5, 0.0, 0.2), lens=40, fstop=9, focus=(0.85, 0, 0.22))
     elif plan == 'gamme':
         a = barre_olympique(bar_mats(fin, COLOUR), name='h'); a.location = (0, 0.07, 0)
         f = barre_olympique(bar_mats(fin, COLOUR, femme=True), femme=True, name='f'); f.location = (0, -0.07, 0)
@@ -291,35 +190,7 @@ def colour_shot(plan, colour):
             b.rotation_euler = Matrix(((0, 1, 0), (0, 0, 1), (1, 0, 0))).to_euler()
         catalog(k=1.1); wide()
         camera((0.0, -0.88, 2.12), (0.0, -0.12, 1.07), lens=50, fstop=10, focus=(0.0, -0.08, 1.1))
-    elif plan == 'theme':        # one colour for the plates, the collars and the bar
-        load_bar(bar_mats('A', colour), colour, 'levier', colour)
-        light_floor(center=(0.5, 0, 0.22), k=1.2); setup_render()
-        camera((2.25, -1.2, 0.62), (0.5, 0.0, 0.2), lens=40, fstop=9, focus=(0.85, 0, 0.22))
     render(os.path.join(OUT, f'barre-couleur-{colour}-{plan}.png'))
-
-
-def collar_shot(plan, kind):
-    if plan == 'seul':
-        c = COLLARS[kind](coll_mats(kind, COLOUR)); c.rotation_euler = (math.radians(4), 0, math.radians(-38))
-        catalog(k=1.05); portrait()
-        camera((0.0, -0.46, 0.15), (0.0, 0.0, 0.012), lens=85, fstop=8)
-    elif plan == 'sur-barre':
-        b = barre_olympique(bar_mats('A', COLOUR))
-        e = disque(20, plate_mats('noir', 'moule'), name='d')
-        x = 0.686 + e['T'] / 2
-        e.location = (x, 0, 0); e.rotation_euler = (0, 0, math.radians(90))
-        c = COLLARS[kind](coll_mats(kind, COLOUR)); c.location = (x + e['T'] / 2 + 0.021, 0, 0)
-        catalog(k=1.05); portrait()
-        camera((1.12, -0.33, 0.17), (0.8, 0.0, 0.02), lens=70, fstop=5.6, focus=(x + e['T'] / 2 + 0.02, -0.04, 0.0))
-    elif plan == 'couleurs':
-        cols = list(PALETTE)
-        for i, cname in enumerate(cols):
-            c = COLLARS[kind](coll_mats(kind, cname), name='k%d' % i)
-            c.location = (-0.42 + 0.12 * i, 0.0, {'levier': 0.043, 'alu': 0.038, 'pince': 0.0298}[kind])
-            c.rotation_euler = (0, 0, math.radians(90 - 24))
-        light_floor(center=(0.0, 0.0, 0.04), k=1.1); setup_render()
-        camera((0.02, -1.24, 0.42), (0.02, 0.02, 0.095), lens=45, fstop=10)
-    render(os.path.join(OUT, f'collier-{kind}-{plan}.png'))
 
 
 for var in ([] if globals().get('AS_LIB_BARRE') else VARS):
@@ -330,7 +201,5 @@ for var in ([] if globals().get('AS_LIB_BARRE') else VARS):
         SC.render.film_transparent = False
         if PIECE == 'barre':
             bar_shot(plan, var)
-        elif PIECE == 'couleur':
-            colour_shot(plan, var)
         else:
-            collar_shot(plan, var)
+            colour_shot(plan, var)

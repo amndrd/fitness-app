@@ -1,12 +1,12 @@
 # Step 8 (22/11/2026): the plate-loaded dumbbell, after the user's photo (3d/references/halteres-disques/).
-# - a 25 mm handle: knurled grip, two stop collars, smooth sleeves, a bare steel end (no cap, the user's choice of
-#   22/11: all steel, finish B); three ways to finish that end: chamfer, rounded, recessed. Finishes A, B, C like the bar;
+# - a 25 mm handle, all steel: knurled grip, two stop collars, smooth sleeves with a bare chamfered steel end
+#   (no cap: the user's choice of 22/11);
 # - cement-vinyl plates (1.25, 2.5 and 5 kg, common sizes for 25 mm bars, see 3d/recherche/7-halteres-disques):
 #   a rounded rim with a mould seam, a flat face with the weight embossed along the ring (twice) and eight
 #   holes, a smooth recessed centre around the bore;
 # - our spring clip (colliers.py, pince3) at the size of a 25 mm bar, which is the reference model's own size.
 # The colour (plates, clip sleeves) is a setting (3d/charte.md). Reuses colliers.py, barre.py, poids3.py, poids2.py, base.py.
-# usage: Blender -b --factory-startup -P halteres.py -- plans=paire,haltere couleur=noir finition=B texture=gros marquage=blanc bout=chanfrein res=1400 samples=128 out=<dir>
+# usage: Blender -b --factory-startup -P halteres.py -- plans=paire,haltere couleur=noir res=1400 samples=128 out=<dir>
 import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 AS_LIB_COLLIERS = True
@@ -14,10 +14,10 @@ exec(open(os.path.join(HERE, 'colliers.py')).read())
 
 PLANS = ARGS.get('plans', 'paire').split(',')
 COLOUR = ARGS.get('couleur', 'noir')
-FIN = ARGS.get('finition', 'B')
+FIN = 'B'                                 # all steel (the only finish kept)
 TEX = ARGS.get('texture', 'gros')         # the sandy grain of the photo
 MARK = ARGS.get('marquage', 'blanc')      # blanc: white (charcoal on light colours), the user's choice | relief: same colour (the photo)
-END = ARGS.get('bout', 'chanfrein')       # the steel end of the handle: chanfrein (the user's choice, 22/11) | arrondi | creux
+END = 'chanfrein'                         # the steel end of the handle (the user's choice, 22/11)
 
 # ------------------------------------------------------------------ dimensions
 VINYL = {1.25: (0.185, 0.034), 2.5: (0.225, 0.042), 5: (0.282, 0.050)}   # diameter, thickness
@@ -26,12 +26,9 @@ HR = 0.0125                             # handle: 25 mm
 GRIP = 0.130                            # between the two stop collars
 COL_W, COL_R = 0.015, 0.0185            # stop collars: 15 mm wide, 37 mm across
 SLEEVE = 0.165                          # each side: 5 + 2.5 + 2.5 kg, the clip, then 11 mm of bare steel (like the photo)
-ENDS = ('chanfrein', 'arrondi', 'creux')
 CLIP_S = 0.0256 / 0.051                 # our clip, scaled to the 25 mm bar
 SET = [5, 2.5, 2.5]                     # one side of the dumbbell, from the inside (like the photo)
-HANDLE_FIN = {'A': dict(grip='noir', rest='chrome'),   # black grip, steel collars and sleeves
-              'B': dict(grip='chrome', rest='chrome'), # all steel (like the bar's original finish)
-              'C': dict(grip='noir', rest='noir')}     # all black
+HANDLE_FIN = {'B': dict(grip='chrome', rest='chrome')}  # all steel (like the bar's original finish)
 
 
 def label_v(w):
@@ -63,23 +60,11 @@ def plate_mats_v(colour, texture=TEX, mark=MARK):
 
 
 # ------------------------------------------------------------------ the handle (axis X, centred)
-def sleeve_end(x0, xe, end):
-    """Profile (r, x) of a sleeve from x0 to its bare steel end xe. Solid steel, turned:
-    chanfrein: a 1.5 mm 45-degree chamfer, flat end (like the bar's sleeves);
-    arrondi: a 5.5 mm round, the end face slightly domed;
-    creux: the chamfer and a shallow recess in the end face (the bar's sleeve end, without its cap).
-    (Two fine grooves near the end, like the bar's sleeves, were tried: next to the clip they read as extra coils.)"""
-    if end == 'arrondi':
-        return round_poly([(0.0, x0), (HR, x0), (HR, xe - 0.0008), (0.0, xe)], [0, 0, 0.0055, 0], segs=10)
-    pts = [(0.0, x0), (HR, x0), (HR, xe - 0.0015), (HR - 0.0015, xe)]
-    rad = [0, 0, 0.0002, 0.0002]
-    if end == 'creux':
-        pts += [(0.0095, xe), (0.0095, xe - 0.0015), (0.0, xe - 0.0015)]
-        rad += [0.0003, 0.0004, 0]
-    else:
-        pts += [(0.0, xe)]
-        rad += [0]
-    return round_poly(pts, rad, segs=3)
+def sleeve_end(x0, xe, end='chanfrein'):
+    """Profile (r, x) of a sleeve from x0 to its bare steel end xe: solid turned steel, a 1.5 mm 45-degree chamfer,
+    a flat end (like the bar's sleeves). (Tried on 22/11: rounded, recessed, two grooves; the user chose this one.)"""
+    pts = [(0.0, x0), (HR, x0), (HR, xe - 0.0015), (HR - 0.0015, xe), (0.0, xe)]
+    return round_poly(pts, [0, 0, 0.0002, 0.0002, 0], segs=3)
 
 
 def poignee(M, name='poignee', end=END):
@@ -225,24 +210,11 @@ def shots():
             on_floor(dumbbell(name='h'), 0.0, 0.0, -50)
             fab_studio(); square()
             camera((0.40, -0.50, 0.33), (0.16, -0.08, 0.13), lens=60, fstop=8, focus=(0.18, -0.17, 0.14))
-        elif plan == 'poignees':                     # three handles, one per steel end (front to back: chanfrein, arrondi, creux)
-            for i, end in enumerate(ENDS):
-                h = poignee(handle_mats(FIN), 'po' + end, end)
-                h.rotation_euler = (0, 0, math.radians(-12)); h.location = (0.0, 0.11 * (i - 1), COL_R)
-            fab_studio(); setup_render()
-            camera((0.05, -0.68, 0.52), (0.0, 0.0, 0.0), lens=50, fstop=11)
         elif plan == 'bout':                         # the end of the dumbbell at three-quarters: plate, clip, bare steel end
             on_floor(dumbbell(name='h'), 0.0, 0.0, 0.0)
             xe = GRIP / 2 + COL_W + SLEEVE
             fab_studio(); square()
             camera((xe + 0.15, -0.30, 0.25), (xe - 0.012, 0.0, 0.13), lens=70, fstop=8, focus=(xe - 0.01, -0.005, 0.141))
-        elif plan == 'bouts':                        # macro: the three steel ends side by side (front to back: chanfrein, arrondi, creux)
-            xe = GRIP / 2 + COL_W + SLEEVE
-            for i, end in enumerate(ENDS):
-                h = poignee(handle_mats(FIN), 'pb' + end, end)
-                h.location = (-xe, 0.05 * (i - 1), COL_R)
-            fab_studio(); square()
-            camera((0.17, -0.24, 0.13), (-0.03, 0.004, COL_R - 0.004), lens=70, fstop=11, focus=(0.0, 0.0, COL_R))
         elif plan == 'eclate':                       # exploded along the bar
             h = poignee(handle_mats(FIN), 'pe'); h.location = (0, 0, 0.16)
             MP = plate_mats_v(COLOUR)
@@ -271,4 +243,5 @@ def shots():
         render(out_h(plan))
 
 
-shots()
+if not globals().get('AS_LIB_HALTERES'):     # stories.py uses this file as a library
+    shots()
