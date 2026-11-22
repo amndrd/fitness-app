@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Step 7: the spring clip and the lever collar, reworked from the user's references.
+# Step 7: the spring clip (rebuilt 22/11 after the model chosen by the user) and the lever collar.
 # One Blender run per piece and colour, run again if Blender dies silently.
 # Raw renders in outils/blender/_bruts/colliers2, finished by outils/planche_colliers.py.
 # usage: ./rendus-colliers.sh [pince|levier]   (both pieces by default)
@@ -19,8 +19,8 @@ run() {  # piece couleur plans
 }
 ONLY=${1:-}
 if [[ $ONLY != levier ]]; then
-  run pince noir paire,macro,trois-quarts,sur-barre,couleurs
-  for c in rose bleu; do run pince $c paire; done
+  run pince noir dessus,cote,bout,trois-quarts,arriere,debout,heros,sur-barre,couleurs
+  for c in rose bleu; do run pince $c trois-quarts; done
 fi
 if [[ $ONLY != pince ]]; then
   run levier noir paire,detail,sur-barre,couleurs

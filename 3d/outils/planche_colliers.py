@@ -1,6 +1,6 @@
 # Step 7 (22/11/2026): the two collars reworked from the user's references, shown side by side with them.
-# 22/11, later: the clip's sleeves as on the photo of the pair (upper one flat, lower one lying down and bent back);
-# the sleeves turn freely on the wire, which is why the three photos show them differently.
+# 22/11, later: the clip rebuilt after the model chosen by the user (3d/recherche/6-pince-fab, its pictures stay local),
+# each of its views next to ours.
 # Finishes the renders of outils/blender/rendus-colliers.sh into 3d/prototypes/05-colliers/, then writes
 # planche.html and planche.jpg. The board shows the user's references: it stays on the Mac (see .gitignore).
 # usage: python3 3d/outils/planche_colliers.py
@@ -37,13 +37,34 @@ def duo(ref_img, ref_cap, render, cap):
     return f'<div class="duo">{fig(REF + ref_img, "<b>Ta référence</b> · " + e(ref_cap), "s", True)}{fig(render, "<b>Notre rendu</b> · " + e(cap), "s")}</div>'
 
 
+FAB = '../../recherche/6-pince-fab/'
+LIGHT = 'linear-gradient(#f6f6f6,#e8e8e8)'
+DARK = 'radial-gradient(circle at 50% 45%,#3c3c3c,#1f1f1f 75%)'
+
+
+def ref_crop(img, left, cap):
+    """One view of the model (its pictures hold two views side by side)."""
+    pos = '0 0' if left else '-440px 0'
+    return (f'<figure class="s ref"><div class="crop" style="background-image:url({e(FAB + img)});background-position:{pos}"></div>'
+            f'<div class="cap"><b>Le modèle</b> · {e(cap)}</div></figure>')
+
+
+def duo_fab(img, left, cap, plan):
+    return f'<div class="duo">{ref_crop(img, left, cap)}{fig(finish("pince", "noir", plan, LIGHT), "<b>Notre pince</b> · " + e(cap), "s")}</div>'
+
+
 pince = ''.join([
-    duo('02-ta-reference-pince-paire.jpeg', 'la paire', finish('pince', 'noir', 'paire'), 'la paire'),
-    duo('01-ta-reference-pince-macro.jpeg', 'de près', finish('pince', 'noir', 'macro'), 'de près'),
+    duo_fab('rendu-3.jpg', False, 'de dessus', 'dessus'),
+    duo_fab('rendu-2.jpg', True, 'de côté', 'cote'),
+    duo_fab('rendu-2.jpg', False, 'par les gaines', 'bout'),
+    duo_fab('rendu-3.jpg', True, 'de trois-quarts', 'trois-quarts'),
+    duo_fab('rendu-1.jpg', False, 'la spirale devant', 'arriere'),
+    duo_fab('rendu-1.jpg', True, 'debout', 'debout'),
 ])
-pince_plus = (fig(finish('pince', 'noir', 'trois-quarts'), 'De trois-quarts', 's')
-              + fig(finish('pince', 'noir', 'sur-barre', '#F2F2F3'), 'Sur la barre, contre un disque', 'p')
-              + fig(finish('pince', 'rose', 'paire'), 'Gaines roses', 's') + fig(finish('pince', 'bleu', 'paire'), 'Gaines bleues', 's')
+pince_hero = (f'<div class="duo"><figure class="w ref"><img src="{e(FAB + "img-01.jpg")}" alt=""><div class="cap"><b>Le modèle</b> · l\'image principale</div></figure>'
+              + fig(finish('pince', 'noir', 'heros', DARK), '<b>Notre pince</b> · l\'image principale', 'w') + '</div>')
+pince_plus = (fig(finish('pince', 'noir', 'sur-barre', '#F2F2F3'), 'Sur la barre, contre un disque', 'p')
+              + fig(finish('pince', 'rose', 'trois-quarts', LIGHT), 'Gaines roses', 's') + fig(finish('pince', 'bleu', 'trois-quarts', LIGHT), 'Gaines bleues', 's')
               + fig(finish('pince', 'noir', 'couleurs'), 'Les huit coloris', 'l'))
 levier = duo('04-ta-reference-levier.jpeg', 'fermé et ouvert', finish('levier', 'noir', 'paire'), 'fermé et ouvert')
 levier_plus = (fig(finish('levier', 'noir', 'sur-barre', '#F2F2F3'), 'Sur la barre, contre un disque', 'p')
@@ -54,19 +75,19 @@ notes = '''
 <div class="colw notes">
 <section>
   <div class="stitle">Les deux colliers, d'après tes références</div>
-  <div class="snote">22/11/2026 · étape 7 · la pince à ressort (gaines corrigées) et le collier à levier ; plus de collier en aluminium</div>
-  <div class="txt">Chaque rendu est placé à côté de ta photo, pris sous le même angle, sur le même fond blanc.</div>
+  <div class="snote">22/11/2026 · étape 7 · la pince refaite d'après le modèle que tu as choisi, et le collier à levier</div>
+  <div class="txt">Chaque rendu est placé à côté de sa référence, pris sous le même angle.</div>
 </section>
 <section>
-  <div class="stitle">La pince : l'analyse</div>
+  <div class="stitle">La pince : la logique du modèle</div>
   <ul class="list">
-    <li><span class="lbl2">Le fil.</span> Un acier chromé miroir de 5,4 mm, deux spires de 51 mm de diamètre intérieur, à peine écartées.</li>
-    <li><span class="lbl2">Les branches.</span> Celle du haut sort de l'anneau par une petite tige droite, celle du bas par un petit S.</li>
-    <li><span class="lbl2">Les gaines tournent sur le fil.</span> Le fil est rond : chaque gaine pivote librement. C'est pour ça que tes trois photos les montrent différemment.</li>
-    <li><span class="lbl2">Le sens des gaines, sur ta photo (corrigé).</span> Celle du haut est à plat : on voit sa grande face et un peu de son flanc gauche. Celle du bas est couchée, tournée d'environ 60° : on voit son dessus, son flanc et son ouverture où entre le fil. Elle est aussi pliée vers l'arrière, donc elle paraît plus courte. Les deux forment un V d'environ 40°.</li>
-    <li><span class="lbl2">Les gaines.</span> Caoutchouc gris anthracite satiné, 84 × 26 × 13 mm, ouvertes en rectangle côté fil, arrondies au bout, aux arêtes douces.</li>
-    <li><span class="lbl2">Sur la barre</span>, la gaine pliée part à l'opposé du disque, et les deux gaines montrent leur grande face.</li>
-    <li><span class="lbl2">Le rendu.</span> Le chrome se photographie dans une pièce blanche avec quelques bandes noires. C'est ce qui donne ces reflets clairs coupés de traits sombres.</li>
+    <li><span class="lbl2">Ce que j'avais faux.</span> Je posais les gaines à plat, dans le plan de l'anneau, et je les tournais au hasard. Sur ce modèle, tout suit une logique : on serre les deux gaines entre les doigts pour ouvrir la spirale.</li>
+    <li><span class="lbl2">La spirale est à plat :</span> trois spires serrées d'un fil rond. Elle fait trois épaisseurs de fil de haut, et le fil mesure 1/8 de son diamètre.</li>
+    <li><span class="lbl2">Les deux bouts partent du même point de l'anneau</span>, en ligne droite : celui de la spire du haut part d'un côté, celui de la spire du bas de l'autre. Chacun reste à sa hauteur, puis se coude vers l'extérieur. Les deux branches forment un V d'environ 50°.</li>
+    <li><span class="lbl2">Les gaines sont posées sur la tranche</span>, dans l'axe de leur branche. Leurs grandes faces sont verticales : c'est là qu'on appuie. Elles posent au sol avec la spirale et la dépassent un peu en hauteur. Le bout est arrondi. L'ouverture a une fente où entre le fil, en haut pour une gaine, en bas pour l'autre.</li>
+    <li><span class="lbl2">Les proportions</span> sont mesurées sur ses images : gaines de 1,1 diamètre de long et 0,49 de haut, branches de 0,55.</li>
+    <li><span class="lbl2">La taille.</span> Le modèle est une pince pour les barres de 25 à 28 mm. La nôtre garde ses proportions mais s'ouvre sur 51 mm, pour la barre olympique : fil de 7,8 mm, gaines de 73 × 33 × 10,5 mm.</li>
+    <li><span class="lbl2">Le rendu :</span> un acier satiné (pas un miroir), un caoutchouc gris anthracite, un studio gris très clair aux ombres douces. L'image principale est sur fond gris foncé, comme celle du modèle.</li>
   </ul>
 </section>
 <section>
@@ -82,7 +103,7 @@ notes = '''
 <section>
   <div class="stitle">Questions</div>
   <ol class="list">
-    <li>Les gaines de la pince sont-elles bonnes maintenant ? Le collier à levier te va-t-il ?</li>
+    <li>La pince correspond-elle maintenant au modèle ? Qu'est-ce qui diffère encore ?</li>
     <li>Le collier par défaut : la pince ou le levier ?</li>
     <li>La couleur va sur les gaines (pince) et sur tout le plastique (levier). Ça te va ?</li>
   </ol>
@@ -100,13 +121,15 @@ figure{{display:flex;flex-direction:column;gap:8px}}
 figure.s img{{width:440px;height:440px;object-fit:cover;display:block;background:#fff}}
 figure.p img{{width:440px;height:550px;object-fit:cover;display:block}}
 figure.l img{{width:900px;height:auto;display:block}}
+figure.w img{{width:782px;height:440px;object-fit:cover;display:block}}
+.crop{{width:440px;height:440px;background-size:880px 440px;background-repeat:no-repeat}}
 .cap{{font-size:12px;color:#6B6B6B}}
 .cap b{{color:#111}}
 </style></head><body>
 {notes}
 <div class="board">
-<section class="big"><div class="stitle">La pince à ressort</div><div class="snote">à gauche ta photo, à droite notre rendu</div>
-  <div class="row">{pince}</div><div class="row">{pince_plus}</div></section>
+<section class="big"><div class="stitle">La pince à ressort</div><div class="snote">à gauche le modèle que tu as choisi, à droite notre pince, sous le même angle</div>
+  <div class="row">{pince}</div><div class="row">{pince_hero}</div><div class="row">{pince_plus}</div></section>
 <section class="big"><div class="stitle">Le collier à levier</div><div class="snote">à gauche ta photo, à droite notre rendu</div>
   <div class="row">{levier}{fig(finish('levier', 'noir', 'detail'), 'Le levier et sa grille', 's')}</div><div class="row">{levier_plus}</div></section>
 </div></body></html>'''

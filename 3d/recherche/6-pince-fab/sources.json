@@ -1,0 +1,19 @@
+{
+  "sujet": "La pince à ressort choisie par l'utilisateur (22/11/2026)",
+  "sources": [
+    {
+      "titre": "Spring collar clip (Fab)",
+      "url": "https://www.fab.com/listings/3e581a6e-7a79-412d-b046-0b22df5a09ce",
+      "note": "Modèle payant d'un autre auteur : seules ses images publiques ont été regardées (non publiées). Notre pince est modélisée de zéro d'après sa logique et ses proportions."
+    }
+  ],
+  "fichiers": {
+    "img-01.jpg": "image principale (fond gris foncé)",
+    "rendu-1.jpg": "debout | la spirale devant",
+    "rendu-2.jpg": "de côté | par les gaines",
+    "rendu-3.jpg": "de trois-quarts | de dessus",
+    "rendu-4.jpg": "filaire",
+    "rendu-5.jpg": "capture Blender (dimensions 10,3 × 8 × 2 cm)",
+    "rendu-6.jpg": "capture Blender (UV)"
+  }
+}
