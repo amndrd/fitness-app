@@ -38,7 +38,7 @@ Les prototypes :
 
 | Story | Le contenu | Les prototypes |
 |---|---|---|
-| 1 | les barres en arc, et les disques alignés au-dessus, tournés de 84° vers la droite, un petit espace entre eux | une (22/11, d'après ta référence) |
+| 1 | les barres en arc, et les disques alignés au-dessus, tournés de 88° vers la droite (presque de profil), un petit espace entre eux | une (22/11, d'après ta référence) |
 | 2 | les haltères ronds, sur tout l'écran | a en colonne, b les faces, c la gamme de 5 à 40 kg |
 | 3 | l'haltère à disques | a les disques, b l'éclaté, c la paire, d les huit coloris |
 | 4 | les disques vinyle et les pinces, en colonne | ton choix |
