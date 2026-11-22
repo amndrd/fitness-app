@@ -27,19 +27,27 @@ Les scripts sont dans `3d/outils/blender/`. Chaque modèle se refait avec son `r
 
 ## Les stories Instagram (22/11/2026)
 
-Des images de présentation des modèles, au format story (1080 × 1920), sur fond blanc et sans texte. Les objets sont isolés, sans sol, avec une ombre légère dessous (comme `3d/modeles/2-haltere/flottant.jpg`).
+Des images de présentation des modèles, au format story (1080 × 1920), sur fond blanc et sans texte. Les objets sont seuls sur le blanc, sans sol ni ombre (comme `3d/modeles/2-haltere/flottant.jpg`).
 
-| Story | Le contenu | Les mises en page |
+**Tes choix (22/11) :**
+- les barres en arc de la story 1 ;
+- la colonne de disques vinyle et de pinces (devenue la story 4) ;
+- les deux haltères séparés, chacun sur sa story.
+
+Les prototypes :
+
+| Story | Le contenu | Les prototypes |
 |---|---|---|
-| 1 | les barres debout en arc, embouts de couleur en haut (comme `3d/modeles/3-barre/couleurs-rack.jpg`), et les disques au-dessus | une |
-| 2 | les haltères ronds dans les huit coloris, et les haltères à disques | a en grille, b en cascade |
-| 3 | les disques vinyle et les pinces dans les huit coloris | a en rangées, b en colonne |
+| 1 | les barres en arc, et les disques au-dessus | a en pile, b en éventail, c la gamme de 25 à 1,25 kg |
+| 2 | les haltères ronds, sur tout l'écran | a en colonne, b les faces, c la gamme de 5 à 40 kg |
+| 3 | l'haltère à disques | a les disques, b l'éclaté, c la paire, d les huit coloris |
+| 4 | les disques vinyle et les pinces, en colonne | ton choix |
 
 Les fichiers et leur planche (`planche.jpg`) sont dans `3d/stories/`. Les modèles restent dans la zone centrale : Instagram couvre le haut (le profil) et le bas (la réponse).
 
 Pour refaire les images :
-1. `3d/outils/blender/rendus-stories.sh` fait deux rendus par story avec le script `stories.py` : les objets seuls, puis leur ombre seule.
-2. `python3 3d/outils/stories.py` pose l'ombre, éclaircie, puis les objets sur le blanc.
+1. `3d/outils/blender/rendus-stories.sh` fait le rendu de chaque story avec le script `stories.py`.
+2. `python3 3d/outils/stories.py` pose les objets sur le blanc.
 
 ## Le chemin parcouru
 

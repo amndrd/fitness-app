@@ -1,20 +1,20 @@
 # Instagram stories (22/11/2026): the validated models, grouped, on white, no text. 1080 x 1920 (9:16).
-# The user's direction: no floor in the picture. The objects are isolated, lit like the models' catalogue renders
-# (3d/modeles/2-haltere/flottant.jpg), with only a light soft shadow under them; and the bars standing in an arc,
+# The user's direction: no floor in the picture, and no shadow on a floor either (22/11). The objects are alone on
+# white, lit like the models' catalogue renders (3d/modeles/2-haltere/flottant.jpg); the bars stand in an arc,
 # their coloured end caps on top (3d/modeles/3-barre/couleurs-rack.jpg).
-#   S1  the bars in an arc at the bottom, the plates floating above;
-#   S2a the dumbbells floating in a grid, S2b in a cascade;
-#   S3a the 25 mm plates in a row and the clips below, S3b the plates in a column, the clips on both sides.
+#   1  the bars in an arc at the bottom (validated), the plates above: a stack (1a), a fan (1b), the range of weights (1c);
+#   2  the round dumbbells, the whole screen: a column (2a), the faces (2b), the range of weights (2c);
+#   3  the plate-loaded dumbbell: the plates (3a), exploded (3b), the pair (3c), the eight colours (3d);
+#   4  the 25 mm plates in a column, the clips on both sides (chosen).
 # Instagram covers the top and the bottom of a story (profile, reply bar): the models stay in the middle.
-# Two transparent renders per story: the objects alone (story-X.png), then only their shadow (story-X-ombre.png);
-# outils/stories.py lays the shadow, lighter, then the objects on white.
-# usage: Blender -b --factory-startup -P stories.py -- scenes=S1,S2a res=1440 samples=128 out=<dir>
+# One transparent render per story (story-X.png); outils/stories.py puts it on white.
+# usage: Blender -b --factory-startup -P stories.py -- scenes=1a,2b res=1440 samples=128 out=<dir>
 import os, random
 HERE = os.path.dirname(os.path.abspath(__file__))
 AS_LIB_HALTERES = True
 exec(open(os.path.join(HERE, 'halteres.py')).read())
 
-SCENES = ARGS.get('scenes', 'S1').split(',')
+SCENES = ARGS.get('scenes', '1a').split(',')
 COLS = list(PALETTE)                    # noir, graphite, blanc, rose, bleu, vert, rouge, sable
 LIFT = 0.10                             # floating: 10 cm above the (invisible) floor
 
@@ -54,7 +54,7 @@ def jitter(k, a):
     return [random.uniform(-a, a) for _ in range(k)]
 
 
-# ------------------------------------------------------------------ light: isolated objects, a light shadow under them
+# ------------------------------------------------------------------ light: isolated objects, no floor, no shadow
 def flags(c=(0.0, 0.0, 0.0), s=1.0):
     """Black cards out of the frame, seen only in reflections: chrome on white needs dark lines (like in a photo studio)."""
     blk = mat('drapeau', (0.0, 0.0, 0.0), rough=1.0, spec=0.0)
@@ -81,85 +81,147 @@ def catalogue_light(c=(0.0, 0.0, 0.0), s=1.0):
     flags(c, s)
 
 
-def shadow_pass(c=(0.0, 0.0, 0.0), s=1.0, floor=0.0):
-    """Second render: the objects hidden from the camera but still casting shadows, an invisible floor that keeps
-    only the shadows, one soft light from straight above: a light shadow right under each object."""
-    for o in list(SC.objects):
-        if o.type == 'LIGHT' or o.name.startswith('drapeau'):
-            remove(o)
-        elif o.type in ('MESH', 'CURVE'):
-            o.visible_camera = False
-    w = bpy.data.worlds.new('noir'); w.use_nodes = True    # no ambient light: only the light from above makes the shadows,
-    next(n for n in w.node_tree.nodes if n.type == 'BACKGROUND').inputs['Strength'].default_value = 0.0
-    SC.world = w                                        # (the studio HDRI left a faint grey veil on the whole floor)
-    cx, cy, cz = c
-    k = 1.5 * s                                         # only around the objects
-    me = bpy.data.meshes.new('sol')
-    me.from_pydata([(cx - k, cy - k, floor), (cx + k, cy - k, floor), (cx + k, cy + k, floor), (cx - k, cy + k, floor)], [], [(0, 1, 2, 3)])
-    fl = link(bpy.data.objects.new('sol', me)); fl.is_shadow_catcher = True
-    sun = bpy.data.lights.new('ombre', 'SUN')           # straight down, soft: the shadow falls only right under each object
-    sun.energy = 3.0; sun.angle = math.radians(28)
-    link(bpy.data.objects.new('ombre', sun))
-
-
 def story():
     setup_render(RES, (9, 16))
 
 
 # ------------------------------------------------------------------ scenes
-def S1():   # the bars standing in an arc (their coloured end caps on top), the plates floating above them
+# 1 the bars in an arc (validated) and the plates above them: a stack, a fan, the range of weights
+def bars_arc():
+    """The eight bars standing in an arc, their coloured end caps on top (validated by the user, 22/11)."""
     r = 0.55
     for i, c in enumerate(COLS):
         a = math.radians(-38 + 76 * i / 7)
         b = bar(c, 'A', 'r%d' % i)
         b.location = (r * math.sin(a), r * math.cos(a) - r, 0.0)
         b.rotation_euler = Matrix(((0, 1, 0), (0, 0, 1), (1, 0, 0))).to_euler()    # axis up, the engraving reads from the camera
-    for i, c in enumerate(COLS):
-        pose(plate(c, name='d%d' % i), (-0.28 + 0.08 * i, 0.72 + 0.018 * (i % 2), 1.31 + 0.012 * (i % 2)), (-30, 0, -40))
+
+
+def bars_camera():
     story()
     camera((0.0, -1.3, 2.45), (0.0, 0.2, 1.32), lens=40, fstop=11, focus=(0.0, 0.0, 1.15))
     return (0.0, 0.2, 1.3), 1.1, None                 # no shadow: the floor is far below the frame
 
 
-def S2a():  # the dumbbells floating in a grid, the plate-loaded ones below
+def s1a():  # a stack of plates, each turned a little so the numbers fan out
+    bars_arc()
+    z = 1.17
+    for i, c in enumerate(COLS):
+        e = plate(c, name='d%d' % i)
+        e.location = (0.0, 0.78, 0.0)
+        lie_flat(e, z + e['T'] / 2, -60 + 11 * i)
+        z += e['T'] + 0.002
+    return bars_camera()
+
+
+def s1b():  # a fan, like a colour swatch, above the arc of bars
+    bars_arc()
+    pivot = Vector((0.0, 0.8, 1.02))
+    for i, c in enumerate(COLS):
+        th = -42 + 12 * i
+        e = plate(c, name='d%d' % i)
+        e.matrix_world = (Matrix.Translation(pivot) @ Matrix.Rotation(math.radians(-24), 4, 'X')
+                          @ Matrix.Rotation(math.radians(th), 4, 'Y') @ Matrix.Translation((0.0, -0.016 * i, 0.47)))
+    return bars_camera()
+
+
+def s1c():  # the range of weights in a pyramid: 25 kg at the bottom up to 1.25 kg, one colour each
+    bars_arc()
+    z = 1.18
+    for i, (w, c) in enumerate(((25, 'noir'), (20, 'blanc'), (15, 'rose'), (10, 'bleu'), (5, 'vert'), (2.5, 'rouge'), (1.25, 'sable'))):
+        e = plate(c, w, name='d%d' % i)
+        e.location = (0.0, 0.78, 0.0)
+        lie_flat(e, z + e['T'] / 2, -50 + 17 * i)
+        z += e['T'] + 0.002
+    return bars_camera()
+
+
+# 2 the round dumbbells, the whole screen: a column, the faces, the range of weights
+def s2a():  # one aligned column, the eight colours
+    for i, c in enumerate(COLS):
+        pose(round_db(c, 25, 'h%d' % i), (0.0, 0.0, 0.32 + 0.19 * (7 - i)), (0, 0, -24))
+    story()
+    camera((0.45, -3.9, 1.5), (0.0, 0.0, 0.98), lens=70, fstop=16)
+    return (0.0, 0.0, 1.0), 1.2, 0.12
+
+
+def s2b():  # the faces turned towards the camera, in a grid: the medallion and "15 KG"
     for i, c in enumerate(COLS):
         r, k = divmod(i, 2)
-        pose(round_db(c, 15, 'h%d' % i), (-0.2 + 0.4 * k, 0.66 - 0.185 * r, DB2[15][0] + LIFT), (0, 0, -8))
-    for i, c in enumerate(('noir', 'rose')):
-        e = loaded(c, 'hd%d' % i)
-        pose(e, (0.0, -0.22 - 0.38 * i, e['R'] + LIFT), (0, 0, -8))
+        pose(round_db(c, 15, 'h%d' % i), (-0.13 + 0.26 * k, 0.04 * k, 0.30 + 0.225 * (3 - r)), (0, 0, 62 if k else 118))
     story()
-    camera((0.45, -3.0, 3.75), (0.0, 0.12, 0.16), lens=70, fstop=16)
-    return (0.0, 0.1, 0.2), 1.3, 0.0
+    camera((0.0, -2.35, 0.98), (0.0, 0.0, 0.66), lens=72, fstop=16)
+    return (0.0, 0.0, 0.66), 0.9, 0.12
 
 
-def S2b():  # the dumbbells in a floating cascade, the plate-loaded ones below
-    random.seed(11)
-    for i, c in enumerate(COLS):
-        a, b_ = jitter(2, 14)
-        x = 0.17 * (1 if i % 2 else -1)
-        pose(round_db(c, 15, 'h%d' % i), (x, 0.06 * (i % 2), 0.72 + 0.135 * (7 - i)), (a, b_, -22 + (8 if i % 2 else -8)))
-    for i, c in enumerate(('noir', 'rose')):
-        e = loaded(c, 'hd%d' % i)
-        pose(e, (-0.02 + 0.06 * i, -0.05 - 0.34 * i, e['R'] + LIFT + 0.02 * i), (0, 0, -18))
+def s2c():  # the range of weights, from 5 to 40 kg, the small ones on top
+    z = 0.14
+    for i, (w, c) in enumerate(((40, 'noir'), (30, 'graphite'), (25, 'bleu'), (15, 'rose'), (5, 'sable'))):
+        R = DB2[w][0]
+        z += R
+        pose(round_db(c, w, 'h%d' % i), (0.0, 0.0, z), (0, 0, -24))
+        z += R + 0.07
     story()
-    camera((0.55, -3.9, 1.97), (0.0, 0.0, 0.93), lens=62, fstop=16)
-    return (0.0, 0.0, 0.8), 1.3, 0.0
+    camera((0.45, -3.4, 1.15), (0.0, 0.0, 0.70), lens=84, fstop=16)
+    return (0.0, 0.0, 0.70), 1.2, 0.04
 
 
-def S3a():  # the 25 mm plates in a row, the clips in two rows below, all floating
-    for i, c in enumerate(COLS):
-        e = vplate(c, 2.5, 'v%d' % i)
-        pose(e, (-0.31 + 0.088 * i, 0.30 + 0.015 * (i % 2), e['R'] + LIFT), (0, 0, 54))
-    for i, c in enumerate(COLS):
-        r, k = divmod(i, 4)
-        pose(clip(c, 'p%d' % i), (-0.24 + 0.175 * k + 0.06 * r, -0.12 - 0.19 * r, GROUND + LIFT * 0.6), (0, 0, -30))
+# 3 the plate-loaded dumbbell: the plates, exploded, the pair, the eight colours
+def s3a():  # the three plates, 5 kg at the bottom, 1.25 kg on top
+    z = 0.12
+    for i, (w, rz) in enumerate(((5, 62), (2.5, 70), (1.25, 78))):
+        e = vplate('noir', w, 'v%d' % i)
+        z += e['R']
+        pose(e, (0.02 * i, 0.0, z), (0, 0, rz))
+        z += e['R'] + 0.10
     story()
-    camera((0.42, -2.45, 2.45), (0.02, 0.2, 0.14), lens=74, fstop=16)
-    return (0.0, 0.1, 0.12), 0.9, 0.0
+    camera((0.35, -2.6, 1.02), (0.0, 0.0, 0.54), lens=80, fstop=16)
+    return (0.0, 0.0, 0.52), 0.9, 0.0
 
 
-def S3b():  # the 25 mm plates in a floating column, the clips on both sides
+def s3b():  # exploded along its axis, standing up: the handle, three plates each side, the clips
+    MP, MC = plate_mats_v('noir'), collar_mats('noir')
+    parts = [poignee(handle_mats('B'), 'pe')]
+    for sg in (-1, 1):
+        x = GRIP / 2 + COL_W + 0.09
+        for i, w in enumerate(SET):
+            T = VINYL[w][1]
+            p = vinyl_plate(w, MP, f'e{sg}{i}'); p.location = (sg * (x + T / 2), 0, 0)
+            p.rotation_euler = (math.radians(11 * i + (0 if sg > 0 else 7)), 0, 0)
+            parts.append(p)
+            x += T + 0.09
+        c = pince3(MC, 'noir', f'ep{sg}')
+        c.matrix_world = (Matrix.Translation((sg * (x + 0.05), 0, 0)) @ Matrix.Rotation(math.radians(35 * sg), 4, 'X')
+                          @ Matrix.Rotation(math.radians(90 * sg), 4, 'Y') @ Matrix.Scale(CLIP_S, 4))
+        parts.append(c)
+    g = group('eclate', parts)
+    g.matrix_world = (Matrix.Translation((0, 0, 0.95)) @ Matrix.Rotation(math.radians(-30), 4, 'Y') @ Matrix.Rotation(math.radians(20), 4, 'X')
+                      @ Matrix.Rotation(math.radians(-90), 4, 'Y'))        # the axis on a diagonal, leaning towards the camera: the plates show their faces
+    story()
+    camera((0.3, -3.0, 1.35), (0.0, 0.0, 0.95), lens=56, fstop=16)
+    return (0.0, 0.0, 0.95), 1.1, 0.25
+
+
+def s3c():  # the pair, floating like the models' catalogue render
+    a = loaded('noir', 'ha'); pose(a, (0.08, 0.35, 0.98), (4, -6, -28))
+    b = loaded('noir', 'hb'); pose(b, (-0.05, -0.25, 0.42), (-5, 4, 152))
+    story()
+    camera((0.15, -3.1, 1.2), (0.0, 0.0, 0.7), lens=62, fstop=16)
+    return (0.0, 0.0, 0.7), 1.0, 0.12
+
+
+def s3d():  # the whole dumbbell in the eight colours, two columns
+    for i, c in enumerate(COLS):
+        r, k = divmod(i, 2)
+        e = loaded(c, 'h%d' % i)
+        pose(e, (-0.29 + 0.58 * k, 0.05 * k, 0.30 + 0.36 * (3 - r)), (0, 0, -22))
+    story()
+    camera((0.3, -3.9, 1.5), (0.0, 0.0, 0.86), lens=62, fstop=16)
+    return (0.0, 0.0, 0.86), 1.3, 0.0
+
+
+# 4 the 25 mm plates in a floating column, the clips on both sides (chosen by the user, 22/11)
+def s4():
     random.seed(5)
     for i, c in enumerate(COLS):
         a, b_ = jitter(2, 6)
@@ -173,7 +235,7 @@ def S3b():  # the 25 mm plates in a floating column, the clips on both sides
     return (0.0, 0.0, 0.95), 1.0, 0.38
 
 
-SCENE_FN = {k: globals()[k] for k in ('S1', 'S2a', 'S2b', 'S3a', 'S3b')}
+SCENE_FN = {k: globals()['s' + k] for k in ('1a', '1b', '1c', '2a', '2b', '2c', '3a', '3b', '3c', '3d', '4')}
 
 for sc in SCENES:
     reset()
@@ -182,9 +244,6 @@ for sc in SCENES:
     for cl in list(bpy.data.collections):
         bpy.data.collections.remove(cl)
     random.seed(7)
-    c, k, floor = SCENE_FN[sc]()
+    c, k, _ = SCENE_FN[sc]()
     catalogue_light(c, k)
     render(os.path.join(OUT, f'story-{sc}.png'))
-    if floor is not None:
-        shadow_pass(c, k, floor)
-        render(os.path.join(OUT, f'story-{sc}-ombre.png'))
