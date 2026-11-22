@@ -69,13 +69,14 @@ def flags(c=(0.0, 0.0, 0.0), s=1.0):
         o.visible_camera = False; o.visible_shadow = False
 
 
-def catalogue_light(c=(0.0, 0.0, 0.0), s=1.0):
+def catalogue_light(c=(0.0, 0.0, 0.0), s=1.0, side=None):
     """The light of the models' catalogue renders: an HDRI for the reflections, a soft key from the top left,
     a top light, a rim. No floor: the objects alone, on a transparent film."""
     SC.render.film_transparent = True
     world_hdri(0.35, rot=30)
     cx, cy, cz = c
-    area('key', (cx - 1.7 * s, cy - 2.0 * s, cz + 1.7 * s), (cx, cy, cz), 220 * s * s, 1.6 * s, (1.0, 0.98, 0.96))
+    kx = 1.7 if side == 'droite' else -1.7               # the key on the side the faces are turned to
+    area('key', (cx + kx * s, cy - 2.0 * s, cz + 1.7 * s), (cx, cy, cz), 220 * s * s, 1.6 * s, (1.0, 0.98, 0.96))
     area('top', (cx + 0.2 * s, cy - 0.8 * s, cz + 2.4 * s), (cx, cy, cz), 35 * s * s, 2.0 * s)
     area('rim', (cx + 1.4 * s, cy + 1.4 * s, cz + 1.2 * s), (cx, cy, cz), 140 * s * s, 0.4 * s, (1, 1, 1), 'RECTANGLE', 2.4 * s)
     flags(c, s)
@@ -134,6 +135,27 @@ def s1c():  # the range of weights in a pyramid: 25 kg at the bottom up to 1.25 
         lie_flat(e, z + e['T'] / 2, -50 + 17 * i)
         z += e['T'] + 0.002
     return bars_camera()
+
+
+def sbarres():  # the bars alone (the bottom layer of story 1d)
+    bars_arc()
+    return bars_camera()
+
+
+def s1d():  # the plates standing in a straight row, all turned the same way, a little air between them
+    # (the user's reference: the step-8 colour row, more turned and closer); rendered with its own camera, nearly
+    # level with the plates, then laid over the bars (sbarres): no floor, no shadow, so the two layers match.
+    yaw = float(ARGS.get('yaw', 74))
+    p = 0.45 * math.cos(math.radians(yaw)) + 0.058 * math.sin(math.radians(yaw))   # width of a plate seen from the front
+    step = p * float(ARGS.get('gap', 1.13))                 # a small gap between the plates
+    for i, c in enumerate(COLS):
+        pose(plate(c, name='d%d' % i), ((i - 3.5) * step, 0.0, 0.0), (0, 0, yaw))       # the face turned to the right, the rim seen on the left (the reference)
+    story()
+    width = 8 * step / 0.86                                  # the row fills 86 % of the width
+    dist = width / 2 / (10.125 / 135)                         # lens 135 (a flat perspective), the width of a 9:16 sensor is 36 x 9 / 16 mm
+    el = math.radians(7)
+    camera((0.0, -dist * math.cos(el), dist * math.sin(el)), (0.0, 0.0, 0.0), lens=135, fstop=32, shift_y=-0.08)
+    return (0.0, 0.0, 0.0), 1.0, 'droite'
 
 
 # 2 the round dumbbells, the whole screen: a column, the faces, the range of weights
@@ -235,7 +257,7 @@ def s4():
     return (0.0, 0.0, 0.95), 1.0, 0.38
 
 
-SCENE_FN = {k: globals()['s' + k] for k in ('1a', '1b', '1c', '2a', '2b', '2c', '3a', '3b', '3c', '3d', '4')}
+SCENE_FN = {k: globals()['s' + k] for k in ('1a', '1b', '1c', '1d', 'barres', '2a', '2b', '2c', '3a', '3b', '3c', '3d', '4')}
 
 for sc in SCENES:
     reset()
@@ -244,6 +266,6 @@ for sc in SCENES:
     for cl in list(bpy.data.collections):
         bpy.data.collections.remove(cl)
     random.seed(7)
-    c, k, _ = SCENE_FN[sc]()
-    catalogue_light(c, k)
+    c, k, side = SCENE_FN[sc]()
+    catalogue_light(c, k, side)
     render(os.path.join(OUT, f'story-{sc}.png'))

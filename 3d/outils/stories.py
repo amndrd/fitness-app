@@ -10,10 +10,8 @@ OUT = Path(__file__).resolve().parent
 BRUTS = OUT / 'blender/_bruts/stories'
 DOS = OUT.parent / 'stories'
 GROUPS = [   # story, its prototypes: scene, file, label on the board
-    ('1 · La barre et ses disques', 'les barres en arc (validées), les disques au-dessus', [
-        ('1a', '1a-barre-et-disques-pile', 'a · en pile'),
-        ('1b', '1b-barre-et-disques-eventail', 'b · en éventail'),
-        ('1c', '1c-barre-et-disques-gamme', 'c · la gamme, de 25 à 1,25 kg')]),
+    ('1 · La barre et ses disques', 'les barres en arc, les disques alignés au-dessus', [
+        ('1', '1-barre-et-disques', 'les disques alignés et tournés')]),
     ('2 · Les haltères ronds', 'tout l\'écran pour eux', [
         ('2a', '2a-halteres-ronds-colonne', 'a · en colonne'),
         ('2b', '2b-halteres-ronds-faces', 'b · les faces'),
@@ -29,11 +27,13 @@ GROUPS = [   # story, its prototypes: scene, file, label on the board
 STORIES = [st for _, _, sts in GROUPS for st in sts]
 
 DOS.mkdir(parents=True, exist_ok=True)
+LAYERS = {'1': ['barres', '1d']}    # story 1: the bars and the row of plates, each with its own camera
+
 for sc, name, _ in STORIES:
-    obj = BRUTS / f'story-{sc}.png'
-    if not obj.exists():
+    objs = [BRUTS / f'story-{k}.png' for k in LAYERS.get(sc, [sc])]
+    if not all(o.exists() for o in objs):
         continue
-    layers = f'<img src="{obj.as_uri()}">'
+    layers = ''.join(f'<img src="{o.as_uri()}">' for o in objs)
     page = f'''<html><body style="margin:0;width:1080px;height:1920px;background:#FFFFFF;position:relative;overflow:hidden">
 <style>img {{ position:absolute; inset:0; width:1080px; height:1920px; }}</style>{layers}</body></html>'''
     with tempfile.NamedTemporaryFile('w', suffix='.html', delete=False) as f:
