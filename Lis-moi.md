@@ -25,6 +25,22 @@ Les scripts sont dans `3d/outils/blender/`. Chaque modèle se refait avec son `r
 
 **Les huit coloris :** noir (par défaut), graphite, blanc, rose, bleu, vert, rouge, sable.
 
+## Les stories Instagram (22/11/2026)
+
+Des images de présentation des modèles, au format story (1080 × 1920), sur fond blanc et sans texte. Les objets sont isolés, sans sol, avec une ombre légère dessous (comme `3d/modeles/2-haltere/flottant.jpg`).
+
+| Story | Le contenu | Les mises en page |
+|---|---|---|
+| 1 | les barres debout en arc, embouts de couleur en haut (comme `3d/modeles/3-barre/couleurs-rack.jpg`), et les disques au-dessus | une |
+| 2 | les haltères ronds dans les huit coloris, et les haltères à disques | a en grille, b en cascade |
+| 3 | les disques vinyle et les pinces dans les huit coloris | a en rangées, b en colonne |
+
+Les fichiers et leur planche (`planche.jpg`) sont dans `3d/stories/`. Les modèles restent dans la zone centrale : Instagram couvre le haut (le profil) et le bas (la réponse).
+
+Pour refaire les images :
+1. `3d/outils/blender/rendus-stories.sh` fait deux rendus par story avec le script `stories.py` : les objets seuls, puis leur ombre seule.
+2. `python3 3d/outils/stories.py` pose l'ombre, éclaircie, puis les objets sur le blanc.
+
 ## Le chemin parcouru
 
 1. **La recherche (21/11) :** les salles et les machines pectoraux. Tu as choisi un style noir et sobre, comme les machines Technogym de Fitness Park, et des machines universelles.
@@ -44,6 +60,7 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
 3d/
   charte.md                les choix validés : police, coloris, tailles, textures
   modeles/                 les images des modèles validés, un dossier par pièce
+  stories/                 les stories Instagram et leur planche
   recherche/               la recherche, étape par étape (les images restent sur ton Mac, sources.json garde les liens)
   references/              tes images de référence (sur ton Mac seulement)
   outils/
@@ -54,6 +71,7 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
       barre.py             la barre olympique
       colliers.py          la pince à ressort
       halteres.py          l'haltère à disques
+      stories.py           les scènes des stories Instagram
       rendus-*.sh          refont les rendus de chaque modèle
     polices/               Archivo Expanded (et les polices essayées à l'étape 3), avec leurs licences OFL
     planche_recherche.py   refait la planche de la recherche (étape 1)
@@ -62,6 +80,7 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
     contact.py             assemble les images d'un dossier en une seule image
     export.mjs             transforme une page HTML en image
     compose.mjs            pose un rendu transparent sur un fond
+    stories.py             pose les stories sur le blanc (1080 × 1920) et fait leur planche
     credits.md             les éléments de tiers (HDRI) et leurs licences
 ```
 
