@@ -15,10 +15,11 @@ run() {  # <expected file> <settings...>
   done
   echo "$want : $(( $(date +%s) - t0 )) s"
 }
-run haltere-haltere-noir-C-gros-relief.png plans=paire,detail,haltere couleur=noir finition=C
-run haltere-eclate-noir-B-gros-relief.png plans=haltere,eclate couleur=noir finition=B
-run haltere-couleurs-noir-B-gros-relief.png plans=poignees,disques,couleurs couleur=noir finition=B
-for t in gros fin moule; do run haltere-gros-plan-noir-B-$t-relief.png plans=gros-plan texture=$t; done
-run haltere-gros-plan-noir-B-gros-blanc.png plans=gros-plan marquage=blanc
-for c in rose bleu; do run haltere-haltere-$c-B-gros-relief.png plans=haltere couleur=$c finition=B; done
+# Defaults since 22/11: handle B (all steel, bare steel ends), sandy plates, white marking, chamfered end.
+D=noir-B-gros-blanc
+run haltere-haltere-$D-chanfrein.png plans=paire,detail,haltere
+run haltere-disques-$D-chanfrein.png plans=eclate,gros-plan,disques
+for e in chanfrein arrondi creux; do run haltere-bout-$D-$e.png plans=bout bout=$e; done
+run haltere-couleurs-$D-chanfrein.png plans=bouts,poignees,couleurs
+for c in rose bleu; do run haltere-haltere-$c-B-gros-blanc-chanfrein.png plans=haltere couleur=$c; done
 echo "fin : $(( $(date +%s) - t0 )) s"

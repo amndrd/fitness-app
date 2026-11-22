@@ -1,4 +1,5 @@
-# Step 8 (22/11/2026): the plate-loaded dumbbell after the user's photo. Finishes the renders of
+# Step 8 (22/11/2026): the plate-loaded dumbbell after the user's photo. Version 2: the user's choices (handle B
+# all steel without the black end caps, sandy plates, white marking) and three ways to finish the bare steel end. Finishes the renders of
 # outils/blender/rendus-halteres.sh into 3d/prototypes/06-halteres-disques/, then writes planche.html and planche.jpg.
 # The board shows the user's photo: it stays on the Mac (see .gitignore).
 # usage: python3 3d/outils/planche_halteres.py
@@ -15,9 +16,9 @@ BG = '#ECECEE'                      # the light grey of the photo
 def e(s): return html.escape(s, quote=True)
 
 
-def finish(plan, colour='noir', fin='B', tex='gros', mark='relief', opaque=False):
-    src = BRUTS / f'haltere-{plan}-{colour}-{fin}-{tex}-{mark}.png'
-    dst = DOS / f'{plan}-{colour}-{fin}-{tex}-{mark}.jpg'
+def finish(plan, colour='noir', end='chanfrein', opaque=False):
+    src = BRUTS / f'haltere-{plan}-{colour}-B-gros-blanc-{end}.png'
+    dst = DOS / (f'{plan}-{colour}.jpg' if plan in ('bouts', 'poignees') else f'{plan}-{colour}-{end}.jpg')   # those two show all three ends
     DOS.mkdir(parents=True, exist_ok=True)
     if src.exists():
         if opaque:
@@ -32,77 +33,57 @@ def fig(rel, cap, cls, ref=False):
 
 
 photo = (f'<div class="duo">{fig(REF, "<b>Ta photo</b>", "s", True)}'
-         + fig(finish('paire', fin='C'), '<b>Notre rendu</b> · même montage, poignée noire', 's') + '</div>'
-         + fig(finish('detail', fin='C'), 'Le bout de l\'haltère : le disque, la pince, l\'embout noir', 's'))
-haltere = (fig(finish('haltere', fin='C'), 'Poignée C, tout noir (comme ta photo)', 'w')
-           + fig(finish('haltere', fin='B'), 'Poignée B, tout acier', 'w')
-           + fig(finish('eclate', fin='B'), 'Éclaté : la poignée, trois disques par côté, une pince à chaque bout', 'x'))
-poignee = fig(finish('poignees'), 'De devant à derrière : A (prise noire, acier), B (tout acier), C (tout noir)', 'x')
+         + fig(finish('paire'), '<b>Notre rendu</b> · même montage, tout acier, marquage blanc', 's') + '</div>'
+         + fig(finish('detail'), 'Le bout de l\'haltère : le disque, la pince, l\'acier nu', 's'))
+bouts = (fig(finish('bout', end='chanfrein'), '<b>1 · Chanfrein</b> · un biseau de 1,5 mm, bout plat (comme les manchons de la barre)', 's')
+         + fig(finish('bout', end='arrondi'), '<b>2 · Arrondi</b> · un arrondi de 5,5 mm, bout légèrement bombé', 's')
+         + fig(finish('bout', end='creux'), '<b>3 · Creux</b> · le chanfrein et un creux dans la face (le bout de la barre olympique, sans son embout)', 's')
+         + fig(finish('bouts'), 'De devant à derrière : 1 chanfrein, 2 arrondi, 3 creux', 's')
+         + fig(finish('poignees'), 'Les trois poignées entières, dans le même ordre', 'x'))
+haltere = (fig(finish('haltere'), 'Poignée tout acier, disques sablés, marquage blanc (bout 1, chanfrein)', 'w')
+           + fig(finish('eclate'), 'Éclaté : la poignée, trois disques par côté, une pince à chaque bout', 'w'))
 disques = (fig(finish('disques'), '1,25 kg · 2,5 kg · 5 kg', 'x')
-           + fig(finish('gros-plan', tex='gros'), '<b>Sablée</b> (comme ta photo), marquage en relief', 's')
-           + fig(finish('gros-plan', tex='fin'), '<b>Grain fin</b> (comme nos haltères ronds)', 's')
-           + fig(finish('gros-plan', tex='moule'), '<b>Moulée</b> (comme nos disques)', 's')
-           + fig(finish('gros-plan', tex='gros', mark='blanc'), 'Sablée, <b>marquage blanc</b>', 's'))
-coloris = (fig(finish('couleurs', opaque=True), 'Les huit coloris (disque de 2,5 kg)', 'x')
+           + fig(finish('gros-plan'), 'Sablé, marquage blanc', 's'))
+coloris = (fig(finish('couleurs', opaque=True), 'Les huit coloris : marquage blanc, ou anthracite sur les teintes claires', 'x')
            + fig(finish('haltere', colour='rose'), 'Rose : les disques et les gaines de la pince', 'w')
            + fig(finish('haltere', colour='bleu'), 'Bleu', 'w'))
 
 notes = '''
 <div class="colw notes">
 <section>
-  <div class="stitle">L'haltère à disques, d'après ta photo</div>
-  <div class="snote">22/11/2026 · étape 8 · une poignée de 25 mm, des disques en ciment-vinyle et notre pince</div>
+  <div class="stitle">L'haltère à disques, version 2</div>
+  <div class="snote">22/11/2026 · étape 8 · tes choix appliqués, et trois façons de finir le bout en acier</div>
   <div class="txt">Tous les rendus sont sur le gris clair de ta photo.</div>
 </section>
 <section>
-  <div class="stitle">L'analyse de ta photo</div>
+  <div class="stitle">Tes choix</div>
   <ul class="list">
-    <li><span class="lbl2">Les disques</span> sont en ciment enrobé de vinyle, au grain sablé et mat.
-      <ul class="list">
-        <li>Le bord est arrondi en bourrelet, avec la ligne de moulage au milieu.</li>
-        <li>La face est plate, un peu en retrait. Le poids y est en relief le long de l'anneau, deux fois, face à face. Huit trous sont répartis en cercle.</li>
-        <li>Le centre est lisse et en creux autour de l'alésage.</li>
-      </ul></li>
-    <li><span class="lbl2">Le montage :</span> trois disques par côté, du plus grand au plus petit vers l'extérieur.</li>
-    <li><span class="lbl2">La barre</span> fait 25 mm. Ses bouts noirs dépassent après la pince.</li>
-    <li><span class="lbl2">La pince</span> est la nôtre. Le modèle que tu as choisi était justement une pince pour barre de 25 mm : on la reprend à cette taille.</li>
+    <li><span class="lbl2">La poignée</span> est tout en acier (B), sans les embouts noirs.</li>
+    <li><span class="lbl2">Les disques</span> sont sablés, avec le marquage blanc. Sur les coloris clairs, il passe en anthracite pour rester lisible.</li>
+    <li><span class="lbl2">Les poids :</span> 1,25, 2,5 et 5 kg.</li>
+    <li><span class="lbl2">La pince</span> ne change pas : ses gaines sont à la bonne taille.</li>
   </ul>
 </section>
 <section>
-  <div class="stitle">Les recherches</div>
+  <div class="stitle">Ce qui change</div>
   <ul class="list">
-    <li><span class="lbl2">Les disques ciment-vinyle</span> du commerce, pour les barres de 25 mm :
-      <ul class="list">
-        <li>1,25 kg : Ø 185 × 34 mm ;</li>
-        <li>2,5 kg : Ø 225 × 42 mm ;</li>
-        <li>5 kg : Ø 282 × 50 mm ;</li>
-        <li>un trou de 25 à 27 mm.</li>
-      </ul></li>
-    <li><span class="lbl2">Les poignées</span> mesurent de 35 à 45 cm, avec une prise moletée et deux bagues d'arrêt.</li>
-    <li>Sources : MuscleSquad, Decathlon, YPC (FXR Sports). Les images sont dans <i>3d/recherche/7-halteres-disques</i>.</li>
+    <li><span class="lbl2">Plus d'embout noir :</span> le manchon finit en acier nu, tourné dans la masse.</li>
+    <li><span class="lbl2">Le manchon passe de 15 à 16,5 cm</span> (poignée de 49 cm). Avant, la pince dépassait un peu du bout de l'acier, et l'embout le cachait. Maintenant l'acier dépasse de 11 mm après la pince, comme sur ta photo.</li>
+    <li><span class="lbl2">Un essai écarté :</span> deux fines gorges près du bout, comme sur la barre. Collées à la pince, elles se lisaient comme des spires en plus.</li>
   </ul>
 </section>
 <section>
-  <div class="stitle">Nos choix</div>
+  <div class="stitle">Rappel de l'analyse</div>
   <ul class="list">
-    <li><span class="lbl2">La poignée</span> fait 46 cm.
-      <ul class="list">
-        <li>Une prise moletée de 13 cm, entre deux bagues d'arrêt de 37 mm.</li>
-        <li>Des manchons lisses de 15 cm, et des embouts noirs bombés.</li>
-        <li>Trois finitions, comme pour la barre : A (prise noire), B (tout acier), C (tout noir).</li>
-      </ul></li>
-    <li><span class="lbl2">Les disques</span> pèsent 1,25, 2,5 et 5 kg. Le marquage « 2,5 KG » est en Archivo Expanded, courbé le long de l'anneau : lisible en bas, à l'envers en haut, comme sur ta photo.</li>
-    <li><span class="lbl2">Le montage de ta photo :</span> 5 + 2,5 + 2,5 kg par côté, soit 20 kg de disques par haltère.</li>
-    <li><span class="lbl2">La couleur</span> va sur les disques et sur les gaines de la pince.</li>
+    <li>Disques ciment-vinyle du commerce pour barre de 25 mm : 1,25 kg Ø 185 × 34 mm, 2,5 kg Ø 225 × 42 mm, 5 kg Ø 282 × 50 mm.</li>
+    <li>Bord en bourrelet avec la ligne de moulage, huit trous, centre lisse en creux, le poids écrit deux fois le long de l'anneau.</li>
+    <li>Trois disques par côté (5 + 2,5 + 2,5 kg), une pince à chaque bout.</li>
   </ul>
 </section>
 <section>
-  <div class="stitle">Questions</div>
+  <div class="stitle">Question</div>
   <ol class="list">
-    <li>Le style des disques et de l'haltère correspond-il à ce que tu veux ?</li>
-    <li>Quelle finition de poignée : A, B ou C ?</li>
-    <li>Quelle texture de disque : sablée, grain fin ou moulée ? Et le marquage : en relief ou en blanc ?</li>
-    <li>Les disques de 1,25, 2,5 et 5 kg suffisent-ils, ou faut-il en ajouter (0,5 kg, 10 kg) ?</li>
+    <li>Quel bout pour la poignée : 1 chanfrein, 2 arrondi ou 3 creux ? Je conseille le 1 : c'est le plus sobre, et c'est le même que celui des manchons de la barre.</li>
   </ol>
 </section>
 </div>'''
@@ -125,11 +106,11 @@ figure.x img{{width:1060px;height:auto;display:block}}
 <div class="board">
 <section class="big"><div class="stitle">Comme ta photo</div><div class="snote">à gauche ta photo, à droite notre rendu</div>
   <div class="row">{photo}</div></section>
-<section class="big"><div class="stitle">L'haltère</div><div class="snote">les disques sablés, le marquage en relief, notre pince en 25 mm</div>
+<section class="big"><div class="stitle">Le bout de la poignée</div><div class="snote">plus d'embout noir : l'acier nu, trois façons de le finir</div>
+  <div class="row">{bouts}</div></section>
+<section class="big"><div class="stitle">L'haltère</div><div class="snote">tout acier, disques sablés, marquage blanc, notre pince en 25 mm</div>
   <div class="row">{haltere}</div></section>
-<section class="big"><div class="stitle">La poignée</div><div class="snote">trois finitions, comme la barre olympique</div>
-  <div class="row">{poignee}</div></section>
-<section class="big"><div class="stitle">Les disques</div><div class="snote">les trois poids, puis les textures et le marquage</div>
+<section class="big"><div class="stitle">Les disques</div><div class="snote">les trois poids et le marquage blanc</div>
   <div class="row">{disques}</div></section>
 <section class="big"><div class="stitle">Les coloris</div><div class="snote">les huit couleurs de la charte</div>
   <div class="row">{coloris}</div></section>

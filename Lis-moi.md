@@ -83,11 +83,23 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
 - Ta photo est dans `3d/references/halteres-disques/`. Les recherches (dimensions des disques ciment-vinyle, poignées de 25 mm) sont dans `3d/recherche/7-halteres-disques/`.
 - `3d/prototypes/06-halteres-disques/planche.jpg` montre :
   - ta photo à côté de notre rendu, avec le même montage ;
-  - l'haltère, l'éclaté, les trois finitions de poignée ;
-  - les trois disques, trois textures et deux marquages ;
-  - les coloris.
+  - les trois façons de finir le bout en acier ;
+  - l'haltère et l'éclaté ;
+  - les trois disques, le marquage blanc et les coloris.
   La planche reste sur ton Mac, puisqu'elle montre ta photo. On la refait avec `python3 3d/outils/planche_halteres.py`.
 - Le modèle est dans `3d/outils/blender/halteres.py` (il réutilise la pince de `colliers.py`). Tous les rendus se refont avec `rendus-halteres.sh`.
+
+**Tes choix (22/11) :**
+- la poignée tout en acier (B), sans les embouts noirs ;
+- les disques sablés, avec le marquage blanc ;
+- les poids de 1,25, 2,5 et 5 kg ;
+- les gaines de la pince telles quelles.
+
+La planche montre maintenant cette version 2 :
+- l'acier nu au bout de la poignée, avec trois façons de le finir : chanfrein, arrondi, creux ;
+- le manchon allongé à 16,5 cm, pour que l'acier dépasse après la pince comme sur ta photo.
+
+Il reste à choisir le bout.
 
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 
