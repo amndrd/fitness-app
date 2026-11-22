@@ -73,7 +73,7 @@ Tout est rassemblé dans **`3d/charte.md`** : la police, les coloris, les taille
 - Tes photos sont dans `3d/references/colliers/` : trois de la pince à ressort, une du collier à levier.
 - `3d/prototypes/05-colliers/planche.jpg` : chacune de tes photos à côté de notre rendu, pris sous le même angle, puis les plans en plus (sur la barre, les huit coloris, rose et bleu). La planche reste sur ton Mac, puisqu'elle montre tes photos. On la refait avec `python3 3d/outils/planche_colliers.py`.
 - La pince : fil chromé de 4,8 mm, deux spires serrées, branches coudées, gaines plates ouvertes en rectangle et arrondies au bout.
-- **Ton retour (22/11) :** le sens des gaines n'allait pas. Elles sont maintenant à plat dans le plan de l'anneau, en V serré, et celle du bas est pliée vers l'arrière, comme sur ta photo de la paire. Ta photo de profil montre un autre modèle : elle est remplacée par une vue de trois-quarts.
+- **Tes retours (22/11) :** le sens des gaines n'allait pas. Les gaines tournent librement sur le fil, ce qui explique pourquoi tes trois photos les montrent différemment. La paire reprend maintenant ta photo : la gaine du haut à plat, celle du bas couchée et pliée vers l'arrière. Sur la barre, les deux gaines montrent leur grande face. La vue de profil est remplacée par une vue de trois-quarts.
 - Le collier à levier : deux mâchoires à six lobes articulées en bas, une garniture en caoutchouc, une charnière à trois segments, un levier avec sa grille, des vis cruciformes, montré fermé et ouvert.
 - Le modèle est dans `3d/outils/blender/colliers.py`. Tous les rendus se refont avec `rendus-colliers.sh` (ou `rendus-colliers.sh pince` pour la pince seule).
 

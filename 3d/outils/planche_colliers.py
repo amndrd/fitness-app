@@ -1,5 +1,6 @@
 # Step 7 (22/11/2026): the two collars reworked from the user's references, shown side by side with them.
-# 22/11, later: the clip's sleeves turned flat, as on the photo of the pair; the profile photo (another model) is no longer compared.
+# 22/11, later: the clip's sleeves as on the photo of the pair (upper one flat, lower one lying down and bent back);
+# the sleeves turn freely on the wire, which is why the three photos show them differently.
 # Finishes the renders of outils/blender/rendus-colliers.sh into 3d/prototypes/05-colliers/, then writes
 # planche.html and planche.jpg. The board shows the user's references: it stays on the Mac (see .gitignore).
 # usage: python3 3d/outils/planche_colliers.py
@@ -40,7 +41,7 @@ pince = ''.join([
     duo('02-ta-reference-pince-paire.jpeg', 'la paire', finish('pince', 'noir', 'paire'), 'la paire'),
     duo('01-ta-reference-pince-macro.jpeg', 'de près', finish('pince', 'noir', 'macro'), 'de près'),
 ])
-pince_plus = (fig(finish('pince', 'noir', 'trois-quarts'), 'De trois-quarts : les gaines à plat, celle du bas pliée vers l\'arrière', 's')
+pince_plus = (fig(finish('pince', 'noir', 'trois-quarts'), 'De trois-quarts', 's')
               + fig(finish('pince', 'noir', 'sur-barre', '#F2F2F3'), 'Sur la barre, contre un disque', 'p')
               + fig(finish('pince', 'rose', 'paire'), 'Gaines roses', 's') + fig(finish('pince', 'bleu', 'paire'), 'Gaines bleues', 's')
               + fig(finish('pince', 'noir', 'couleurs'), 'Les huit coloris', 'l'))
@@ -59,11 +60,12 @@ notes = '''
 <section>
   <div class="stitle">La pince : l'analyse</div>
   <ul class="list">
-    <li><span class="lbl2">Le fil.</span> Un acier chromé miroir d'environ 4,8 mm, deux spires serrées de 50 mm de diamètre intérieur.</li>
-    <li><span class="lbl2">Les branches.</span> Elles sont courtes et coudées. L'une sort du haut de l'anneau et monte, l'autre sort du côté avec un petit S.</li>
-    <li><span class="lbl2">Le sens des gaines (corrigé).</span> Les gaines sont à plat, dans le plan de l'anneau : vues de face, on voit leur grande face. Elles forment un V serré d'environ 40° : celle du haut monte en biais à 45°, celle du bas part vers la gauche. Celle du bas est pliée vers l'arrière : sur ta photo, elle paraît plus courte et montre son ouverture.</li>
-    <li><span class="lbl2">Les gaines.</span> Plates, noires et satinées (84 × 26 × 10 mm), ouvertes en rectangle côté fil, arrondies au bout, avec des arêtes douces.</li>
-    <li><span class="lbl2">Ta photo de profil</span> montre un autre modèle, aux gaines tournées d'un quart de tour. Elle n'est plus comparée : j'ai suivi la paire et le gros plan, qui vont ensemble (le gros plan montre la pince de dos).</li>
+    <li><span class="lbl2">Le fil.</span> Un acier chromé miroir de 5,4 mm, deux spires de 51 mm de diamètre intérieur, à peine écartées.</li>
+    <li><span class="lbl2">Les branches.</span> Celle du haut sort de l'anneau par une petite tige droite, celle du bas par un petit S.</li>
+    <li><span class="lbl2">Les gaines tournent sur le fil.</span> Le fil est rond : chaque gaine pivote librement. C'est pour ça que tes trois photos les montrent différemment.</li>
+    <li><span class="lbl2">Le sens des gaines, sur ta photo (corrigé).</span> Celle du haut est à plat : on voit sa grande face et un peu de son flanc gauche. Celle du bas est couchée, tournée d'environ 60° : on voit son dessus, son flanc et son ouverture où entre le fil. Elle est aussi pliée vers l'arrière, donc elle paraît plus courte. Les deux forment un V d'environ 40°.</li>
+    <li><span class="lbl2">Les gaines.</span> Caoutchouc gris anthracite satiné, 84 × 26 × 13 mm, ouvertes en rectangle côté fil, arrondies au bout, aux arêtes douces.</li>
+    <li><span class="lbl2">Sur la barre</span>, la gaine pliée part à l'opposé du disque, et les deux gaines montrent leur grande face.</li>
     <li><span class="lbl2">Le rendu.</span> Le chrome se photographie dans une pièce blanche avec quelques bandes noires. C'est ce qui donne ces reflets clairs coupés de traits sombres.</li>
   </ul>
 </section>
@@ -80,7 +82,7 @@ notes = '''
 <section>
   <div class="stitle">Questions</div>
   <ol class="list">
-    <li>Le sens des gaines de la pince est-il bon maintenant ? Le collier à levier te va-t-il ?</li>
+    <li>Les gaines de la pince sont-elles bonnes maintenant ? Le collier à levier te va-t-il ?</li>
     <li>Le collier par défaut : la pince ou le levier ?</li>
     <li>La couleur va sur les gaines (pince) et sur tout le plastique (levier). Ça te va ?</li>
   </ol>

@@ -71,7 +71,7 @@ Les petites mentions (« KG » sur les disques) sont ton sur ton : de la couleur
 ### Les colliers
 
 Deux modèles seulement : **la pince à ressort** et **le collier à levier**, d'après les références de l'utilisateur (étape 7, en cours de validation).
-- **La pince :** les gaines sont à plat dans le plan de l'anneau (jamais tournées en travers). Elles forment un V serré d'environ 40°, et celle du bas est pliée vers l'arrière.
+- **La pince :** fil chromé de 5,4 mm, deux spires. Gaines en caoutchouc anthracite de 84 × 26 × 13 mm, qui tournent librement sur le fil. Elles forment un V d'environ 40°, et la branche du bas est pliée vers l'arrière (45°). La pose de référence est celle de la photo de la paire : la gaine du haut à plat, celle du bas couchée (tournée d'environ 60°).
 
 ## Gardé de côté
 
