@@ -28,4 +28,4 @@ Le détail est dans `.gitignore`.
 
 Tous droits réservés. Le code est visible, mais il n'est pas sous licence libre : il ne peut pas être réutilisé sans autorisation.
 
-Les polices de `3d/outils/polices/` (Inter, Archivo, Saira, Michroma) sont sous licence SIL Open Font License : voir les fichiers OFL. Archivo et Saira y sont figées en version étendue.
+Les polices de `3d/outils/polices/` (Inter, Archivo, Saira, Michroma, Outfit, Instrument Serif, Manrope) sont sous licence SIL Open Font License : voir les fichiers OFL. Archivo et Saira y sont figées en version étendue.

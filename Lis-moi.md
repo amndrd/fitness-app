@@ -38,11 +38,11 @@ Les prototypes :
 
 | Story | Le contenu | Les prototypes |
 |---|---|---|
-| 1 | les barres en arc, et les disques alignés au-dessus, tournés de la même façon, un petit espace entre eux | une (22/11, d'après ta référence) |
+| 1 | les barres en arc, et les disques alignés au-dessus, tournés de 80° vers la gauche, un petit espace entre eux | une (22/11, d'après ta référence) |
 | 2 | les haltères ronds, sur tout l'écran | a en colonne, b les faces, c la gamme de 5 à 40 kg |
 | 3 | l'haltère à disques | a les disques, b l'éclaté, c la paire, d les huit coloris |
 | 4 | les disques vinyle et les pinces, en colonne | ton choix |
-| 5 | « COMING SOON » : le logo au centre de l'écran blanc, le texte dessous en Archivo Expanded | une |
+| 5 | « coming soon » : le logo, plus petit, au centre de l'écran blanc, le texte dessous | a Inter, b Outfit, c Instrument Serif, d Manrope |
 
 Les fichiers et leur planche (`planche.jpg`) sont dans `3d/stories/`. Le logo (`marque/logo.png`), la story 5 et la planche restent sur ton Mac : le logo n'est pas publié sur GitHub avant l'annonce de l'app. Les modèles restent dans la zone centrale : Instagram couvre le haut (le profil) et le bas (la réponse).
 
