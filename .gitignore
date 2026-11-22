@@ -32,3 +32,8 @@ GoogleService-Info.plist
 # your own reference images (third-party content)
 3d/references/**
 !3d/references/Lis-moi.md
+
+# the app's logo and what shows it (the "coming soon" story, the stories board): kept local until the app is announced
+marque/
+3d/stories/5-coming-soon.jpg
+3d/stories/planche.jpg

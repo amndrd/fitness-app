@@ -1,7 +1,7 @@
 # The Instagram stories (22/11/2026): puts the renders of outils/blender/rendus-stories.sh on white at
 # 1080 x 1920 (the story format): the objects alone on white, no floor and no shadow (the user's choice, 22/11).
 # Writes 3d/stories/*.jpg and 3d/stories/planche.jpg (the stories side by side, with labels: that board is for
-# choosing, it is not posted).
+# choosing, it is not posted). The last story shows the app's logo (marque/logo.png): it stays local, like the board.
 # usage: python3 3d/outils/stories.py
 import subprocess, tempfile
 from pathlib import Path
@@ -23,18 +23,37 @@ GROUPS = [   # story, its prototypes: scene, file, label on the board
         ('3d', '3d-haltere-disques-couleurs', 'd · les huit coloris')]),
     ('4 · Disques vinyle et pinces', 'ton choix', [
         ('4', '4-vinyle-et-pinces', 'la colonne')]),
+    ('5 · Coming soon', 'le logo au centre, sur le blanc', [
+        ('logo', '5-coming-soon', 'le logo et « coming soon »')]),
 ]
+LOGO = OUT.parent.parent / 'marque/logo.png'       # the app's logo (kept local, see .gitignore)
+FONT = OUT / 'polices/Archivo-ExpandedSemiBold.ttf'
 STORIES = [st for _, _, sts in GROUPS for st in sts]
 
 DOS.mkdir(parents=True, exist_ok=True)
 LAYERS = {'1': ['barres', '1d']}    # story 1: the bars and the row of plates, each with its own camera
 
+def logo_page():
+    """The last story: the logo in the middle of the white screen, "coming soon" under it, in the charter's font."""
+    return f'''<html><head><style>
+@font-face {{ font-family: Archivo; src: url("{FONT.as_uri()}"); font-weight: 600; }}
+body {{ margin:0; width:1080px; height:1920px; background:#FFFFFF; display:flex; flex-direction:column; align-items:center; justify-content:center; }}
+img {{ width:420px; height:auto; display:block; margin-top:-60px; }}
+p {{ margin:76px 0 0; font-family:Archivo; font-weight:600; font-size:34px; letter-spacing:0.34em; text-indent:0.34em; color:#1B1B1D; }}
+</style></head><body><img src="{LOGO.as_uri()}"><p>COMING SOON</p></body></html>'''
+
+
 for sc, name, _ in STORIES:
-    objs = [BRUTS / f'story-{k}.png' for k in LAYERS.get(sc, [sc])]
-    if not all(o.exists() for o in objs):
-        continue
-    layers = ''.join(f'<img src="{o.as_uri()}">' for o in objs)
-    page = f'''<html><body style="margin:0;width:1080px;height:1920px;background:#FFFFFF;position:relative;overflow:hidden">
+    if sc == 'logo':
+        if not LOGO.exists():
+            continue
+        page = logo_page()
+    else:
+        objs = [BRUTS / f'story-{k}.png' for k in LAYERS.get(sc, [sc])]
+        if not all(o.exists() for o in objs):
+            continue
+        layers = ''.join(f'<img src="{o.as_uri()}">' for o in objs)
+        page = f'''<html><body style="margin:0;width:1080px;height:1920px;background:#FFFFFF;position:relative;overflow:hidden">
 <style>img {{ position:absolute; inset:0; width:1080px; height:1920px; }}</style>{layers}</body></html>'''
     with tempfile.NamedTemporaryFile('w', suffix='.html', delete=False) as f:
         f.write(page)

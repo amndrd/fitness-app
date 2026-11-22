@@ -145,11 +145,13 @@ def sbarres():  # the bars alone (the bottom layer of story 1d)
 def s1d():  # the plates standing in a straight row, all turned the same way, a little air between them
     # (the user's reference: the step-8 colour row, more turned and closer); rendered with its own camera, nearly
     # level with the plates, then laid over the bars (sbarres): no floor, no shadow, so the two layers match.
-    yaw = float(ARGS.get('yaw', 74))
+    yaw = float(ARGS.get('yaw', 80))                    # 22/11: 74, then 'a bit more to the left'
+    roll = float(ARGS.get('roll', 0))                   # leaning the plates' tops (negative: to the left)
     p = 0.45 * math.cos(math.radians(yaw)) + 0.058 * math.sin(math.radians(yaw))   # width of a plate seen from the front
     step = p * float(ARGS.get('gap', 1.13))                 # a small gap between the plates
     for i, c in enumerate(COLS):
-        pose(plate(c, name='d%d' % i), ((i - 3.5) * step, 0.0, 0.0), (0, 0, yaw))       # the face turned to the right, the rim seen on the left (the reference)
+        e = plate(c, name='d%d' % i)                     # the face turned to the right, the rim seen on the left (the reference)
+        e.matrix_world = Matrix.Translation(((i - 3.5) * step, 0.0, 0.0)) @ Matrix.Rotation(math.radians(roll), 4, 'Y') @ Matrix.Rotation(math.radians(yaw), 4, 'Z')
     story()
     width = 8 * step / 0.86                                  # the row fills 86 % of the width
     dist = width / 2 / (10.125 / 135)                         # lens 135 (a flat perspective), the width of a 9:16 sensor is 36 x 9 / 16 mm
