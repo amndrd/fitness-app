@@ -17,7 +17,7 @@ COLOUR = ARGS.get('couleur', 'noir')
 FIN = ARGS.get('finition', 'B')
 TEX = ARGS.get('texture', 'gros')         # the sandy grain of the photo
 MARK = ARGS.get('marquage', 'blanc')      # blanc: white (charcoal on light colours), the user's choice | relief: same colour (the photo)
-END = ARGS.get('bout', 'chanfrein')       # the steel end of the handle: chanfrein | arrondi | creux
+END = ARGS.get('bout', 'chanfrein')       # the steel end of the handle: chanfrein (the user's choice, 22/11) | arrondi | creux
 
 # ------------------------------------------------------------------ dimensions
 VINYL = {1.25: (0.185, 0.034), 2.5: (0.225, 0.042), 5: (0.282, 0.050)}   # diameter, thickness

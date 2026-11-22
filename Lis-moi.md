@@ -99,7 +99,7 @@ La planche montre maintenant cette version 2 :
 - l'acier nu au bout de la poignée, avec trois façons de le finir : chanfrein, arrondi, creux ;
 - le manchon allongé à 16,5 cm, pour que l'acier dépasse après la pince comme sur ta photo.
 
-Il reste à choisir le bout.
+Tu as choisi le bout chanfreiné (22/11) : l'étape 8 est validée.
 
 **Tes références :** dépose tes images de machines dans `3d/references/` (elles restent sur ton Mac).
 

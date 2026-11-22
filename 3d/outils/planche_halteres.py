@@ -83,7 +83,7 @@ notes = '''
 <section>
   <div class="stitle">Question</div>
   <ol class="list">
-    <li>Quel bout pour la poignée : 1 chanfrein, 2 arrondi ou 3 creux ? Je conseille le 1 : c'est le plus sobre, et c'est le même que celui des manchons de la barre.</li>
+    <li>Quel bout pour la poignée : 1 chanfrein, 2 arrondi ou 3 creux ? <b>Ton choix : 1, le chanfrein.</b> L'étape 8 est validée.</li>
   </ol>
 </section>
 </div>'''
