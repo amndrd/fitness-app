@@ -104,14 +104,15 @@ RC = (0.051 + WIRE) / 2                # centre line of the coil: 51 mm inside
 D = 2 * RC + WIRE                      # 66.6 mm outside
 PITCH = WIRE + 0.0002                  # turns touching
 TURNS = 3
-SL_L, SL_W, SL_T = 1.1 * D, 0.49 * D, 1.35 * WIRE   # sleeve: length, width (along the coil axis), thickness
+SL_L, SL_W, SL_T = 1.1 * D, 0.52 * D, 1.35 * WIRE   # sleeve: length, width (along the coil axis), thickness
+SL_WALL = 0.0009                                     # sleeve wall: the wire must stay inside the slot (22/11)
 LEG_UP = dict(run=0.30 * D, to=139.0, r=0.10 * D, straight=0.57 * D)     # top turn: up, then up-left
 LEG_LOW = dict(run=0.03 * D, to=188.0, r=0.10 * D, straight=0.55 * D)    # bottom turn: down, then left
-SL_Z0 = -TURNS * PITCH / 2 - WIRE / 2 - 0.0012     # bottom of the sleeves: just under the coil's bottom
+SL_Z0 = -TURNS * PITCH / 2 - WIRE / 2 - SL_WALL - 0.0004   # bottom of the sleeves: the bottom wire sits just inside the slot
 GROUND = -SL_Z0                         # lying flat, the clip rests on its sleeves and its coil
 
 
-def sleeve(name, E, d, wdir, m, L, w, t, wall=0.0009):
+def sleeve(name, E, d, wdir, m, L, w, t, wall=SL_WALL):
     """Sleeve: open end (with a slot) at E, rounded tip, pointing along d, its width along wdir.
     Local axes: X = thickness, Y = along the sleeve, Z = width."""
     out = [(0.0, -w / 2), (L - w / 2, -w / 2)] + [((L - w / 2) + (w / 2) * math.cos(a), (w / 2) * math.sin(a))

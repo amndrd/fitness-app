@@ -85,8 +85,8 @@ notes = '''
     <li><span class="lbl2">La spirale est à plat :</span> trois spires serrées d'un fil rond. Elle fait trois épaisseurs de fil de haut, et le fil mesure 1/8 de son diamètre.</li>
     <li><span class="lbl2">Les deux bouts partent du même point de l'anneau</span>, en ligne droite : celui de la spire du haut part d'un côté, celui de la spire du bas de l'autre. Chacun reste à sa hauteur, puis se coude vers l'extérieur. Les deux branches forment un V d'environ 50°.</li>
     <li><span class="lbl2">Les gaines sont posées sur la tranche</span>, dans l'axe de leur branche. Leurs grandes faces sont verticales : c'est là qu'on appuie. Elles posent au sol avec la spirale et la dépassent un peu en hauteur. Le bout est arrondi. L'ouverture a une fente où entre le fil, en haut pour une gaine, en bas pour l'autre.</li>
-    <li><span class="lbl2">Les proportions</span> sont mesurées sur ses images : gaines de 1,1 diamètre de long et 0,49 de haut, branches de 0,55.</li>
-    <li><span class="lbl2">La taille.</span> Le modèle est une pince pour les barres de 25 à 28 mm. La nôtre garde ses proportions mais s'ouvre sur 51 mm, pour la barre olympique : fil de 7,8 mm, gaines de 73 × 33 × 10,5 mm.</li>
+    <li><span class="lbl2">Les proportions</span> sont mesurées sur ses images : gaines de 1,1 diamètre de long et un peu plus hautes que la spirale (0,52), branches de 0,55. Le fil reste dans la fente : il ne traverse jamais la paroi.</li>
+    <li><span class="lbl2">La taille.</span> Le modèle est une pince pour les barres de 25 à 28 mm. La nôtre garde ses proportions mais s'ouvre sur 51 mm, pour la barre olympique : fil de 7,8 mm, gaines de 73 × 35 × 10,5 mm.</li>
     <li><span class="lbl2">Le rendu :</span> un acier satiné (pas un miroir), un caoutchouc gris anthracite, un studio gris très clair aux ombres douces. L'image principale est sur fond gris foncé, comme celle du modèle.</li>
   </ul>
 </section>

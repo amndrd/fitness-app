@@ -71,7 +71,7 @@ Les petites mentions (« KG » sur les disques) sont ton sur ton : de la couleur
 ### Les colliers
 
 Deux modèles seulement : **la pince à ressort** et **le collier à levier**, d'après les références de l'utilisateur (étape 7, en cours de validation).
-- **La pince :** d'après le modèle choisi par l'utilisateur (22/11). La spirale est à plat, trois spires serrées d'un fil d'acier satiné (1/8 du diamètre). Les deux bouts partent du même point de l'anneau, chacun à sa hauteur, puis s'écartent en V d'environ 50°. Les gaines en caoutchouc anthracite sont posées sur la tranche, leurs grandes faces verticales, bout arrondi et ouverture à fente. Elles posent au sol avec la spirale. Dimensions pour la barre olympique : 51 mm dedans, fil de 7,8 mm, gaines de 73 × 33 × 10,5 mm.
+- **La pince :** d'après le modèle choisi par l'utilisateur (22/11). La spirale est à plat, trois spires serrées d'un fil d'acier satiné (1/8 du diamètre). Les deux bouts partent du même point de l'anneau, chacun à sa hauteur, puis s'écartent en V d'environ 50°. Les gaines en caoutchouc anthracite sont posées sur la tranche, leurs grandes faces verticales, bout arrondi et ouverture à fente. Elles posent au sol avec la spirale. Dimensions pour la barre olympique : 51 mm dedans, fil de 7,8 mm, gaines de 73 × 35 × 10,5 mm. Le fil reste toujours dans la fente de la gaine (paroi de 0,9 mm).
 
 ## Gardé de côté
 
