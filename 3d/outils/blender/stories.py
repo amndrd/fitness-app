@@ -266,7 +266,7 @@ def s6():
     for i, c in enumerate(('noir', 'blanc', 'rose')):
         pose(plate(c, name='d%d' % i), (0.0, 0.0, (1 - i) * (2 * PR + gap)), (0, 0, 0))     # the face towards the camera
     story()
-    height = (3 * 2 * PR + 2 * gap) / 0.97                   # the column fills 97 % of the height
+    height = (3 * 2 * PR + 2 * gap) / 0.84                   # the column fills 84 % of the height (97 % touched the edges)
     dist = height / 2 / (18 / 200)                           # lens 200 (almost flat), the 36 mm side is the height
     camera((0.0, -dist, 0.0), (0.0, 0.0, 0.0), lens=200, fstop=32)
     return (0.0, 0.0, 0.0), 1.0, None
