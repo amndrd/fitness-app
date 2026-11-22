@@ -52,6 +52,24 @@ Pour refaire les images :
 1. `3d/outils/blender/rendus-stories.sh` fait le rendu de chaque story avec le script `stories.py`.
 2. `python3 3d/outils/stories.py` pose les objets sur le blanc.
 
+## Les captures de Blender (22/11/2026)
+
+Des captures d'écran de l'interface de Blender, une par modèle validé, au format story, dans `3d/stories/blender/` :
+1. le disque, avec son arbre de matière ;
+2. l'haltère rond, avec le maillage en fil de fer et la liste des objets ;
+3. le bout de la barre, avec le panneau de la matière de l'embout ;
+4. la pince, avec la liste des objets ;
+5. l'haltère à disques, avec la liste de ses pièces.
+
+Comment elles sont faites :
+- Les captures sont prises par Blender lui-même, dans une fenêtre en portrait.
+- La fenêtre fait 640 × 831 points : c'est la plus étroite que Blender accepte, à la hauteur de ton écran.
+- La capture est posée sur toute la largeur de la story. Au-dessus et au-dessous, des bandes reprennent la couleur des barres de Blender.
+
+Pour les refaire :
+1. `3d/outils/blender/rendus-captures.sh`, avec le script `captures.py`. Blender s'ouvre quelques secondes à l'écran pour chaque modèle.
+2. `python3 3d/outils/captures.py` pour la mise au format story.
+
 ## Le chemin parcouru
 
 1. **La recherche (21/11) :** les salles et les machines pectoraux. Tu as choisi un style noir et sobre, comme les machines Technogym de Fitness Park, et des machines universelles.
@@ -83,6 +101,7 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
       colliers.py          la pince à ressort
       halteres.py          l'haltère à disques
       stories.py           les scènes des stories Instagram
+      captures.py          les captures de l'interface de Blender, une fenêtre en portrait par modèle
       rendus-*.sh          refont les rendus de chaque modèle
     polices/               Archivo Expanded (et les polices essayées à l'étape 3), avec leurs licences OFL
     planche_recherche.py   refait la planche de la recherche (étape 1)
