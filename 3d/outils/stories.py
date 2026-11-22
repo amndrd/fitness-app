@@ -23,17 +23,14 @@ GROUPS = [   # story, its prototypes: scene, file, label on the board
         ('3d', '3d-haltere-disques-couleurs', 'd · les huit coloris')]),
     ('4 · Disques vinyle et pinces', 'ton choix', [
         ('4', '4-vinyle-et-pinces', 'la colonne')]),
-    ('5 · Coming soon', 'le logo plus petit, quatre polices pour le texte', [
-        ('logo-a', '5a-coming-soon-inter', 'a · Inter'),
-        ('logo-b', '5b-coming-soon-outfit', 'b · Outfit'),
-        ('logo-c', '5c-coming-soon-instrument', 'c · Instrument Serif'),
-        ('logo-d', '5d-coming-soon-manrope', 'd · Manrope')]),
+    ('5 · Coming soon', 'le logo, petit, et « coming soon » en Outfit (ton choix)', [
+        ('logo-b', '5-coming-soon', 'coming soon')]),
 ]
 LOGO = OUT.parent.parent / 'marque/logo.png'       # the app's logo (kept local, see .gitignore)
 POL = OUT / 'polices'
 COMING = {   # font file, weight, text, size px, letter spacing, style (all open fonts, OFL, see polices/)
     'a': ('inter-latin-500-normal.woff2', 500, 'Coming soon', 40, '0.01em', 'normal'),
-    'b': ('Outfit[wght].ttf', 400, 'coming soon', 44, '0.02em', 'normal'),
+    'b': ('Outfit[wght].ttf', 400, 'coming soon', 40, '0.02em', 'normal'),     # the user's choice (22/11)
     'c': ('InstrumentSerif-Italic.ttf', 400, 'coming soon', 54, '0.01em', 'italic'),
     'd': ('Manrope[wght].ttf', 600, 'COMING SOON', 26, '0.3em', 'normal'),
 }
@@ -48,8 +45,8 @@ def logo_page(v):
     return f'''<html><head><style>
 @font-face {{ font-family: F; src: url("{(POL / font).as_uri()}"); font-weight: 100 900; font-style: {style}; }}
 body {{ margin:0; width:1080px; height:1920px; background:#FFFFFF; display:flex; flex-direction:column; align-items:center; justify-content:center; }}
-img {{ width:240px; height:auto; display:block; margin-top:-40px; }}
-p {{ margin:52px 0 0; font-family:F; font-weight:{weight}; font-style:{style}; font-size:{size}px; letter-spacing:{track}; text-indent:{track}; color:#1B1B1D; }}
+img {{ width:170px; height:auto; display:block; margin-top:-30px; }}
+p {{ margin:44px 0 0; font-family:F; font-weight:{weight}; font-style:{style}; font-size:{size}px; letter-spacing:{track}; text-indent:{track}; color:#1B1B1D; }}
 </style></head><body><img src="{LOGO.as_uri()}"><p>{text}</p></body></html>'''
 
 

@@ -147,7 +147,7 @@ def s1d():  # the plates standing in a straight row, all turned the same way, a 
     # level with the plates, then laid over the bars (sbarres): no floor, no shadow, so the two layers match.
     yaw = float(ARGS.get('yaw', 80))                    # 22/11: 74, then 'a bit more to the left'
     roll = float(ARGS.get('roll', 0))                   # leaning the plates' tops (negative: to the left)
-    p = 0.45 * math.cos(math.radians(yaw)) + 0.058 * math.sin(math.radians(yaw))   # width of a plate seen from the front
+    p = 0.45 * abs(math.cos(math.radians(yaw))) + 0.058 * abs(math.sin(math.radians(yaw)))   # width of a plate seen from the front
     step = p * float(ARGS.get('gap', 1.13))                 # a small gap between the plates
     for i, c in enumerate(COLS):
         e = plate(c, name='d%d' % i)                     # the face turned to the right, the rim seen on the left (the reference)
@@ -157,7 +157,7 @@ def s1d():  # the plates standing in a straight row, all turned the same way, a 
     dist = width / 2 / (10.125 / 135)                         # lens 135 (a flat perspective), the width of a 9:16 sensor is 36 x 9 / 16 mm
     el = math.radians(7)
     camera((0.0, -dist * math.cos(el), dist * math.sin(el)), (0.0, 0.0, 0.0), lens=135, fstop=32, shift_y=-0.08)
-    return (0.0, 0.0, 0.0), 1.0, 'droite'
+    return (0.0, 0.0, 0.0), 1.0, ('droite' if yaw > 0 else None)      # the key on the side the faces are turned to
 
 
 # 2 the round dumbbells, the whole screen: a column, the faces, the range of weights
