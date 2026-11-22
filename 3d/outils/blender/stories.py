@@ -145,7 +145,7 @@ def sbarres():  # the bars alone (the bottom layer of story 1d)
 def s1d():  # the plates standing in a straight row, all turned the same way, a little air between them
     # (the user's reference: the step-8 colour row, more turned and closer); rendered with its own camera, nearly
     # level with the plates, then laid over the bars (sbarres): no floor, no shadow, so the two layers match.
-    yaw = float(ARGS.get('yaw', 80))                    # 22/11: 74, then 'a bit more to the left'
+    yaw = float(ARGS.get('yaw', 84))                    # 22/11: 74, then turned further to the right (the faces more to the right)
     roll = float(ARGS.get('roll', 0))                   # leaning the plates' tops (negative: to the left)
     p = 0.45 * abs(math.cos(math.radians(yaw))) + 0.058 * abs(math.sin(math.radians(yaw)))   # width of a plate seen from the front
     step = p * float(ARGS.get('gap', 1.13))                 # a small gap between the plates
