@@ -153,7 +153,7 @@ def s1d():  # the plates standing in a straight row, all turned the same way, a 
         e = plate(c, name='d%d' % i)                     # the face turned to the right, the rim seen on the left (the reference)
         e.matrix_world = Matrix.Translation(((i - 3.5) * step, 0.0, 0.0)) @ Matrix.Rotation(math.radians(roll), 4, 'Y') @ Matrix.Rotation(math.radians(yaw), 4, 'Z')
     story()
-    width = 8 * step / 0.86                                  # the row fills 86 % of the width
+    width = 8 * step / float(ARGS.get('fill', 1.12))         # the row overflows the screen a little on both sides (the user, 22/11)
     dist = width / 2 / (10.125 / 135)                         # lens 135 (a flat perspective), the width of a 9:16 sensor is 36 x 9 / 16 mm
     el = math.radians(7)
     camera((0.0, -dist * math.cos(el), dist * math.sin(el)), (0.0, 0.0, 0.0), lens=135, fstop=32, shift_y=-0.08)
