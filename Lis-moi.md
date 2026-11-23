@@ -80,6 +80,12 @@ Pour les refaire :
 6. **La barre olympique (21/11) :** la finition B tout acier, avec A et C en options.
 7. **Les colliers (22/11) :** la pince, refaite d'après le modèle que tu as choisi. Le collier en aluminium, puis le levier, sont abandonnés : la pince est le seul collier.
 8. **L'haltère à disques (22/11) :** d'après ta photo, avec la poignée tout acier au bout chanfreiné.
+9. **L'inventaire (22/11) :** tout ce qu'on peut modéliser, dans le document « Fitness app · Tout ce qu'on peut modéliser » (137 objets). Tu as choisi de commencer par le cardio.
+10. **Le tapis de course (22/11, en cours) :** d'après ta référence, le Landice L8 noir. L'analyse est dans `3d/recherche/9-tapis-de-course/analyse.md`, le premier prototype dans `3d/prototypes/tapis-de-course/`. Les planches restent sur ton Mac : elles montrent les photos du fabricant.
+    - **23/11 :** le portique reste noir (ton choix). On corrige partie par partie. D'abord le bas à l'avant : la coque du capot, le socle, les grilles et les pieds (`rendus-tapis-capot.sh`, `planche-capot.jpg`). Validé, avec les grilles A, lamelles fines.
+    - **23/11, après-midi :** le haut. Les angles du portique sont moins arrondis. Les mains courantes deviennent de grandes palettes debout, avec un bloc et son porte-gobelet à chaque coin. Le clavier est plus large, et les poignées cardio existent en deux versions, A droites et B galbées (`rendus-tapis-haut.sh`, `planche-haut.jpg`).
+    - **Tes choix (23/11) :** les poignées A, droites. L'anneau garde sa grande forme arrondie du premier prototype : ce sont ses arêtes qui deviennent nettes, comme sur l'original (réglage `arete=`). `rendus-tapis-tout.sh` refait toutes les vues.
+    - **La suite :** le tableau de bord (la console).
 
 Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent dans l'historique GitHub. La recherche est gardée dans `3d/recherche/`, et tes images de référence dans `3d/references/` (elles restent sur ton Mac).
 
@@ -89,6 +95,7 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
 3d/
   charte.md                les choix validés : police, coloris, tailles, textures
   modeles/                 les images des modèles validés, un dossier par pièce
+  prototypes/              les prototypes en cours, à choisir (tapis-de-course)
   stories/                 les stories Instagram et leur planche
   recherche/               la recherche, étape par étape (les images restent sur ton Mac, sources.json garde les liens)
   references/              tes images de référence (sur ton Mac seulement)
@@ -100,12 +107,16 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
       barre.py             la barre olympique
       colliers.py          la pince à ressort
       halteres.py          l'haltère à disques
+      tapis.py             le tapis de course (rendus-tapis*.sh refont ses vues)
       stories.py           les scènes des stories Instagram
       captures.py          les captures de l'interface de Blender, une fenêtre en portrait par modèle
       rendus-*.sh          refont les rendus de chaque modèle
     polices/               Archivo Expanded (et les polices essayées à l'étape 3), avec leurs licences OFL
     planche_recherche.py   refait la planche de la recherche (étape 1)
     planche_style_poids.py refait la planche de l'étape 3
+    planche_tapis.py       pose les rendus du tapis sur le blanc et fait sa planche
+    planche_tapis_capot.py la planche des corrections du bas du tapis (23/11)
+    planche_tapis_haut.py  la planche des corrections du haut du tapis (23/11)
     page_images.mjs        récupère les photos d'une page de fabricant
     contact.py             assemble les images d'un dossier en une seule image
     export.mjs             transforme une page HTML en image
