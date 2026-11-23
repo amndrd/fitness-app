@@ -25,6 +25,7 @@ GoogleService-Info.plist
 3d/recherche/**/*.png
 3d/recherche/**/*.webp
 3d/recherche/**/*.gif
+3d/recherche/**/*.pdf
 # - downloaded 3D models and textures (see credits.md)
 3d/outils/assets/
 # the research boards are collages of those images: kept locally, rebuilt by 3d/outils/planche_recherche.py
@@ -37,3 +38,6 @@ GoogleService-Info.plist
 marque/
 3d/stories/5-coming-soon.jpg
 3d/stories/planche.jpg
+
+# the prototype boards that show the manufacturers' pictures next to our renders
+3d/prototypes/tapis-de-course/planche*
