@@ -81,11 +81,23 @@ Pour les refaire :
 7. **Les colliers (22/11) :** la pince, refaite d'après le modèle que tu as choisi. Le collier en aluminium, puis le levier, sont abandonnés : la pince est le seul collier.
 8. **L'haltère à disques (22/11) :** d'après ta photo, avec la poignée tout acier au bout chanfreiné.
 9. **L'inventaire (22/11) :** tout ce qu'on peut modéliser, dans le document « Fitness app · Tout ce qu'on peut modéliser » (137 objets). Tu as choisi de commencer par le cardio.
-10. **Le tapis de course (22/11, en cours) :** d'après ta référence, le Landice L8 noir. L'analyse est dans `3d/recherche/9-tapis-de-course/analyse.md`, le premier prototype dans `3d/prototypes/tapis-de-course/`. Les planches restent sur ton Mac : elles montrent les photos du fabricant.
-    - **23/11 :** le portique reste noir (ton choix). On corrige partie par partie. D'abord le bas à l'avant : la coque du capot, le socle, les grilles et les pieds (`rendus-tapis-capot.sh`, `planche-capot.jpg`). Validé, avec les grilles A, lamelles fines.
-    - **23/11, après-midi :** le haut. Les angles du portique sont moins arrondis. Les mains courantes deviennent de grandes palettes debout, avec un bloc et son porte-gobelet à chaque coin. Le clavier est plus large, et les poignées cardio existent en deux versions, A droites et B galbées (`rendus-tapis-haut.sh`, `planche-haut.jpg`).
-    - **Tes choix (23/11) :** les poignées A, droites. L'anneau garde sa grande forme arrondie du premier prototype : ce sont ses arêtes qui deviennent nettes, comme sur l'original (réglage `arete=`). `rendus-tapis-tout.sh` refait toutes les vues.
-    - **La suite :** le tableau de bord (la console).
+10. **Le tapis de course (22-23/11, en cours) :** d'après ta référence, le Landice L8 noir. L'analyse est dans `3d/recherche/9-tapis-de-course/analyse.md`.
+    - **Où on en est :** le portique noir, avec sa grande forme arrondie et des arêtes nettes. Le bas est refait : la coque du capot, le socle, les grilles A et les pieds. Le haut aussi : de grandes palettes comme mains courantes, un bloc et son porte-gobelet à chaque coin, le clavier et les poignées cardio droites (A).
+    - **Les images :** 10 vues dans `3d/prototypes/tapis-de-course/`. Il y a les trois quarts avant et arrière, le profil, la face, une vue en plongée, le dos, la console, le capot, la main courante et l'arrière de près. `rendus-tapis.sh` les refait.
+    - **Le ménage (23/11) :** les anciennes versions, les variantes écartées et les planches de comparaison sont dans la Corbeille, dossier « Fitness app - ménage tapis 23-11 ». Ce qui était sur GitHub reste dans l'historique.
+    - **Le tableau de bord (23-24/11) :** refait d'après celui du Technogym Skillrun, sans la marque. On retrouve :
+      - l'écran de 22 pouces (éteint) sur une colonne ;
+      - le bac d'une seule pièce avec la colonne ;
+      - le guidon modelé d'une seule pièce : le renflement et son STOP rouge, les poignées moletées, les palettes + et − ;
+      - les deux grandes poignées (ton choix) et les lignes entre les pièces.
+
+      La version 3 est dans `3d/prototypes/tapis-de-course/tableau-de-bord/`. `rendus-tapis-tdb.sh` la refait, et `planche_tapis_tdb.py` fait sa planche, qui reste locale. L'analyse est dans `3d/recherche/10-tableau-de-bord/analyse.md`.
+    - **En pause (24/11) :** le tapis attend ta relecture de la version 3. À reprendre ensuite :
+      - tes corrections sur le tableau de bord ;
+      - le bord arrière du STOP, qui a de petites marches vu de très près ;
+      - les repères des palettes, blancs chez nous et jaunes sur le Skillrun : à choisir ;
+      - la bande, qui paraît grise quand on la regarde en rasant ;
+      - les 10 vues du dossier, à refaire avec `rendus-tapis.sh` : elles montrent encore l'ancien dessus.
 
 Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent dans l'historique GitHub. La recherche est gardée dans `3d/recherche/`, et tes images de référence dans `3d/references/` (elles restent sur ton Mac).
 
@@ -95,7 +107,7 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
 3d/
   charte.md                les choix validés : police, coloris, tailles, textures
   modeles/                 les images des modèles validés, un dossier par pièce
-  prototypes/              les prototypes en cours, à choisir (tapis-de-course)
+  prototypes/              les modèles en cours (tapis-de-course : les vues de l'état actuel)
   stories/                 les stories Instagram et leur planche
   recherche/               la recherche, étape par étape (les images restent sur ton Mac, sources.json garde les liens)
   references/              tes images de référence (sur ton Mac seulement)
@@ -107,16 +119,14 @@ Les anciens modèles et leurs planches ont été retirés le 22/11 ; ils restent
       barre.py             la barre olympique
       colliers.py          la pince à ressort
       halteres.py          l'haltère à disques
-      tapis.py             le tapis de course (rendus-tapis*.sh refont ses vues)
+      tapis.py             le tapis de course (rendus-tapis.sh refait ses 10 vues, rendus-tapis-tdb.sh le tableau de bord)
       stories.py           les scènes des stories Instagram
       captures.py          les captures de l'interface de Blender, une fenêtre en portrait par modèle
       rendus-*.sh          refont les rendus de chaque modèle
     polices/               Archivo Expanded (et les polices essayées à l'étape 3), avec leurs licences OFL
     planche_recherche.py   refait la planche de la recherche (étape 1)
     planche_style_poids.py refait la planche de l'étape 3
-    planche_tapis.py       pose les rendus du tapis sur le blanc et fait sa planche
-    planche_tapis_capot.py la planche des corrections du bas du tapis (23/11)
-    planche_tapis_haut.py  la planche des corrections du haut du tapis (23/11)
+    planche_tapis_tdb.py   pose les rendus du tableau de bord du tapis sur le blanc et fait sa planche
     page_images.mjs        récupère les photos d'une page de fabricant
     contact.py             assemble les images d'un dossier en une seule image
     export.mjs             transforme une page HTML en image
