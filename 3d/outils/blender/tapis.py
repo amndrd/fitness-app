@@ -8,7 +8,8 @@
 #   two chrome heart-rate grips; two flat handrails going back from the corners; the console (a tablet) above.
 # No brand: no logo, no model name; the screen stays off. Sizes: 2.11 x 0.89 x 1.56 m, belt 0.56 x 1.60 m, step 0.19 m.
 # Axes: X across (the user's right is +X), Y along (the hood is at +Y, the user runs towards +Y), Z up, floor z = 0.
-# usage: Blender -b --factory-startup -P tapis.py -- plans=reference,avant couleur=noir res=1400 samples=128 out=<dir>
+# usage: Blender -b --factory-startup -P tapis.py -- plans=reference,profil couleur=noir res=1400 samples=128 out=<dir>
+# The current views: rendus-tapis.sh (they go to 3d/prototypes/tapis-de-course/).
 import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 AS_LIB_P3 = True
@@ -32,7 +33,7 @@ BASE_Y = 0.97                  # the uprights' feet: their front face flush with
 TOP_Z = 1.21                   # the axis of the portal's top bar
 CORNER = float(ARGS.get('coin', 0.27))   # the portal's top corners: the big round bend (the user's choice, 23/11)
 EDGE = float(ARGS.get('arete', 0.007))   # the portal's edges: crisp like the original (23/11; they were 0.026, too soft)
-GRIPS = ARGS.get('poignees', 'droites')  # heart-rate grips: droites (like the original, the user's choice 23/11) | galbees
+HAUTES = ARGS.get('poignees_hautes', 'oui')   # the dashboard's two tall upright handles: oui | non
 
 
 # ------------------------------------------------------------------ materials
@@ -43,6 +44,51 @@ FINISHES = {   # the portal: satin metallic paint
 }
 
 
+def mat_moule(name, color):
+    """Moulded plastic: a fine stipple (the mould's texture) and a roughness that varies a little."""
+    m = mat(name, color, rough=0.6, spec=0.3, grain=0.3, grain_scale=2600)
+    nt = m.node_tree
+    p = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    nz = N(nt, 'ShaderNodeTexNoise', Scale=60.0, Detail=5.0); nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
+    nt.links.new(maprange(nt, nz.outputs['Fac'], 0.3, 0.7, 0.57, 0.63).outputs['Result'], p.inputs['Roughness'])
+    return m
+
+
+def mat_moletage(name, color, R, pitch=0.0028):
+    """Rubber with a diamond knurl, round the axis (local Z) of a cylinder of radius R."""
+    m = mat(name, color, rough=0.7, spec=0.3)
+    nt = m.node_tree
+    p = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+    tc = nt.nodes.new('ShaderNodeTexCoord'); sep = nt.nodes.new('ShaderNodeSeparateXYZ')
+    nt.links.new(tc.outputs['Object'], sep.inputs[0])
+    ang = math_node(nt, 'ARCTAN2', sep.outputs['Y'], sep.outputs['X'])
+    u = math_node(nt, 'MULTIPLY', ang.outputs[0], v1=R)
+    k = 2 * math.pi / pitch
+    s1 = math_node(nt, 'SINE', math_node(nt, 'MULTIPLY', math_node(nt, 'ADD', u.outputs[0], sep.outputs['Z']).outputs[0], v1=k).outputs[0])
+    s2 = math_node(nt, 'SINE', math_node(nt, 'MULTIPLY', math_node(nt, 'SUBTRACT', u.outputs[0], sep.outputs['Z']).outputs[0], v1=k).outputs[0])
+    h = math_node(nt, 'MULTIPLY', s1.outputs[0], s2.outputs[0])
+    bmp = nt.nodes.new('ShaderNodeBump'); bmp.inputs['Strength'].default_value = 0.7; bmp.inputs['Distance'].default_value = 0.0004
+    nt.links.new(h.outputs[0], bmp.inputs['Height']); nt.links.new(bmp.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def mat_moletage_uv(name, color, pitch=0.0026):
+    """Rubber with a diamond knurl, drawn from the UVs of sweep_var (metres round and along the tube)."""
+    m = mat(name, color, rough=0.68, spec=0.3)
+    nt = m.node_tree
+    p = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+    uv = nt.nodes.new('ShaderNodeUVMap'); uv.uv_map = 'UVMap'
+    sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(uv.outputs['UV'], sep.inputs[0])
+    k = 2 * math.pi / pitch
+    s1 = math_node(nt, 'SINE', math_node(nt, 'MULTIPLY', math_node(nt, 'ADD', sep.outputs['X'], sep.outputs['Y']).outputs[0], v1=k).outputs[0])
+    s2 = math_node(nt, 'SINE', math_node(nt, 'MULTIPLY', math_node(nt, 'SUBTRACT', sep.outputs['X'], sep.outputs['Y']).outputs[0], v1=k).outputs[0])
+    h = math_node(nt, 'MULTIPLY', s1.outputs[0], s2.outputs[0])
+    bmp = nt.nodes.new('ShaderNodeBump'); bmp.inputs['Strength'].default_value = 0.75; bmp.inputs['Distance'].default_value = 0.00035
+    nt.links.new(h.outputs[0], bmp.inputs['Height']); nt.links.new(bmp.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
 def mats(finish=FINISH):
     f = FINISHES[finish]
     M = {}
@@ -50,14 +96,23 @@ def mats(finish=FINISH):
                         grain=0.05, grain_scale=1200, peel=0.15, peel_scale=160)
     M['jupe'] = mat('jupe', f['c'], rough=f['rough'] + 0.04, metal=f['metal'] * 0.9, coat=0.2, coat_rough=0.3)
     M['rail'] = mat('rail', (0.03, 0.03, 0.033), rough=0.36, metal=0.7, grain=0.1, grain_scale=1500)
-    M['plastique'] = mat('plastique', (0.017, 0.017, 0.019), rough=0.52, spec=0.42, grain=0.25, grain_scale=2200)
+    # moulded plastic: matte, a fine grain (the mould's texture), the roughness changes a little: not a toy
+    M['plastique'] = mat_moule('plastique', (0.0135, 0.0135, 0.015))
+    M['tube'] = mat('tube', (0.017, 0.017, 0.019), rough=0.4, metal=0.35, spec=0.45, coat=0.15, coat_rough=0.3,
+                    grain=0.12, grain_scale=1800, peel=0.22, peel_scale=220)          # powder-coated steel
+    M['grip'] = mat_moletage_uv('grip', (0.015, 0.015, 0.016))                     # rubber, a diamond knurl
+    M['satin'] = mat('satin', (0.016, 0.016, 0.018), rough=0.45, spec=0.4, coat=0.1, coat_rough=0.3, grain=0.15, grain_scale=2600)
+    M['cadre_ecran'] = mat('cadre_ecran', (0.025, 0.025, 0.028), rough=0.32, metal=0.6, spec=0.5)   # the rim: dark anodised
+    M['gris'] = mat('gris', (0.07, 0.07, 0.075), rough=0.45, spec=0.4)   # printed icons, dark grey
     M['capot'] = mat('capot', (0.013, 0.013, 0.015), rough=0.62, spec=0.26, grain=0.3, grain_scale=2200)
     M['mat'] = mat('plastique_mat', (0.012, 0.012, 0.013), rough=0.7, spec=0.3, grain=0.3, grain_scale=2200)
     M['bande'] = mat('bande', (0.011, 0.011, 0.012), rough=0.82, spec=0.25, grain=0.7, grain_scale=900)
     M['grille'] = mat('grille', (0.004, 0.004, 0.005), rough=0.9, spec=0.1)
     M['chrome'] = mat('chrome', (0.86, 0.86, 0.88), rough=0.07, metal=1.0)
-    M['ecran'] = mat('ecran', (0.004, 0.004, 0.006), rough=0.04, spec=0.6, coat=1.0, coat_rough=0.02)
-    M['stop'] = mat('stop', (0.55, 0.04, 0.045), rough=0.3, spec=0.5, coat=0.5, coat_rough=0.1)
+    M['ecran'] = mat('ecran', (0.002, 0.002, 0.0025), rough=0.14, spec=0.5, coat=1.0, coat_rough=0.09)   # the glass over the black print
+    M['dalle'] = mat('dalle', (0.007, 0.0075, 0.009), rough=0.14, spec=0.5, coat=1.0, coat_rough=0.09)   # the active area, off
+    M['stop'] = mat('stop', (0.36, 0.004, 0.006), rough=0.5, spec=0.28, grain=0.2, grain_scale=2400)   # bright red rubber, satin (stays red under the light)
+    M['blanc'] = mat('marquage', (0.78, 0.78, 0.79), rough=0.5, spec=0.4)
     M['caoutchouc'] = mat('pied', (0.015, 0.015, 0.016), rough=0.8, spec=0.25)
     return M
 
@@ -182,6 +237,100 @@ def slices_x(name, profile, x0, x1, n, m, deform=None):
     faces.append(tuple(n * k + j for j in range(k))[::-1])
     o = mesh_obj(name, verts, faces, m, smooth=True)
     return fix_normals(o)
+
+
+def resample(P, step):
+    """Points every `step` metres along a polyline."""
+    out = [P[0]]
+    acc = 0.0
+    for i in range(1, len(P)):
+        a, b = P[i - 1], P[i]
+        seg = (b - a).length
+        t = step - acc
+        while t <= seg:
+            out.append(a.lerp(b, t / seg)); t += step
+        acc = seg - (t - step)
+    if (out[-1] - P[-1]).length > 1e-6:
+        out.append(P[-1])
+    return out
+
+
+def sweep_var(name, P, rfun, mats_list, mfun, ring=56, rnom=0.0175):
+    """One moulded piece: a tube along the dense path P, its radius rfun(s) changing along it (s: metres from the
+    start). mfun(s) gives the material index of each ring of faces. The UVs run round (metres, at rnom) and along,
+    so a knurl can be drawn on the grips. Its two ends are closed. Returns the object and the length of each point."""
+    S = [0.0]
+    for i in range(1, len(P)):
+        S.append(S[-1] + (P[i] - P[i - 1]).length)
+    T = [(P[min(i + 1, len(P) - 1)] - P[max(i - 1, 0)]).normalized() for i in range(len(P))]
+    up = Vector((0, 0, 1))
+    Ns = [(up - T[0] * up.dot(T[0])).normalized()]
+    for i in range(1, len(P)):
+        Ns.append((Ns[-1] - T[i] * Ns[-1].dot(T[i])).normalized())     # parallel transport: no twist
+    verts, faces, fmat, uvs = [], [], [], []
+    for i, p in enumerate(P):
+        n, b = Ns[i], T[i].cross(Ns[i])
+        r = rfun(S[i])
+        for k in range(ring):
+            a = 2 * math.pi * k / ring
+            verts.append(tuple(p + (n * math.cos(a) + b * math.sin(a)) * r))
+    for i in range(len(P) - 1):
+        mi = mfun((S[i] + S[i + 1]) / 2)
+        for k in range(ring):
+            k2 = (k + 1) % ring
+            faces.append((i * ring + k, i * ring + k2, (i + 1) * ring + k2, (i + 1) * ring + k))
+            fmat.append(mi)
+            u0, u1 = rnom * 2 * math.pi * k / ring, rnom * 2 * math.pi * (k + 1) / ring
+            uvs.append([(u0, S[i]), (u1, S[i]), (u1, S[i + 1]), (u0, S[i + 1])])
+    c0 = len(verts); verts.append(tuple(P[0])); c1 = len(verts); verts.append(tuple(P[-1]))
+    last = (len(P) - 1) * ring
+    for k in range(ring):
+        k2 = (k + 1) % ring
+        faces.append((c0, k2, k)); fmat.append(mfun(0.0)); uvs.append([(0, 0)] * 3)
+        faces.append((c1, last + k, last + k2)); fmat.append(mfun(S[-1])); uvs.append([(0, 0)] * 3)
+    me = bpy.data.meshes.new(name); me.from_pydata(verts, [], faces)
+    uvl = me.uv_layers.new(name='UVMap')
+    for f, uvq in zip(me.polygons, uvs):
+        for li, uv in zip(f.loop_indices, uvq):
+            uvl.data[li].uv = uv
+    for m in mats_list:
+        me.materials.append(m)
+    for f, mi in zip(me.polygons, fmat):
+        f.material_index = mi; f.use_smooth = True
+    o = link(bpy.data.objects.new(name, me))
+    fix_normals(o)
+    return o, S
+
+
+def tube(name, pts, r, m, bend=0.05, segs=14, ends=True):
+    """A round tube along a 3D polyline, its corners bent, both ends closed by a half sphere (ends=False: flat)."""
+    P = fillet3(pts, bend, segs)
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'
+    sp = cu.splines.new('POLY'); sp.points.add(len(P) - 1)
+    for i, p in enumerate(P):
+        sp.points[i].co = (p.x, p.y, p.z, 1.0)
+    cu.bevel_mode = 'ROUND'; cu.bevel_depth = r; cu.bevel_resolution = 8
+    cu.use_fill_caps = True; cu.twist_mode = 'MINIMUM'
+    tmp = link(bpy.data.objects.new(name + '_c', cu))
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = bpy.data.meshes.new_from_object(tmp.evaluated_get(dg))
+    remove(tmp)
+    o = link(bpy.data.objects.new(name, me))
+    me.materials.append(m)
+    for p in me.polygons:
+        p.use_smooth = True
+    out = [o]
+    for e, d in ((P[0], P[0] - P[1]), (P[-1], P[-1] - P[-2])) if ends else ():
+        sph = bpy.data.meshes.new(name + '_bout'); bm = bmesh.new()
+        bmesh.ops.create_uvsphere(bm, u_segments=32, v_segments=16, radius=r)
+        bm.to_mesh(sph); bm.free()
+        so = link(bpy.data.objects.new(name + '_bout', sph)); sph.materials.append(m)
+        for p in sph.polygons:
+            p.use_smooth = True
+        so.location = e
+        out.append(so)
+    bpy.context.view_layer.update()
+    return join(out, name)
 
 
 # ------------------------------------------------------------------ the treadmill
@@ -351,89 +500,236 @@ def build(finish=FINISH):
             yb = BASE_Y - zb * math.tan(LEAN)
             parts.append(cyl('boulon', (s * (UP_X + UP_W2 - 0.001), yb, zb), (s * (UP_X + UP_W2 + 0.003), yb, zb), 0.007, M['mat']))
 
-    # --- on top (reworked 23/11 after the user's notes, like the original):
-    #     a shell behind the portal's bar; at each corner an end block with its cup holder, which covers the root of
-    #     the handrail; the handrails are big flat paddles, about 7 cm lower than the bar; the heart-rate grips go from
-    #     the sides of the keypad, back and out, into the roots of the handrails.
+    # --- on top: the ring keeps its two arms (the paddle handrails). The dashboard is new (23/11, after the user's
+    #     reference, the dashboard of a Technogym Skillrun, without its brand): a wide screen on a column that sits on
+    #     the ring's bar, a tray at its foot, a gull-wing handlebar held by the two arms (STOP on top, thumb paddles at
+    #     its ends), and two tall upright handles beside the screen (HAUTES=non takes them away).
     st = TOP_Z + UP_W2                                  # top of the portal's bar
-    hz = st - 0.105                                     # handrails: their axis (their top is 7 cm under the bar)
+    hz = st - 0.105                                     # handrails: their axis
     hxa = UP_X - 0.004                                  # handrails: their axis across
-    shell_xy = round_poly([(-0.36, top_y - 0.03), (0.36, top_y - 0.03), (0.36, top_y - 0.15), (0.17, top_y - 0.15), (0.115, top_y - 0.19),
-                           (-0.115, top_y - 0.19), (-0.17, top_y - 0.15), (-0.36, top_y - 0.15)], [0.02, 0.02, 0.03, 0.05, 0.04, 0.04, 0.05, 0.03], segs=10)
-    n = len(shell_xy)
-    shell = mesh_obj('coque', [(x, y, z) for z in (st - 0.075, st - 0.012) for x, y in shell_xy],
-                     [tuple(range(n))[::-1], tuple(range(n, 2 * n))] + [(i, (i + 1) % n, n + (i + 1) % n, n + i) for i in range(n)],
-                     M['plastique'], smooth=False)
-    rounded(shell, 0.02, 5)
-    parts.append(shell)
+    th2 = 0.026                                         # handrails: half thickness
+    zt = st - 0.05                                      # handrails: their top
     for sg in (-1, 1):
-        # the end block over the corner of the portal, with its deep cup holder
-        top_b = st - 0.004                                # just under the top of the portal's bar
-        bot_b = st - 0.085
-        parts.append(rbox('bout_coque', (0.125, 0.2, top_b - bot_b), M['plastique'], r=0.0395, segs=9,
-                          loc=(sg * hxa, top_y - 0.07, (top_b + bot_b) / 2)))
-        c = Vector((sg * hxa, top_y - 0.07, top_b))
-        parts.append(cyl('gobelet_bord', c - Vector((0, 0, 0.006)), c + Vector((0, 0, 0.004)), 0.046, M['plastique']))
-        parts.append(cyl('gobelet_fond', c - Vector((0, 0, 0.004)), c + Vector((0, 0, 0.0052)), 0.038, M['grille']))
-        # the handrail: an upright flat paddle (5 cm thick), 10 cm tall at its root and 7.5 cm at its end, which is
-        # rounded like a D; its big inner face looks at the runner's hands. The top stays level, the underside rises.
+        # the handrail: an upright flat paddle, 13 cm tall at its root and 9.5 cm at its D-shaped end
         y0, y1 = top_y - 0.03, top_y - 0.68
-        zt = st - 0.05
         prof = round_poly([(y0, zt - 0.13), (y1, zt - 0.095), (y1, zt), (y0, zt)], [0.0, 0.045, 0.045, 0.0], segs=12)
-        th2 = 0.026
-        xa, xb = (sg * hxa - th2, sg * hxa + th2)
-        pad = prism('main_courante', prof, xa, xb, M['plastique'], axis='X')
+        pad = prism('main_courante', prof, sg * hxa - th2, sg * hxa + th2, M['plastique'], axis='X')
         rounded(pad, 0.014, 6, angle=35)
         parts.append(pad)
-        # a thin lip along the top of the inner face, round the end too
-        lip = [(y0, zt - 0.004), (y1 + 0.03, zt - 0.004)]
         parts.append(rbox('levre', (0.006, y0 - y1 - 0.03, 0.01), M['plastique'], r=0.0028, segs=2,
                           loc=(sg * (hxa - th2 - 0.001), (y0 + y1 + 0.03) / 2, zt - 0.006)))
-    # the keypad, under the back edge of the shell, turned towards the runner: + and - on each side, STOP in the middle
-    kp = Vector((0.0, top_y - 0.185, st - 0.07))
-    tilt_k = 35
-    Rk = Euler((math.radians(tilt_k), 0, 0)).to_matrix()
-    nk, uk = Rk @ Vector((0, -1, 0)), Rk @ Vector((0, 0, 1))
-    parts.append(rbox('clavier', (0.3, 0.048, 0.078), M['plastique'], r=0.014, segs=4, loc=kp, rot=(tilt_k, 0, 0)))
-    parts.append(rbox('clavier_face', (0.27, 0.004, 0.056), M['mat'], r=0.008, segs=2, loc=kp + nk * 0.024, rot=(tilt_k, 0, 0)))
-    parts.append(cyl('stop', kp + nk * 0.024, kp + nk * 0.031, 0.019, M['stop']))
-    for sg in (-1, 1):
-        for dz in (0.014, -0.014):
-            q = kp + Vector((sg * 0.095, 0, 0)) + nk * 0.025 + uk * dz
-            parts.append(rbox('touche', (0.024, 0.006, 0.022), M['plastique'], r=0.005, segs=2, loc=q, rot=(tilt_k, 0, 0)))
-    parts.append(rbox('cle', (0.014, 0.02, 0.03), M['stop'], r=0.003, segs=2, loc=kp + Vector((0.035, -0.012, -0.05))))
-    # the heart-rate grips, into the roots of the handrails
-    for sg in (-1, 1):
-        a = kp + Vector((sg * 0.152, 0.004, -0.006))
-        c = Vector((sg * (hxa - 0.026), top_y - 0.19, st - 0.05 - 0.08))        # into the lower part of the handrail's root
-        if GRIPS == 'droites':                             # a straight bar: black ends, a long chrome sleeve (the original)
-            parts.append(cyl('poignee_cardio', a, c, 0.0155, M['plastique']))
-            parts.append(cyl('capteur', a.lerp(c, 0.16), a.lerp(c, 0.84), 0.0172, M['chrome']))
-            for e0, e1 in ((a, a.lerp(c, 0.16)), (c, c.lerp(a, 0.12))):
-                parts.append(cyl('bague', e0, e1, 0.02, M['plastique']))
-        else:                                              # a moulded grip, bent where the hand goes, two steel pads
-            b = a.lerp(c, 0.35) + Vector((0, -0.03, -0.025))
-            path = fillet3([a, b, c], 0.06, segs=16)
-            nrm_g = (b - a).cross(c - b).normalized()
-            parts.append(sweep('poignee_cardio', path, rrect(0.017, 0.017, 0.0169, 6), nrm_g, M['plastique']))
-            d = (c - b).normalized()
-            for t0, t1 in ((0.12, 0.47), (0.53, 0.88)):
-                parts.append(cyl('capteur', b.lerp(c, t0), b.lerp(c, t1), 0.0182, M['chrome']))
-            parts.append(cyl('bague', c - d * 0.03, c, 0.021, M['plastique']))
 
-    # --- the console: a tablet on a short neck, tilted back towards the user
-    neck = Vector((0.0, top_y + 0.015, st + 0.02))
-    parts.append(rbox('cou', (0.2, 0.08, 0.07), M['plastique'], r=0.02, segs=3, loc=neck))
-    tilt = 18
-    cc = Vector((0.0, top_y + 0.035, st + 0.185))
-    parts.append(rbox('console', (0.44, 0.058, 0.29), M['plastique'], r=0.026, segs=5, loc=cc, rot=(-tilt, 0, 0)))
-    nrm = Vector((0, -math.cos(math.radians(tilt)), math.sin(math.radians(tilt))))
-    parts.append(rbox('ecran', (0.38, 0.004, 0.225), M['ecran'], r=0.004, segs=2, loc=cc + nrm * 0.0285, rot=(-tilt, 0, 0)))
-    parts.append(rbox('dos_console', (0.28, 0.006, 0.17), M['mat'], r=0.004, segs=2, loc=cc - nrm * 0.03, rot=(-tilt, 0, 0)))
-    for k in range(5):                     # vents on the back of the console
-        parts.append(rbox('event', (0.05, 0.004, 0.004), M['grille'], r=0.0015, segs=1,
-                          loc=cc - nrm * 0.03 + Vector((0.17, 0, 0)) + Vector((0, math.sin(math.radians(tilt)), math.cos(math.radians(tilt)))) * (0.05 - k * 0.012),
-                          rot=(-tilt, 0, 0)))
+    # ---- the dashboard (v3, 24/11, after the user's notes on the Skillrun's):
+    # a console body clamped on the ring's bar (two shells, a parting line, an end block over each arm's root);
+    # in front of it the tray, one moulded piece with the column: a thick rim, a floor panel with a gutter round it,
+    # a slanted rest for a phone, the column's face curving down into the floor; the screen sits over the column.
+    hf, hb = top_y - 0.115, top_y + 0.09                # the console body: its front (runner's side) and back
+    hx2 = hxa - th2 - 0.002                             # it reaches the inner faces of the two arms
+    zt_h, zb_h, zs_h = st + 0.03, st - 0.075, st - 0.02   # its top, bottom and the line between its two shells
+    upper = rbox('boitier', (2 * hx2, hb - hf, zt_h - zs_h), M['plastique'], r=0.012, segs=5,
+                 loc=(0.0, (hf + hb) / 2, (zt_h + zs_h) / 2))
+    pocket = rbox('poche', (0.05, 0.032, 0.03), M['plastique'], r=0.006, segs=3, loc=(-0.24, top_y - 0.075, zt_h))
+    boolean(upper, pocket); bake(upper, sharp=40); remove(pocket)      # a small pocket left of the column
+    parts.append(upper)
+    parts.append(rbox('poche_fond', (0.044, 0.026, 0.002), M['mat'], r=0.003, segs=1, loc=(-0.24, top_y - 0.075, zt_h - 0.0145)))
+    parts.append(rbox('boitier_bas', (2 * hx2 - 0.006, hb - hf - 0.006, zs_h - zb_h), M['plastique'], r=0.01, segs=4,
+                      loc=(0.0, (hf + hb) / 2, (zs_h + zb_h) / 2 - 0.0015)))
+    for sg in (-1, 1):                                   # the two ends: a rounded block over the root of each arm
+        parts.append(rbox('boitier_bout', (0.075, 0.2, zt_h - (zt - 0.03)), M['plastique'], r=0.028, segs=7,
+                          loc=(sg * (hx2 + 0.012), top_y - 0.075, (zt_h + zt - 0.03) / 2)))
+
+    # the tray: a rounded block that sticks out towards the runner; a rim band on top, the lower body set in 1.5 mm
+    tx, ty0, ty1 = 0.175, top_y - 0.25, top_y - 0.06    # half width, front, back (inside the column)
+    tzt, tzb, tz_line = zt_h + 0.008, zs_h - 0.03, zt_h + 0.008 - 0.024
+    def plan(x2, y0, y1, r, segs=10):
+        return round_poly([(-x2, y0), (x2, y0), (x2, y1), (-x2, y1)], [r, r, r * 0.3, r * 0.3], segs=segs)
+    def slab_xy(name, outline, z0, z1, m, rb):
+        n = len(outline)
+        o = mesh_obj(name, [(x, y, z) for z in (z0, z1) for x, y in outline],
+                     [tuple(range(n))[::-1], tuple(range(n, 2 * n))] + [(i, (i + 1) % n, n + (i + 1) % n, n + i) for i in range(n)],
+                     m, smooth=False)
+        return rounded(o, rb, 4, angle=30) if rb else fix_normals(o)
+    rim = slab_xy('bac', plan(tx, ty0, ty1, 0.03), tz_line, tzt, M['plastique'], 0.007)
+    yc = top_y - 0.095                                   # the column's face, at its foot (the back of the cavity)
+    floor_z = tzt - 0.03
+    cav = slab_xy('bac_creux', plan(tx - 0.022, ty0 + 0.022, yc + 0.03, 0.014), floor_z, tzt + 0.02, M['plastique'], 0.0)
+    boolean(rim, cav); bake(rim, sharp=40); remove(cav)
+    parts.append(rim)
+    body = slab_xy('bac_corps', plan(tx - 0.0015, ty0 + 0.0015, ty1, 0.0285), tzb, tz_line - 0.0006, M['plastique'], 0.004)
+    parts.append(body)
+    # the floor: a panel 2.5 mm proud, a gutter all round it along the walls
+    parts.append(slab_xy('bac_fond', plan(tx - 0.03, ty0 + 0.03, yc - 0.012, 0.008), floor_z - 0.002, floor_z + 0.0025, M['plastique'], 0.0012))
+    parts.append(slab_xy('bac_gouttiere', plan(tx - 0.022, ty0 + 0.022, yc, 0.014), floor_z - 0.003, floor_z - 0.0015, M['mat'], 0.0))
+    # the slanted rest across the back of the floor, cut by two notches (for a cable)
+    rest = Vector((0.0, yc - 0.034, floor_z + 0.012))
+    for x0, x1 in ((-0.13, -0.075), (-0.055, 0.055), (0.075, 0.13)):
+        parts.append(rbox('cale_telephone', (x1 - x0, 0.007, 0.03), M['plastique'], r=0.0025, segs=2,
+                          loc=rest + Vector(((x0 + x1) / 2, 0, 0)), rot=(-28, 0, 0)))
+    parts.append(rbox('cale_pied', (0.26, 0.026, 0.006), M['plastique'], r=0.002, segs=2, loc=rest + Vector((0, 0.004, -0.009))))
+
+    # the column, one piece with the tray: its face goes up from the floor through a concave curve; narrower and
+    # lower than before (24 x 7 cm), leaning back like the screen; a seam runs down each side behind the front cover
+    lean = 12
+    r_f, col_h, col_d, col_w = 0.03, 0.17, 0.07, 0.24
+    arc = [(yc - r_f + r_f * math.sin(math.radians(t)), floor_z + r_f - r_f * math.cos(math.radians(t))) for t in range(0, 91, 10)]
+    top_f = (yc + col_h * math.sin(math.radians(lean)), floor_z + r_f + col_h)
+    top_b = (top_f[0] + col_d, top_f[1] - 0.01)
+    prof = arc + [top_f, top_b, (top_b[0] + 0.01, zb_h + 0.01), (yc - r_f - 0.02, zb_h + 0.01), (yc - r_f - 0.02, floor_z)]
+    radii = [0.0] * len(arc) + [0.01, 0.01, 0.0, 0.0, 0.0]
+    col = prism('colonne', round_poly(prof, radii, segs=8), -col_w / 2, col_w / 2, M['plastique'], axis='X')
+    rounded(col, 0.006, 4, angle=35)
+    parts.append(col)
+    Rl = Euler((math.radians(-lean), 0, 0)).to_matrix()
+    up_c, fwd_c = Rl @ Vector((0, 0, 1)), Rl @ Vector((0, -1, 0))
+    foot = Vector((0.0, yc, floor_z + r_f))
+    for sg in (-1, 1):
+        g = foot + up_c * (col_h / 2) - fwd_c * 0.012 + Vector((sg * (col_w / 2 + 0.0003), 0, 0))
+        parts.append(rbox('colonne_joint', (0.0012, 0.0016, col_h - 0.01), M['grille'], r=0, loc=g, rot=(-lean, 0, 0)))
+    # on its face: the wireless charging plate (a dark plate, a ring with a phone in it) and the contactless mark
+    pc = foot + up_c * 0.085 + fwd_c * 0.0008 + Vector((0.025, 0, 0))
+    parts.append(rbox('recharge', (0.13, 0.002, 0.095), M['mat'], r=0.006, segs=2, loc=pc, rot=(-lean, 0, 0)))
+    ring_c = pc + fwd_c * 0.0012
+    parts.append(cyl('recharge_anneau', ring_c, ring_c + fwd_c * 0.0004, 0.017, M['gris']))
+    parts.append(cyl('recharge_anneau_fond', ring_c + fwd_c * 0.0002, ring_c + fwd_c * 0.0006, 0.0155, M['mat']))
+    parts.append(rbox('recharge_tel', (0.008, 0.0008, 0.014), M['gris'], r=0.0015, segs=1, loc=ring_c + fwd_c * 0.0007, rot=(-lean, 0, 0)))
+    nfc = foot + up_c * 0.07 + fwd_c * 0.0008 + Vector((-0.09, 0, 0))
+    for k, rr in enumerate((0.002, 0.004, 0.006)):
+        parts.append(cyl('sans_contact', nfc + fwd_c * (0.0003 * k), nfc + fwd_c * (0.0003 * k + 0.0003), rr, M['gris'] if k % 2 == 0 else M['plastique']))
+    # the safety key, red, on the console's front, left of the tray
+    parts.append(rbox('cle_socle', (0.046, 0.006, 0.032), M['mat'], r=0.003, segs=1, loc=(-0.23, hf - 0.001, zs_h - 0.02)))
+    parts.append(rbox('cle', (0.032, 0.012, 0.022), M['stop'], r=0.004, segs=2, loc=(-0.23, hf - 0.005, zs_h - 0.02)))
+
+    # the screen (22 inches): a thin rim round edge-to-edge glass, the glass a hair under the rim; under the glass the
+    # black border and the active area, which an off screen shows as a slightly lighter rectangle; a back shell behind.
+    tilt = 16
+    Rs = Euler((math.radians(-tilt), 0, 0)).to_matrix()
+    up_s, fwd_s = Rs @ Vector((0, 0, 1)), Rs @ Vector((0, -1, 0))
+    sw, sh, sd = 0.53, 0.32, 0.024
+    col_top = Vector((0.0, top_f[0] + col_d / 2, top_f[1]))
+    sc = col_top + up_s * (sh / 2 - 0.045) + fwd_s * (col_d / 2 + sd / 2 - 0.006)
+    def screen_part(name, w, h, y0, y1, r, m, rb, dz=0.0):
+        o = prism(name, round_poly([(-w / 2, -h / 2 + dz), (w / 2, -h / 2 + dz), (w / 2, h / 2 + dz), (-w / 2, h / 2 + dz)], r, segs=10),
+                  y0, y1, m, axis='Y')
+        if rb:
+            rounded(o, rb, 4, angle=30)
+        else:
+            fix_normals(o)
+        o.rotation_euler = (math.radians(-tilt), 0, 0); o.location = sc
+        return o
+    parts.append(screen_part('ecran_cadre', sw, sh, -sd / 2, sd / 2, 0.02, M['cadre_ecran'], 0.0035))
+    parts.append(screen_part('ecran_verre', sw - 0.007, sh - 0.007, -sd / 2 - 0.0002, -sd / 2 + 0.004, 0.0165, M['ecran'], 0.0006))
+    parts.append(screen_part('ecran_dalle', sw - 0.046, sh - 0.058, -sd / 2 - 0.00028, -sd / 2 - 0.00022, 0.002, M['dalle'], 0.0, dz=0.004))
+    parts.append(screen_part('ecran_dos', 0.4, 0.22, sd / 2 - 0.002, sd / 2 + 0.014, 0.03, M['plastique'], 0.006, dz=-0.02))
+
+    # the tall handles: out of the housing's two ends through a collar, a wide bend, then straight up beside the screen
+    if HAUTES == 'oui':
+        for sg in (-1, 1):
+            zh = zt_h - 0.032
+            xh = sg * 0.335                               # just outside the screen, like the Skillrun
+            p0 = Vector((xh, top_y - 0.03, zs_h))         # inside the housing
+            p1 = Vector((xh, top_y - 0.17, zt_h + 0.07))  # out of its top towards the runner...
+            p2 = Vector((xh, top_y - 0.09, st + 0.45))    # ...then a wide bend, and straight up
+            parts.append(tube('poignee_haute', [p0, p1, p2], 0.02, M['tube'], bend=0.09, ends=False))
+            dq = (p1 - p0).normalized()                   # the collar where it leaves the top of the housing
+            q = p0 + dq * ((zt_h - p0.z) / dq.z)
+            parts.append(cyl('poignee_haute_bague', q - dq * 0.01, q + dq * 0.008, 0.026, M['plastique']))
+            d = (p2 - p1).normalized()
+            parts.append(cyl('poignee_haute_bouchon', p2 - d * 0.004, p2 + d * 0.006, 0.0205, M['plastique']))
+            parts.append(cyl('poignee_haute_bouchon_fond', p2 + d * 0.006, p2 + d * 0.0075, 0.015, M['mat']))
+
+    # the handlebar (v3): ONE moulded piece. An arch held by the two arms; at its top, in the middle, it swells into a
+    # smooth knuckle whose top is the bright red STOP, set in and following the curve; down each side the part where
+    # the hand goes is a little thicker and knurled, with a parting line at both ends; near each end a moulded collar
+    # carries the thumb paddle (+ on top, - under it).
+    xe = hxa - th2 + 0.004
+    mid = Vector((0.0, ty0 - 0.06, st - 0.012))
+    def wing(sg):
+        return [Vector((sg * xe, top_y - 0.33, hz - 0.01)), Vector((sg * 0.3, top_y - 0.335, hz - 0.012)),
+                Vector((sg * 0.165, mid.y + 0.01, st - 0.062)), Vector((sg * 0.05, mid.y, mid.z))]
+    P = resample(fillet3(wing(-1) + wing(1)[::-1], 0.06, segs=24), 0.0018)
+    S = [0.0]
+    for i in range(1, len(P)):
+        S.append(S[-1] + (P[i] - P[i - 1]).length)
+    L = S[-1]; Lh = L / 2
+    def s_of(v):
+        return S[min(range(len(P)), key=lambda i: (P[i] - v).length)]
+    wl = wing(-1)
+    sA, sB = s_of(wl[1]), s_of(wl[2])
+    sC = s_of(wl[0].lerp(wl[1], 0.5))
+    grips = [(sA + 0.045, sB - 0.02), (L - (sB - 0.02), L - (sA + 0.045))]
+    collars = [sC, L - sC]
+    r0, r_k, k_flat, k_ramp = 0.0175, 0.037, 0.034, 0.05
+    def smooth01(t):
+        t = max(0.0, min(1.0, t)); return t * t * (3 - 2 * t)
+    seams = [Lh - k_flat - k_ramp, Lh + k_flat + k_ramp] + [e for g in grips for e in g] + \
+            [c + d for c in collars for d in (-0.017, 0.017)]
+    def rfun(s_):
+        r = r0
+        d = abs(s_ - Lh)                                  # the knuckle: a flat top, smooth ramps
+        r += (r_k - r0) * (1 - smooth01((d - k_flat) / k_ramp))
+        for g0, g1 in grips:                              # the grips: 2 mm thicker, eased in and out
+            r += 0.002 * smooth01((s_ - g0) / 0.006) * smooth01((g1 - s_) / 0.006)
+        for c in collars:                                 # the paddles' collars
+            r += 0.0055 * (1 - smooth01((abs(s_ - c) - 0.012) / 0.005))
+        for z in seams:                                   # parting lines: a fine groove
+            r -= 0.0007 * math.exp(-((s_ - z) / 0.0011) ** 2)
+        return r
+    def mfun(s_):
+        if any(g0 <= s_ <= g1 for g0, g1 in grips):
+            return 1
+        if abs(s_ - Lh) < k_flat + k_ramp or any(abs(s_ - c) < 0.017 for c in collars):
+            return 2
+        return 0
+    bar, _ = sweep_var('guidon', P, rfun, [M['tube'], M['grip'], M['satin']], mfun)
+    parts.append(bar)
+    # the STOP: the top of the knuckle, a skin 1.2 mm thick in bright red rubber, set on it
+    bm = bmesh.new(); bm.from_mesh(bar.data); bm.faces.ensure_lookup_table()
+    ring = 56
+    keep = []
+    for f in bm.faces:
+        i = f.index // ring
+        if i >= len(P) - 1:
+            continue
+        sm = (S[i] + S[i + 1]) / 2
+        if abs(sm - Lh) < 0.044 and f.normal.z > 0.55:
+            keep.append(f.index)
+    bm.free()
+    stop_me = bar.data.copy()
+    bm = bmesh.new(); bm.from_mesh(stop_me); bm.faces.ensure_lookup_table()
+    drop = [f for f in bm.faces if f.index not in set(keep)]
+    bmesh.ops.delete(bm, geom=drop, context='FACES')
+    for v in bm.verts:
+        v.co += v.normal * 0.0002
+    bm.to_mesh(stop_me); bm.free()
+    stop_me.materials.clear(); stop_me.materials.append(M['stop'])
+    stop = link(bpy.data.objects.new('stop', stop_me))
+    sol = stop.modifiers.new('epaisseur', 'SOLIDIFY'); sol.thickness = 0.0012; sol.offset = 1.0
+    bake(stop, sharp=60)
+    parts.append(stop)
+    top = P[min(range(len(P)), key=lambda i: abs(S[i] - Lh))]
+    t = text_mesh('stop_texte', 'STOP', 0.1, 0.00025, M['blanc'], font=F_BIG, fit_h=0.0135)
+    t.location = top + Vector((0, 0, rfun(Lh) + 0.0016)); parts.append(t)
+    # the thumb paddles: a thin blade growing out of each collar, leaning back; + at the top, - at the bottom
+    for c, sg in ((collars[0], -1), (collars[1], 1)):
+        c0 = P[min(range(len(P)), key=lambda i: abs(S[i] - c))]
+        blade = prism('palette', round_poly([(-0.016, -0.012), (0.016, -0.012), (0.0105, 0.072), (-0.0105, 0.072)],
+                                            [0.002, 0.002, 0.0098, 0.0098], segs=10), -0.0085, 0.0085, M['satin'], axis='Y')
+        for v in blade.data.vertices:                    # a blade that thins towards its top
+            v.co.y *= 1.0 - 0.35 * max(0.0, v.co.z) / 0.072
+        rounded(blade, 0.0035, 4, angle=30)
+        blade.rotation_euler = (math.radians(-12), 0, 0)
+        blade.location = c0 + Vector((0, 0.001, r0 + 0.004))
+        parts.append(blade)
+        Rf = Euler((math.radians(-12), 0, 0)).to_matrix()
+        fu, ff = Rf @ Vector((0, 0, 1)), Rf @ Vector((0, -1, 0))
+        base_f = blade.location + ff * 0.0086
+        tp = text_mesh('palette_plus', '+', 0.1, 0.00025, M['blanc'], font=F_BIG, fit_h=0.013)
+        tp.rotation_euler = (math.radians(78), 0, 0); tp.location = base_f + fu * 0.05 - ff * 0.0015
+        parts.append(tp)
+        parts.append(rbox('palette_moins', (0.01, 0.0006, 0.0024), M['blanc'], r=0, loc=base_f + fu * 0.012, rot=(-12, 0, 0)))
+        parts.append(rbox('palette_trait', (0.015, 0.0006, 0.0007), M['gris'], r=0, loc=base_f + fu * 0.031 - ff * 0.0008, rot=(-12, 0, 0)))
+    # the handlebar's middle is held from under the tray
+    parts.append(cyl('guidon_tige', mid + Vector((0, 0.02, -0.02)), Vector((0.0, ty0 + 0.04, tzb + 0.005)), 0.016, M['tube']))
     return parts
 
 
@@ -455,7 +751,7 @@ def light(cam_loc, c=(0.0, 0.0, 0.7), s=2.0):
     """The catalogue light of the models, turned with the camera: a big soft key above the camera's side,
     a top light, two rims behind. The HDRI gives the reflections."""
     SC.render.film_transparent = True
-    world_hdri(0.45, rot=30)
+    world_hdri(0.38, rot=30)
     C = Vector(c)
     d = (Vector(cam_loc) - C); d.z = 0; d.normalize()
     side = Vector((-d.y, d.x, 0))
@@ -478,6 +774,7 @@ def shot_camera(target, az, el, dist, lens):
 SHOTS = {   # name: target, azimuth, elevation, distance, lens
     'reference': ((0.0, 0.0, 0.68), 48, 7, 2.85, 32),       # the angle of the user's picture (front right)
     'arriere-gauche': ((0.0, 0.0, 0.68), 236, 10, 3.2, 35),  # rear left: the screen, both handrails
+    'plongee': ((0.0, 0.05, 0.62), 38, 34, 4.3, 40),         # from above, three-quarter front right
     'profil': ((0.0, 0.0, 0.74), 90, 2, 6.0, 60),
     'face': ((0.0, 0.0, 0.78), 0, 5, 5.0, 60),
     'arriere': ((0.0, 0.1, 0.70), 200, 20, 4.6, 50),         # where the user steps on
@@ -488,7 +785,13 @@ SHOTS = {   # name: target, azimuth, elevation, distance, lens
     'haut-ref': ((0.0, 0.45, 1.2), 55.5, -3.9, 2.56, 60),    # from the front right (the user's picture)
     'haut-arriere': ((0.0, 0.4, 1.2), 230, 1, 3.4, 85),      # from the runner's side, rear left
     'haut-poignee': ((0.38, 0.2, 1.15), 237, 1.5, 3.6, 170), # the right handrail and its grip, same camera
-    'haut-cardio': ((0.22, 0.38, 1.14), 205, 24, 1.05, 50),  # the right heart-rate grip, from where the runner stands
+    'tdb-face': ((0.0, 0.45, 1.42), 180, 1, 2.0, 50),        # the dashboard, from where the runner stands (bar height)
+    'tdb-34': ((0.0, 0.42, 1.34), 215, 14, 2.1, 50),         # the dashboard, three-quarter from the runner's left
+    'tdb-detail': ((-0.06, 0.33, 1.24), 208, 30, 0.95, 50),  # the tray, the STOP, the left grip
+    'tdb-dos': ((0.0, 0.5, 1.4), 20, 4, 1.7, 50),             # the back of the screen and the column
+    'tdb-ecran': ((0.0, 0.52, 1.5), 180, 10, 1.05, 50),      # the screen, from the runner
+    'tdb-palette': ((0.3, 0.2, 1.17), 196, 14, 0.62, 50),    # the right thumb paddle and its grip
+    'tdb-stop': ((-0.03, 0.22, 1.24), 200, 34, 0.55, 50),    # the STOP and the left grip, close
     'capot-face': ((0.0, 1.0, 0.2), 0, 6, 1.6, 50),
     'capot-arriere': ((-0.05, 0.8, 0.24), 232, 11, 1.5, 50),    # from the runner's side, rear left
     'bout': ((0.22, -0.98, 0.16), 220, 18, 1.3, 50),
