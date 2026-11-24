@@ -40,4 +40,4 @@ marque/
 3d/stories/planche.jpg
 
 # the prototype boards that show the manufacturers' pictures next to our renders
-3d/prototypes/tapis-de-course/planche*
+3d/prototypes/tapis-de-course/**/planche*

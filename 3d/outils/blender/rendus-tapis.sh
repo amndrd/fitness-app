@@ -1,9 +1,11 @@
 #!/bin/zsh
-# Cardio 1: the treadmill, after the user's reference (Landice L8, black). One Blender run per set of settings,
-# run again if Blender dies silently. Raw renders in outils/blender/_bruts/tapis; outils/planche_tapis.py makes the board.
+# The treadmill as it stands (23/11/2026): black portal, the big round bend with crisp edges, the reworked hood
+# (grilles A), the top with the paddle handrails and the straight grips. Ten views, alone on white, into
+# 3d/prototypes/tapis-de-course/. One Blender run per group of views, run again if Blender dies silently.
 cd "$(dirname "$0")"
 B=/Applications/Blender.app/Contents/MacOS/Blender
 OUT="$PWD/_bruts/tapis"; mkdir -p "$OUT"; t0=$(date +%s)
+DOS="$PWD/../../prototypes/tapis-de-course"; mkdir -p "$DOS"
 R=${RES:-1400}; S=${SAMPLES:-128}
 run() {  # <expected file> <settings...>
   local want=$1; shift
@@ -14,8 +16,13 @@ run() {  # <expected file> <settings...>
   done
   echo "$want : $(( $(date +%s) - t0 )) s"
 }
-# black like the reference: the two angles of the manufacturer's pictures, the views, the details
-run tapis-bout-noir.png plans=reference,arriere-gauche,profil,face,arriere,console,capot,bout res=$R samples=$S
-# the other finishes of the portal, at the angle of the user's picture
-for c in graphite argent; do run tapis-reference-$c.png plans=reference couleur=$c res=$R samples=$S; done
+run tapis-arriere-noir.png plans=reference,arriere-gauche,profil,face,plongee,arriere res=$R samples=$S
+run tapis-bout-noir.png plans=console,capot-ref,tdb-detail,bout res=$R samples=$S
+# the shot in tapis.py -> the picture in the folder
+typeset -A NOMS
+NOMS=(reference 01-trois-quarts-avant arriere-gauche 02-trois-quarts-arriere profil 03-profil face 04-face
+      plongee 05-plongee arriere 06-dos console 07-console capot-ref 08-capot tdb-detail 09-tableau-de-bord bout 10-bout)
+for plan nom in ${(kv)NOMS}; do
+  [[ -f "$OUT/tapis-$plan-noir.png" ]] && node ../compose.mjs "$OUT/tapis-$plan-noir.png" "$DOS/$nom.jpg" "#FFFFFF" > /dev/null
+done
 echo "fin : $(( $(date +%s) - t0 )) s"
